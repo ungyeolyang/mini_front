@@ -7,6 +7,7 @@ import AxiosApi from "../api/AxiouApi";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Modal from "../Modal";
+import FindIdPw from "../FindIdPw";
 
 const Container = styled.div`
   display: flex;
@@ -33,6 +34,8 @@ const Input = styled.input`
   margin: 0.7rem;
   padding-left: 1rem;
 `;
+
+//로그인 버튼
 const Button = styled.button`
   width: 25rem;
   height: 3rem;
@@ -100,8 +103,15 @@ const Login = () => {
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [findContent, setFindcontent] = useState("");
+  const [findOpen, setFindOpen] = useState(true);
+
   const closeModal = () => {
     setModalOpen(false);
+  };
+
+  const closeFind = () => {
+    setFindOpen(false);
   };
 
   // const navigate = useNavigate();
@@ -176,6 +186,13 @@ const Login = () => {
       <Modal open={modalOpen} close={closeModal} header="오류">
         {modalContent}
       </Modal>
+      <FindIdPw
+        open={findOpen}
+        close={closeFind}
+        header="아이디/비밀번호 찾기"
+      >
+        {modalContent}
+      </FindIdPw>
     </Container>
   );
 };
