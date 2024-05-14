@@ -55,11 +55,6 @@ const Find = styled.span`
   cursor: pointer;
 `;
 
-const Regit = styled.span`
-  margin-left: 7rem;
-  cursor: pointer;
-`;
-
 const LoginMore = styled.div`
   display: flex;
   color: #808080;
@@ -99,19 +94,30 @@ const Login = () => {
 
   const [isId, setIsId] = useState("");
   const [isPw, setIsPw] = useState("");
+  const [isFind, setIsFind] = useState(false);
 
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
 
   const [findContent, setFindcontent] = useState("");
-  const [findOpen, setFindOpen] = useState(true);
+  const [findOpen, setFindOpen] = useState(false);
 
+  const [category, setCategory] = useState(null);
+
+  const onSelect = (category) => {
+    setCategory(category);
+  };
+  const onFind = (e) => {
+    setIsFind(e);
+  };
+  //오류창닫기
   const closeModal = () => {
     setModalOpen(false);
   };
-
+  //아이디찾기창 닫기
   const closeFind = () => {
     setFindOpen(false);
+    setIsFind(false);
   };
 
   // const navigate = useNavigate();
@@ -142,6 +148,12 @@ const Login = () => {
       setModalContent("서버가 응답하지 않습니다.");
     }
   };
+
+  const onClickFind = (e) => {
+    setFindOpen(true);
+    setCategory(e.target.textContent);
+  };
+
   return (
     <Container>
       <Left>
@@ -167,9 +179,11 @@ const Login = () => {
           <Button disabled>로그인</Button>
         )}
         <LoginMore>
-          <Find>아이디 찾기</Find>
-          <Find>비밀번호 찾기</Find>
-          <Regit>회원가입</Regit>
+          <Find onClick={onClickFind}>아이디 찾기</Find>
+          <Find onClick={onClickFind}>비밀번호 찾기</Find>
+          <Link to="/signup" style={{ marginLeft: "7rem" }}>
+            회원가입
+          </Link>
         </LoginMore>
         <Api>
           <Circle>
@@ -189,10 +203,11 @@ const Login = () => {
       <FindIdPw
         open={findOpen}
         close={closeFind}
-        header="아이디/비밀번호 찾기"
-      >
-        {modalContent}
-      </FindIdPw>
+        category={category}
+        onSelect={onSelect}
+        isFind={isFind}
+        onFind={onFind}
+      ></FindIdPw>
     </Container>
   );
 };
