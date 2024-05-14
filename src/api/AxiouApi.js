@@ -20,12 +20,12 @@ const AxiosApi = {
     return await axios.post(DOMAIN + LOGO + "/certEmail", findInfo);
   },
 
-  memberCertId: async (id) => {
-    return await axios.get(DOMAIN + LOGO + `/certId?id=${id}`);
+  memberConId: async (id) => {
+    return await axios.get(DOMAIN + LOGO + `/conId?id=${id}`);
   },
 
-  memberCertPw: async (email) => {
-    return await axios.get(DOMAIN + LOGO + `/certEmail?email=${email}`);
+  memberConEmail: async (email) => {
+    return await axios.get(DOMAIN + LOGO + `/conEmail?email=${email}`);
   },
 };
 
