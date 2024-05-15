@@ -1,33 +1,15 @@
 import styled from "styled-components";
-import Logo from "../image/로고-fococlipping-standard.png";
 import Naver from "../image/네이버btnG.png";
 import Google from "../image/구글btn.png";
 import Kakao from "../image/카카오btn.png";
-import AxiosApi from "../api/AxiouApi";
-import { useState } from "react";
+import LoginAxiosApi from "../api/LoginAxiosApi";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import Modal from "../Modal";
-import FindIdPw from "../FindIdPw";
+import Modal from "../component/Modal";
+import FindIdPw from "./FindIdPw";
+import Right from "../component/Right";
+import { UserContext } from "../context/UserStore";
 
-const Container = styled.div`
-  display: flex;
-`;
-const Left = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40vw;
-  height: 100vh;
-  background-color: #fefae0;
-`;
-const Right = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 60vw;
-  height: 100vh;
-`;
 const Input = styled.input`
   width: 25rem;
   height: 3rem;
@@ -89,6 +71,9 @@ const H = styled.h1`
 `;
 
 const Login = () => {
+  const context = useContext(UserContext);
+  const { setIsLogin } = context;
+
   const [inputId, setInputId] = useState("");
   const [inputPw, setInputPw] = useState("");
 
@@ -99,7 +84,6 @@ const Login = () => {
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [findContent, setFindcontent] = useState("");
   const [findOpen, setFindOpen] = useState(false);
 
   const [category, setCategory] = useState(null);
@@ -133,11 +117,11 @@ const Login = () => {
 
   const onClickLogin = async () => {
     try {
-      const rsp = await AxiosApi.memberLogin(inputId, inputPw);
+      const rsp = await LoginAxiosApi.memberLogin(inputId, inputPw);
       console.log(rsp.data);
       if (rsp.data) {
         localStorage.setItem("id", inputId);
-        localStorage.setItem("isLogin", "TRUE");
+        setIsLogin(true);
         // navigate("/메인");
       } else {
         setModalOpen(true);
@@ -154,11 +138,12 @@ const Login = () => {
     setCategory(e.target.textContent);
   };
 
+  useEffect(() => {
+    setIsLogin(false);
+  }, []);
+
   return (
-    <Container>
-      <Left>
-        <img src={Logo} alt="로고" />
-      </Left>
+    <>
       <Right>
         <H>Login</H>
         <Input
@@ -208,7 +193,7 @@ const Login = () => {
         isFind={isFind}
         onFind={onFind}
       ></FindIdPw>
-    </Container>
+    </>
   );
 };
 
