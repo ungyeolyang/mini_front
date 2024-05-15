@@ -9,27 +9,8 @@ import Modal from "../component/Modal";
 import FindIdPw from "./FindIdPw";
 import Right from "../component/Right";
 import { UserContext } from "../context/UserStore";
-
-const Input = styled.input`
-  width: 25rem;
-  height: 3rem;
-  margin: 0.7rem;
-  padding-left: 1rem;
-`;
-
-//로그인 버튼
-const Button = styled.button`
-  width: 25rem;
-  height: 3rem;
-  margin: 0.7rem;
-  background-color: ${(props) => (props.disabled ? "#EAEAEA" : "#e9edc9")};
-  border: none;
-
-  &:hover {
-    background-color: ${(props) => (props.disabled ? "#D9D9D9" : "#ccd5ae")};
-    color: white;
-  }
-`;
+import BBtn from "../component/BBtn";
+import Input from "../component/Input";
 
 const Find = styled.span`
   margin: 0 0.5rem;
@@ -156,13 +137,9 @@ const Login = () => {
           placeholder="비밀번호를 입력해주세요."
           onChange={onChangePw}
         />
-        {isId && isPw ? (
-          <Button enabled onClick={onClickLogin}>
-            로그인
-          </Button>
-        ) : (
-          <Button disabled>로그인</Button>
-        )}
+        <BBtn disabled={!(isId && isPw)} onClick={onClickLogin}>
+          로그인
+        </BBtn>
         <LoginMore>
           <Find onClick={onClickFind}>아이디 찾기</Find>
           <Find onClick={onClickFind}>비밀번호 찾기</Find>

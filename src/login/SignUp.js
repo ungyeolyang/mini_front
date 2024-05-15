@@ -5,15 +5,8 @@ import { useNavigate } from "react-router-dom";
 import Right from "../component/Right";
 import Modal from "../component/Modal";
 import { UserContext } from "../context/UserStore";
-
-const Input = styled.input`
-  width: 20rem;
-  height: 3rem;
-  padding-left: 1rem;
-  border: none;
-  border-bottom: 0.1rem solid silver;
-  cursor: pointer;
-`;
+import Input_ from "../component/Input_";
+import BBtn from "../component/BBtn";
 
 const DateInput = styled.input`
   width: 14.5rem;
@@ -46,20 +39,6 @@ const Placeholder1 = styled.span`
   color: #757575;
   font-size: small;
   padding: 0.1rem 1rem 0 0.1rem;
-`;
-
-//회원가입 버튼
-const Button = styled.button`
-  width: 25rem;
-  height: 3rem;
-  margin: 0.7rem;
-  background-color: ${(props) => (props.disabled ? "#EAEAEA" : "#e9edc9")};
-  border: none;
-
-  &:hover {
-    background-color: ${(props) => (props.disabled ? "#D9D9D9" : "#ccd5ae")};
-    color: white;
-  }
 `;
 
 const H = styled.h1`
@@ -267,18 +246,18 @@ const SignUp = () => {
     <>
       <Right>
         <H>회원가입</H>
-        <Input type="text" placeholder="*아이디" onChange={onChangeId} />
+        <Input_ placeholder="*아이디" onChange={onChangeId} />
         <Error> {idMessage}</Error>
-        <Input type="text" placeholder="*비밀번호" onChange={onChangePw} />
+        <Input_ placeholder="*비밀번호" onChange={onChangePw} />
         <Error>{pwMessage}</Error>
-        <Input type="text" placeholder="*닉네임" onChange={onChangeNick} />
+        <Input_ placeholder="*닉네임" onChange={onChangeNick} />
         <Error>{nickMessage}</Error>
         <div>
           <Placeholder>*생년월일</Placeholder>
           <DateInput type="date" onChange={onChangeBirth} />
         </div>
         <Error>{birthMessage}</Error>
-        <Input type="text" placeholder="*이메일" onChange={onChangeMail} />
+        <Input_ placeholder="*이메일" onChange={onChangeMail} />
         <Error>{emailMessage}</Error>
         <Gender>
           <Placeholder1>*성별</Placeholder1>
@@ -317,12 +296,12 @@ const SignUp = () => {
           </div>
         </Gender>
 
-        <Button
+        <BBtn
           disabled={!(isId && isPw && isEmail && isNick && isBirth)}
           onClick={onClickSignUp}
         >
           회원가입
-        </Button>
+        </BBtn>
       </Right>
       <Modal open={modalOpen} close={closeModal} header={head} btn="확인">
         {modalContent}

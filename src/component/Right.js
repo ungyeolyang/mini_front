@@ -11,7 +11,7 @@ const rightShow = (isLogin) => keyframes`
   }
 `;
 
-const Main = styled.div`
+const StyledRight = styled.div`
   display: flex;
   ${({ isLogin }) => !isLogin && `flex-direction: column;`};
   justify-content: center;
@@ -22,11 +22,11 @@ const Main = styled.div`
 `;
 
 // Right 컴포넌트 정의
-const Right = (props) => {
+const Right = ({ children }) => {
   const context = useContext(UserContext);
   const { isLogin, setIsLogin } = context;
 
-  return <Main isLogin={isLogin}>{props.children}</Main>;
+  return <StyledRight isLogin={isLogin}>{children}</StyledRight>;
 };
 
 export default Right;

@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Modal from "../component/Modal";
 import LoginAxiosApi from "../api/LoginAxiosApi";
+import Btn from "../component/Btn";
+import Input from "../component/Input";
 
 const ModalStyle = styled.div`
   .modal {
@@ -117,24 +119,6 @@ const Body = styled.div`
   flex-direction: column;
 `;
 
-const Input = styled.input`
-  width: ${(props) => (props.placeholder === "인증번호" ? "12.5rem" : "25rem")};
-  height: 2.5rem;
-  margin: 0.7rem;
-  padding-left: 1rem;
-`;
-const Btn = styled.button`
-  height: 2.5rem;
-  border: 0;
-  padding: 0 1.5rem;
-  background-color: #e9edc9;
-  border-radius: 5px;
-  &:hover {
-    background-color: #ccd5ae;
-    color: #fff;
-  }
-`;
-
 const Error = styled.span`
   color: red;
   font-size: 0.8rem;
@@ -237,7 +221,6 @@ const FindIdPw = (props) => {
                       {category === "비밀번호 찾기" && (
                         <div>
                           <Input
-                            type="text"
                             placeholder="아이디를 입력해주세요."
                             ref={id}
                             onChange={onChangeId}
@@ -247,7 +230,6 @@ const FindIdPw = (props) => {
                       )}
                       <div>
                         <Input
-                          type="text"
                           placeholder="이메일을 입력해주세요."
                           onChange={onChangeEmail}
                         />
