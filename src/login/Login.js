@@ -85,7 +85,7 @@ const Login = () => {
     setIsFind(false);
   };
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onChangeId = (e) => {
     setInputId(e.target.value);
@@ -103,7 +103,7 @@ const Login = () => {
       if (rsp.data) {
         localStorage.setItem("id", inputId);
         setIsLogin(true);
-        // navigate("/메인");
+        navigate("/main");
       } else {
         setModalOpen(true);
         setModalContent("아이디 및 패스워드를 재 확인 해 주세요.");

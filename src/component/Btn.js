@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
-const StyledBBtn = styled.button`
-  border: 0;
-  padding: 1rem 1.5rem;
+const StyledBtn = styled.button`
+  outline: none;
+  cursor: pointer;
+  margin-right: 10px;
   background-color: #e9edc9;
-  border-radius: 5px;
+  border: 0;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
   &:hover {
     background-color: #ccd5ae;
     color: #fff;
@@ -13,9 +16,9 @@ const StyledBBtn = styled.button`
 
 const Btn = ({ onClick, disabled, children }) => {
   return (
-    <StyledBBtn disabled={disabled} onClick={onClick}>
+    <StyledBtn disabled={disabled} onClick={onClick}>
       {children}
-    </StyledBBtn>
+    </StyledBtn>
   );
 };
 

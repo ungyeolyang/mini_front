@@ -5,12 +5,18 @@ const StyledInput = styled.input`
   height: 3rem;
   margin: 0.7rem;
   padding-left: 1rem;
+  background-color: ${(props) => props.color};
   cursor: pointer;
 `;
 
-const Input = ({ onChange, placeholder }) => {
+const Input = ({ onChange, placeholder, color }) => {
   return (
-    <StyledInput type="text" placeholder={placeholder} onChange={onChange} />
+    <StyledInput
+      type="text"
+      placeholder={placeholder}
+      onChange={onChange}
+      color={color}
+    />
   );
 };
 

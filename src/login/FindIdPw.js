@@ -60,13 +60,6 @@ const ModalStyle = styled.div`
     footer {
       padding: 12px 16px;
       text-align: right;
-      button {
-        padding: 6px 12px;
-        color: #000;
-        background-color: #e9edc9;
-        border-radius: 5px;
-        font-size: 13px;
-      }
     }
   }
 
@@ -95,7 +88,9 @@ const Button = styled.button`
   cursor: pointer;
   margin-right: 10px;
   border: 0;
-  width: 60px;
+  padding: 0.9rem 1rem;
+  border-radius: 0.5rem;
+  background-color: #e9edc9;
   &:hover {
     background-color: #ccd5ae;
     color: #fff;
@@ -233,12 +228,8 @@ const FindIdPw = (props) => {
                           placeholder="이메일을 입력해주세요."
                           onChange={onChangeEmail}
                         />
-                        <Btn onClick={onClickCert}>확인</Btn>
+                        <Button onClick={onClickCert}>확인</Button>
                       </div>
-                      {/* <div>
-                        <Input type="text" placeholder="인증번호" />
-                        <Btn>확인</Btn>
-                      </div> */}
                     </Body>
                   </>
                 ) : (
@@ -250,7 +241,7 @@ const FindIdPw = (props) => {
                 )}
               </main>
               <footer>
-                <Button onClick={close}>취소</Button>
+                <Btn onClick={close}>취소</Btn>
               </footer>
             </section>
           )}
