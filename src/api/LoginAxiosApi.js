@@ -39,6 +39,10 @@ const LoginAxiosApi = {
     };
     return await axios.post(DOMAIN + LOGO + "/signup", SignUp);
   },
+
+  memberGetOne: async (id) => {
+    return await axios.get(DOMAIN + LOGO + `/getinfo?id = ${id}`);
+  },
 };
 
 export default LoginAxiosApi;
