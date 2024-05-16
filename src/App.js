@@ -6,6 +6,7 @@ import SignUp from "./login/SignUp";
 import Main from "./main/Main";
 import UserStore from "./context/UserStore";
 import Meeting from "./meeting/Meeting";
+import MyPage from "./mypage/MyPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route path="/signup" element={<SignUp />} />
               <Route path="/main" element={<Main />} />
               <Route path="/meeting" element={<Meeting />} />
+              <Route path="/mypage" element={<MyPage />} />
             </Route>
           </Routes>
         </Router>
