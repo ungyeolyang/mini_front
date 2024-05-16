@@ -12,6 +12,9 @@ const Pp = styled.div``;
 const Bo = styled.div``;
 const Cal = styled.div``;
 const FullBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 40vw;
   height: 80vh;
   background-color: gray;

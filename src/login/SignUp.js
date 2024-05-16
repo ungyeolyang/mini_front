@@ -87,7 +87,7 @@ const SignUp = () => {
     isLogin && navigate("/main");
   };
 
-  //아이디 유효성
+  //아이디 유효성;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   const onChangeId = (e) => {
     const idRegex = /^[a-zA-Z0-9]{5,20}$/;
     const idCurrent = e.target.value;
