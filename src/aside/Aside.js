@@ -31,6 +31,7 @@ const Profil = styled.div`
   display: flex;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 
   img {
     width: 100%;
@@ -85,6 +86,10 @@ const Aside = () => {
     navigate(isLogin ? "/main" : "/");
   };
 
+  const onClickProfil = () => {
+    navigate(isLogin ? "/mypage" : "/");
+  };
+
   useEffect(() => {
     const getMember = async () => {
       try {
@@ -104,7 +109,7 @@ const Aside = () => {
           <img src={isLogin ? LogoImg : LogoStImg} alt="로고" />
         </Logo>
         <Body isLogin={isLogin}>
-          <Profil>
+          <Profil onClick={onClickProfil} isLogin={isLogin}>
             <img src={BinImg || member.image} alt="User" />
           </Profil>
           <>{nick}</>
