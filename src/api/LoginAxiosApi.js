@@ -41,7 +41,7 @@ const LoginAxiosApi = {
   },
 
   memberGetOne: async (id) => {
-    return await axios.get(DOMAIN + LOGO + `/getinfo?id = ${id}`);
+    return await axios.get(DOMAIN + LOGO + `/getinfo?id=${id}`);
   },
 };
 

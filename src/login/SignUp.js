@@ -87,11 +87,11 @@ const SignUp = () => {
     isLogin && navigate("/main");
   };
 
-  //아이디 유효성;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  //아이디 유효성
   const onChangeId = (e) => {
     const idRegex = /^[a-zA-Z0-9]{5,20}$/;
     const idCurrent = e.target.value;
-    setInputPw(idCurrent);
+    setInputId(idCurrent);
     if (!idCurrent) {
       setIdMessage("필수 정보입니다.");
       setIsId(false);
@@ -220,7 +220,6 @@ const SignUp = () => {
       );
 
       if (rsp.data) {
-        setIsLogin(true);
         localStorage.setItem("id", inputId);
         setIsLogin(true);
         setModalOpen(true);

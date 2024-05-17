@@ -14,6 +14,10 @@ const UserStore = (props) => {
     localStorage.getItem("isLogin") || "FALSE"
   );
 
+  // const [member, setMember] = useState(
+  //   localStorage.getItem("member") || "null"
+  // );
+
   useEffect(() => {
     localStorage.setItem("nick", nick);
   }, [nick]);
@@ -26,9 +30,22 @@ const UserStore = (props) => {
     localStorage.setItem("isLogin", isLogin);
   }, [isLogin]);
 
+  // useEffect(() => {
+  //   localStorage.setItem("member", member);
+  // }, [member]);
+
   return (
     <UserContext.Provider
-      value={{ nick, setNick, imgUrl, setImgUrl, isLogin, setIsLogin }}
+      value={{
+        nick,
+        setNick,
+        imgUrl,
+        setImgUrl,
+        isLogin,
+        setIsLogin,
+        // member,
+        // setMember,
+      }}
     >
       {props.children}
     </UserContext.Provider>

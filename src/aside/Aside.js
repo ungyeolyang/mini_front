@@ -112,7 +112,7 @@ const Aside = () => {
           <Profil onClick={onClickProfil} isLogin={isLogin}>
             <img src={BinImg || member.image} alt="User" />
           </Profil>
-          <>{nick}</>
+          <>{!member ? nick : member[0].nick}</>
           <footer>
             <Link to="/board">게시판</Link>ㅣ<Link to="/letter">쪽지함</Link>
           </footer>

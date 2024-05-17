@@ -99,7 +99,6 @@ const Login = () => {
   const onClickLogin = async () => {
     try {
       const rsp = await LoginAxiosApi.memberLogin(inputId, inputPw);
-      console.log(rsp.data);
       if (rsp.data) {
         localStorage.setItem("id", inputId);
         setIsLogin(true);

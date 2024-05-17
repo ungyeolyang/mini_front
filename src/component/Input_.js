@@ -6,12 +6,20 @@ const StyledInput = styled.input`
   padding-left: 1rem;
   border: none;
   border-bottom: 0.1rem solid silver;
-  cursor: pointer;
+  cursor: ${(props) => !props.disabled && `pointer`};
+  &:focus {
+    outline: none;
+  }
 `;
 
-const Input_ = ({ onChange, placeholder }) => {
+const Input_ = ({ onChange, placeholder, disabled }) => {
   return (
-    <StyledInput type="text" placeholder={placeholder} onChange={onChange} />
+    <StyledInput
+      type="text"
+      placeholder={placeholder}
+      onChange={onChange}
+      disabled={disabled}
+    />
   );
 };
 

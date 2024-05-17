@@ -13,6 +13,7 @@ const rightShow = (isLogin) => keyframes`
 
 const StyledRight = styled.div`
   display: flex;
+  background-color: ${({ backgroundColor }) => backgroundColor || `inherit`};
   ${({ isLogin }) => !isLogin && `flex-direction: column;`};
   justify-content: center;
   align-items: center;
@@ -22,11 +23,15 @@ const StyledRight = styled.div`
 `;
 
 // Right 컴포넌트 정의
-const Right = ({ children }) => {
+const Right = ({ children, backgroundColor }) => {
   const context = useContext(UserContext);
   const { isLogin, setIsLogin } = context;
 
-  return <StyledRight isLogin={isLogin}>{children}</StyledRight>;
+  return (
+    <StyledRight isLogin={isLogin} backgroundColor={backgroundColor}>
+      {children}
+    </StyledRight>
+  );
 };
 
 export default Right;

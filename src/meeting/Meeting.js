@@ -2,15 +2,18 @@ import styled from "styled-components";
 import Right from "../component/Right";
 import { useContext, useEffect, useRef, useState } from "react";
 import Btn from "../component/Btn";
-import MeetingAxiosApi from "../api/MeetingAxiosApi";
 import { UserContext } from "../context/UserStore";
 import Modal from "../component/Modal";
 import Chatting from "./Chatting";
 import Calendar from "./Calender";
+import Board from "../component/Board";
+import Member from "../component/Member";
 
-const Pp = styled.div``;
-const Bo = styled.div``;
-const Cal = styled.div``;
+const Container = styled.div`
+  display: flex;
+  min-height: 80vh;
+  overflow: hidden;
+`;
 const FullBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -30,12 +33,14 @@ const Meeting = () => {
   return (
     <>
       <Right>
-        <FullBox>
-          <Pp>참여자</Pp>
-          <Bo>공지사항</Bo>
-          <Calendar />
-        </FullBox>
-        <Chatting />
+        <Container>
+          <FullBox>
+            <Member></Member>
+            <Board></Board>
+            <Calendar />
+          </FullBox>
+          <Chatting />
+        </Container>
       </Right>
       <Modal open={modalOpen} close={closeModal} header="오류">
         {modalContent}
