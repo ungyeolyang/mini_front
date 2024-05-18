@@ -1,8 +1,8 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import LogoImg from "../image/로고.png";
 import LogoStImg from "../image/로고-문구.png";
-import BinImg from "../image/사람아이콘.png";
 import styled from "styled-components";
+import Btn from "../component/Btn";
 import { useContext, useEffect, useState } from "react";
 import LoginAxiosApi from "../api/LoginAxiosApi";
 import { UserContext } from "../context/UserStore";
@@ -71,7 +71,30 @@ const Body = styled.div`
     }
   }
 `;
+const Nick = styled.span`
+  padding-top: 1rem;
+  font-size: large;
+  font-weight: bold;
+`;
 
+const Id = styled.span`
+  color: gray;
+`;
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  padding: 0.3rem 0.6rem;
+  gap: 0.4rem;
+  margin-top: 1rem;
+  border-radius: 2rem;
+  color: gray;
+  border: 1px solid silver;
+  background-color: transparent;
+  cursor: pointer;
+  &:hover {
+    color: black;
+  }
+`;
 const Aside = () => {
   const [member, setMember] = useState(null);
 
@@ -88,6 +111,11 @@ const Aside = () => {
 
   const onClickProfil = () => {
     navigate(isLogin ? "/mypage" : "/");
+  };
+
+  const onClickLogOut = () => {
+    navigate("/");
+    localStorage.clear();
   };
 
   useEffect(() => {
@@ -110,9 +138,13 @@ const Aside = () => {
         </Logo>
         <Body isLogin={isLogin}>
           <Profil onClick={onClickProfil} isLogin={isLogin}>
-            <img src={BinImg || member.image} alt="User" />
+            <img src={member ? member[0]?.profile : imgUrl} alt="User" />
           </Profil>
-          <>{!member ? nick : member[0].nick}</>
+          <Nick>{member ? member[0]?.nick : nick}</Nick>
+          <Id>{"(" + id + ")"}</Id>
+          <Button onClick={onClickLogOut}>
+            로그아웃<span>[→</span>
+          </Button>
           <footer>
             <Link to="/board">게시판</Link>ㅣ<Link to="/letter">쪽지함</Link>
           </footer>

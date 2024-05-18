@@ -1,5 +1,4 @@
 import styled from "styled-components"; // 화면 스타일링
-import backgroundImage from "/Users/82102/dev/mini_front/src/image/sp_main.74b52318.png";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import AxiosApi from "../api/AxiosApi";
@@ -210,7 +209,7 @@ const Boders = () => {
   );
 
   const handleClick = () => {
-    navigate("/BoInser");
+    navigate("/boinser");
   };
 
   return (
@@ -220,9 +219,7 @@ const Boders = () => {
           <TopContainer>
             <Title>게시판 </Title>
             <Ham>
-              <Hamburger
-                style={{ backgroundImage: `url(${backgroundImage})` }}
-              ></Hamburger>
+              <Hamburger></Hamburger>
             </Ham>
           </TopContainer>
           <SerchContainer>

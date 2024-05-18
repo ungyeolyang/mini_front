@@ -1,17 +1,27 @@
 import styled from "styled-components";
 import LoginAxiosApi from "../api/LoginAxiosApi";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Right from "../component/Right";
 import Modal from "../component/Modal";
 import { UserContext } from "../context/UserStore";
 import Input_ from "../component/Input_";
 import BBtn from "../component/BBtn";
+import { storage } from "../api/FireBase";
+import Person from "../image/사람아이콘.png";
+import Profile from "../component/Profile";
+
+const Container = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem;
+`;
 
 const DateInput = styled.input`
-  width: 14.5rem;
-  height: 3rem;
-
+  width: 19rem;
   padding-left: 1rem;
   color: #757575;
   border: none;
@@ -21,18 +31,27 @@ const DateInput = styled.input`
 
 const Gender = styled.div`
   display: flex;
-  margin: 0.7rem;
+  width: 25rem;
+  height: 3rem;
   gap: 2rem;
+  padding-left: 1rem;
   div {
     justify-content: center;
     align-items: center;
   }
 `;
 
+const Birth = styled.div`
+  display: flex;
+  width: 25rem;
+  height: 3rem;
+  gap: 1.3rem;
+`;
+
 const Placeholder = styled.span`
   color: #757575;
   font-size: small;
-  padding: 1rem 1rem 1rem 1.1rem;
+  padding: 1rem 0 1rem 1rem;
 `;
 
 const Placeholder1 = styled.span`
@@ -54,13 +73,18 @@ const Error = styled.span`
 
 const SignUp = () => {
   const context = useContext(UserContext);
-  const { nick, setNick, isLogin, setIsLogin } = context;
+  const { nick, setNick, isLogin, setIsLogin, imgUrl, setImgUrl } = context;
+  const navigate = useNavigate();
+  const inputFile = useRef(null);
   //입력정보
   const [inputId, setInputId] = useState("");
   const [inputPw, setInputPw] = useState("");
   const [InputBirth, setInputBirth] = useState("");
   const [inputEmail, setInputEmail] = useState("");
   const [inputGender, setInputGender] = useState("비공개");
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(Person);
+
   //오류 메세지
   const [idMessage, setIdMessage] = useState("");
   const [pwMessage, setPwMessage] = useState("");
@@ -79,12 +103,21 @@ const SignUp = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [head, setHead] = useState("");
 
-  const navigate = useNavigate();
-
   //모달창닫기
   const closeModal = () => {
     setModalOpen(false);
     isLogin && navigate("/main");
+  };
+
+  //프로필 선택
+  const onChangFile = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setPreviewUrl(URL.createObjectURL(selectedFile));
+    } else {
+      console.error("파일이 선택 안됨");
+    }
   };
 
   //아이디 유효성
@@ -193,7 +226,6 @@ const SignUp = () => {
   //생년월일 입력 여부
   const onChangeBirth = (e) => {
     const birthCurrent = e.target.value;
-    console.log(birthCurrent);
     setInputBirth(birthCurrent);
     if (!birthCurrent) {
       setIsBirth(false);
@@ -207,16 +239,33 @@ const SignUp = () => {
   const onChangeGender = (e) => {
     setInputGender(e.target.value);
   };
+
+  const onClickInputFile = () => {
+    inputFile.current.click();
+  };
+
   // 회원가입버튼 클릭
   const onClickSignUp = async () => {
+    const storageRef = storage.ref();
+    const fileRef = storageRef.child(file.name);
+
     try {
+      if (file) {
+        await fileRef.put(file);
+        console.log("파일이 정상적으로 업로드됨");
+        const url = await fileRef.getDownloadURL();
+        console.log("저장경로 확인 : " + url);
+        setImgUrl(url);
+      }
+
       const rsp = await LoginAxiosApi.memberSignUp(
         inputId,
         inputPw,
         nick,
         InputBirth,
         inputEmail,
-        inputGender
+        inputGender,
+        imgUrl
       );
 
       if (rsp.data) {
@@ -244,63 +293,69 @@ const SignUp = () => {
   return (
     <>
       <Right>
-        <H>회원가입</H>
-        <Input_ placeholder="*아이디" onChange={onChangeId} />
-        <Error> {idMessage}</Error>
-        <Input_ placeholder="*비밀번호" onChange={onChangePw} />
-        <Error>{pwMessage}</Error>
-        <Input_ placeholder="*닉네임" onChange={onChangeNick} />
-        <Error>{nickMessage}</Error>
-        <div>
-          <Placeholder>*생년월일</Placeholder>
-          <DateInput type="date" onChange={onChangeBirth} />
-        </div>
-        <Error>{birthMessage}</Error>
-        <Input_ placeholder="*이메일" onChange={onChangeMail} />
-        <Error>{emailMessage}</Error>
-        <Gender>
-          <Placeholder1>*성별</Placeholder1>
-          <div>
-            <label htmlFor="남">남</label>
-            <input
-              type="radio"
-              id="남"
-              name="gender"
-              value="남자"
-              onChange={onChangeGender}
-              checked={inputGender === "남자"}
-            />
-          </div>
-          <div>
-            <label htmlFor="여">여</label>
-            <input
-              type="radio"
-              id="여"
-              name="gender"
-              value="여자"
-              onChange={onChangeGender}
-              checked={inputGender === "여자"}
-            />
-          </div>
-          <div>
-            <label htmlFor="비공개">비공개</label>
-            <input
-              type="radio"
-              id="비공개"
-              name="gender"
-              value="비공개"
-              onChange={onChangeGender}
-              checked={inputGender === "비공개"}
-            />
-          </div>
-        </Gender>
+        <Container>
+          <H>회원가입</H>
+          <Profile onClick={onClickInputFile}>
+            <img src={previewUrl} alt="프로필사진" />
+            <input type="file" onChange={onChangFile} ref={inputFile} hidden />
+          </Profile>
+          <Input_ placeholder="*아이디" onChange={onChangeId} />
+          <Error> {idMessage}</Error>
+          <Input_ placeholder="*비밀번호" onChange={onChangePw} />
+          <Error>{pwMessage}</Error>
+          <Input_ placeholder="*닉네임" onChange={onChangeNick} />
+          <Error>{nickMessage}</Error>
+          <Birth>
+            <Placeholder>*생년월일</Placeholder>
+            <DateInput type="date" onChange={onChangeBirth} />
+          </Birth>
+          <Error>{birthMessage}</Error>
+          <Input_ placeholder="*이메일" onChange={onChangeMail} />
+          <Error>{emailMessage}</Error>
+          <Gender>
+            <Placeholder1>*성별</Placeholder1>
+            <div>
+              <label htmlFor="남">남</label>
+              <input
+                type="radio"
+                id="남"
+                name="gender"
+                value="남자"
+                onChange={onChangeGender}
+                checked={inputGender === "남자"}
+              />
+            </div>
+            <div>
+              <label htmlFor="여">여</label>
+              <input
+                type="radio"
+                id="여"
+                name="gender"
+                value="여자"
+                onChange={onChangeGender}
+                checked={inputGender === "여자"}
+              />
+            </div>
+            <div>
+              <label htmlFor="비공개">비공개</label>
+              <input
+                type="radio"
+                id="비공개"
+                name="gender"
+                value="비공개"
+                onChange={onChangeGender}
+                checked={inputGender === "비공개"}
+              />
+            </div>
+          </Gender>
 
-        <BBtn
-          disabled={!(isId && isPw && isEmail && isNick && isBirth)}
-          onClick={onClickSignUp}
-        >
-          회원가입
-        </BBtn>
+          <BBtn
+            disabled={!(isId && isPw && isEmail && isNick && isBirth)}
+            onClick={onClickSignUp}
+          >
+            회원가입
+          </BBtn>
+        </Container>
       </Right>
       <Modal open={modalOpen} close={closeModal} header={head} btn="확인">
         {modalContent}
@@ -308,5 +363,5 @@ const SignUp = () => {
     </>
   );
 };
-// close={closeModal}
+
 export default SignUp;

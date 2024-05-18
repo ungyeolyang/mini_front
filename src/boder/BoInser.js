@@ -1,7 +1,7 @@
 import styled from "styled-components"; // 화면 스타일링
 import React, { useState } from "react";
 import AxiosApi from "../api/AxiosApi";
-import Modal from "../conponent/Modal";
+import Modal from "../component/Modal";
 import { useNavigate } from "react-router-dom";
 
 const Left = styled.div`

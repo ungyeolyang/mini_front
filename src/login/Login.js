@@ -158,7 +158,7 @@ const Login = () => {
           </Circle>
         </Api>
       </Right>
-      <Modal open={modalOpen} close={closeModal} header="오류">
+      <Modal open={modalOpen} close={closeModal} header="오류" btn="확인">
         {modalContent}
       </Modal>
       <FindIdPw

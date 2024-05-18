@@ -3,10 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import Right from "../component/Right";
 import Input_ from "../component/Input_";
 import Btn from "../component/Btn";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import LoginAxiosApi from "../api/LoginAxiosApi";
-import MyAxiosApi from "../api/LoginAxiosApi";
+import MyAxiosApi from "../api/MyAxiosApi";
 import { UserContext } from "../context/UserStore";
+import Modal from "../component/Modal";
+import Profile from "../component/Profile";
+import { storage } from "../api/FireBase";
+import Person from "../image/사람아이콘.png";
 
 const OutContainer = styled.div`
   background-color: #b8d0fa;
@@ -30,8 +34,8 @@ const Head = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 3rem 0;
-  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  margin-bottom: 3rem;
   border-bottom: 1px solid silver;
 `;
 
@@ -53,18 +57,9 @@ const Div = styled.div`
   }
 `;
 
-const Profile = styled.div`
-  width: 9rem;
-  height: 9rem;
-  border-radius: 50%;
-  background-color: silver;
-  display: flex;
-  overflow: hidden;
-`;
-
 const SayHi = styled.div`
   font-size: 40px;
-  padding: 2rem 2rem 0.5rem 2rem;
+  padding: 2rem 2rem 1rem 2rem;
 `;
 
 const Error = styled.span`
@@ -82,34 +77,55 @@ const Button = styled.div`
   bottom: 7rem;
 `;
 
-const MyPage = () => {
-  const [member, setMember] = useState(null);
-  const id = localStorage.getItem("id");
+const Pw = styled.span`
+  width: ${({ curPw }) => (curPw ? `7rem` : `4.4rem`)};
+  span {
+    display: ${({ curPw }) => (!curPw ? "none" : "inline")};
+  }
+`;
 
+const MyPage = () => {
+  const id = localStorage.getItem("id");
+  const navigate = useNavigate();
+  const inputFile = useRef(null);
   const context = useContext(UserContext);
-  const { nick, setNick, isLogin } = context;
+  const { nick, setNick, setImgUrl } = context;
   //입력정보
+  const [curPw, setCurPw] = useState("");
   const [inputPw, setInputPw] = useState("");
   const [inputNick, setInputNick] = useState("");
   const [inputGender, setInputGender] = useState("비공개");
   const [inputIntro, setInputIntro] = useState("");
+
+  const [file, setFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
   //오류 메세지
+  const [curPwMessage, setCurPwMessage] = useState("");
   const [pwMessage, setPwMessage] = useState("");
   //유효성검사
+  const [isConPw, setIsConPw] = useState(false);
   const [isPw, setIsPw] = useState(false);
-  const [isBirth, setIsBirth] = useState(false);
 
   //모달창
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [head, setHead] = useState("");
 
-  const navigate = useNavigate();
+  const [member, setMember] = useState(null);
 
   //모달창닫기
   const closeModal = () => {
     setModalOpen(false);
-    isLogin && navigate("/main");
+  };
+
+  const onChangFile = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+      setPreviewUrl(URL.createObjectURL(selectedFile));
+    } else {
+      console.error("파일이 선택 안됨");
+    }
   };
 
   //비밀번호 유효성
@@ -125,36 +141,118 @@ const MyPage = () => {
       setIsPw(true);
     }
   };
-
+  //현재 비밀번호 확인
+  const onChangeCurPw = async (e) => {
+    setCurPw(e.target.value);
+    try {
+      const rsp = await MyAxiosApi.memberConPw(id, e.target.value);
+      if (!e.target.value) {
+        setCurPwMessage("");
+        setIsConPw(false);
+      } else if (rsp.data) {
+        setCurPwMessage("");
+        setIsConPw(true);
+      } else {
+        setCurPwMessage("현재 비밀번호를 입력해주세요");
+        setIsConPw(false);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  //닉네임 입력
   const onChangeNick = (e) => {
     const nickCurrent = e.target.value;
     setInputNick(nickCurrent);
   };
-
+  //성별 입력
   const onChangeGender = (e) => {
     setInputGender(e.target.value);
   };
-
+  //자기소개 입력
   const onChangeIntro = (e) => {
     setInputIntro(e.target.value);
   };
+  //프로필 클릭
+  const onClickInputFile = () => {
+    inputFile.current.click();
+  };
+  //기본프로필 클릭
+  const onClickBasic = () => {
+    setPreviewUrl(Person);
+    setFile(null);
+  };
+
+  //프로필 수정버튼 클릭
+  const onClickProfileEdit = async () => {
+    const storageRef = storage.ref();
+    let fileRef;
+
+    if (file) {
+      fileRef = storageRef.child(file.name);
+    } else {
+      fileRef = storageRef.child("basic.png");
+    }
+
+    try {
+      if (file) {
+        await fileRef.put(file);
+        console.log("파일이 정상적으로 업로드됨");
+      } else {
+        const response = await fetch(Person);
+        const blob = await response.blob();
+        await fileRef.put(blob);
+        console.log("기본 프로필이 정상적으로 업로드됨");
+      }
+
+      const url = await fileRef.getDownloadURL();
+      console.log("저장경로 확인 : " + url);
+      setImgUrl(url);
+
+      const rsp = await MyAxiosApi.profileEdit(id, url);
+
+      if (rsp.data) {
+        setModalOpen(true);
+        setHead("프로필 수정");
+        setModalContent("프로필이 수정되었습니다.");
+      } else {
+        setModalOpen(true);
+        setHead("오류");
+        setModalContent("프로필 수정에 실패했습니다.");
+      }
+    } catch (e) {
+      setModalOpen(true);
+      setHead("오류");
+      setModalContent("서버가 응답하지 않습니다.");
+    }
+  };
+
   // 수정버튼 클릭
   const onClickEdit = async () => {
     if (member) {
-      !inputNick && setNick(inputNick);
-      const changePw = !inputPw ? inputPw : member[0].pw;
-      const changeIntro = !inputIntro ? inputIntro : member[0].introdution;
+      const changePw = inputPw || member[0].pw;
+      const changeNick = inputNick || member[0].nick;
+      const changeIntro = inputIntro || member[0].introduction;
+
+      if (isConPw && !isPw) {
+        setModalOpen(true);
+        setHead("오류");
+        setModalContent("회원정보 수정에 실패했습니다.");
+        return;
+      }
+
       try {
         const rsp = await MyAxiosApi.memberEdit(
           id,
           changePw,
           member[0].birth,
-          nick,
+          changeNick,
           member[0].email,
           inputGender,
           changeIntro
         );
         if (rsp.data) {
+          setNick(changeNick); // 닉네임 업데이트
           setModalOpen(true);
           setHead("정보수정");
           setModalContent("회원정보를 수정했습니다.");
@@ -171,6 +269,7 @@ const MyPage = () => {
     }
   };
 
+  //회원정보 가져오기
   useEffect(() => {
     const getMember = async () => {
       try {
@@ -181,7 +280,14 @@ const MyPage = () => {
       }
     };
     getMember();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    if (member && member.length > 0) {
+      setInputGender(member[0].gender);
+      setPreviewUrl(member[0].profile);
+    }
+  }, [member]);
 
   return (
     <>
@@ -190,32 +296,55 @@ const MyPage = () => {
           <Right>
             <InContainer>
               <Head>
-                <Profile />
+                <Cdiv style={{ paddingTop: `3rem`, gap: `1rem` }}>
+                  <Profile size="9rem" onClick={onClickInputFile}>
+                    <img src={previewUrl} alt="프로필" />
+                    <input
+                      type="file"
+                      onChange={onChangFile}
+                      ref={inputFile}
+                      hidden
+                    />
+                  </Profile>
+                  <Btn onClick={onClickBasic}>기본 프로필</Btn>
+                </Cdiv>
                 <Cdiv>
-                  <SayHi>'{member[0].nick}'님 안녕하세요!</SayHi>
-                  <Btn>프로필 사진 변경</Btn>
+                  <SayHi>'{nick}'님 안녕하세요!</SayHi>
+                  <div>
+                    <Btn onClick={onClickProfileEdit}>프로필 사진 변경</Btn>
+                  </div>
                 </Cdiv>
               </Head>
               <Div>
-                <div>아이디</div>
-                <Input_ placeholder={member[0].id} disabled={true} />
+                <Pw curPw={curPw}>
+                  <span>현재 </span>비밀번호
+                </Pw>
+                <Input_
+                  placeholder={`*`.repeat(member[0]?.pw.length)}
+                  onChange={onChangeCurPw}
+                />
+                <Error>{curPwMessage}</Error>
               </Div>
-              <Div>
-                <div>비밀번호</div>
-                <Input_ placeholder={member[0].pw} onChange={onChangePw} />
+              <Div style={{ display: !curPw && "none" }}>
+                <Pw curPw={curPw}>새 비밀번호</Pw>
+                <Input_
+                  placeholder="새로운 비밀번호를 입력해주세요"
+                  onChange={onChangePw}
+                  disabled={!isConPw}
+                />
                 <Error>{pwMessage}</Error>
               </Div>
               <Div>
                 <div>닉네임</div>
-                <Input_ placeholder={member[0].nick} onChange={onChangeNick} />
+                <Input_ placeholder={member[0]?.nick} onChange={onChangeNick} />
               </Div>
               <Div>
                 <div>생년월일</div>
-                <Input_ placeholder={member[0].birth} disabled={true} />
+                <Input_ placeholder={member[0]?.birth} disabled={true} />
               </Div>
               <Div>
                 <div>이메일</div>
-                <Input_ placeholder={member[0].email} disabled={true} />
+                <Input_ placeholder={member[0]?.email} disabled={true} />
               </Div>
               <Div type="gender">
                 <div>성별</div>
@@ -256,17 +385,20 @@ const MyPage = () => {
               <Div>
                 <div>자기소개</div>{" "}
                 <Input_
-                  placeholder={member[0].introdution}
+                  placeholder={member[0]?.introdution}
                   onChange={onChangeIntro}
                 />
               </Div>
               <Button>
-                <Btn>정보 수정</Btn>
+                <Btn onClick={onClickEdit}>정보 수정</Btn>
               </Button>
             </InContainer>
           </Right>
         </OutContainer>
       )}
+      <Modal open={modalOpen} close={closeModal} header={head} btn="확인">
+        {modalContent}
+      </Modal>
     </>
   );
 };

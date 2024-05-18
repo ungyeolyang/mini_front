@@ -17,10 +17,21 @@ const MyAxiosApi = {
     return await axios.post(DOMAIN + LOGO + "/memberedit", member);
   },
 
-  chatList: async (meetingNo) => {
-    return await axios.get(
-      DOMAIN + LOGO + `/memberedit?meetingNo=${meetingNo}`
-    );
+  profileEdit: async (id, profile) => {
+    const editProfile = {
+      id: id,
+      profile: profile,
+    };
+    return await axios.post(DOMAIN + LOGO + `/profileedit`, editProfile);
+  },
+
+  //비밀번호가 있으면 true
+  memberConPw: async (id, pw) => {
+    const memberConPw = {
+      id: id,
+      pw: pw,
+    };
+    return await axios.post(DOMAIN + LOGO + `/conpw`, memberConPw);
   },
 };
 
