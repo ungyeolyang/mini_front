@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Right from "../component/Right";
 import Modal from "../component/Modal";
 import { UserContext } from "../context/UserStore";
-import Input_ from "../component/Input_";
+import InputBar from "../component/InputBar";
 import BBtn from "../component/BBtn";
 import { storage } from "../api/FireBase";
 import Person from "../image/사람아이콘.png";
@@ -18,6 +18,10 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   gap: 0.2rem;
+  & > :nth-child(2) {
+    margin-bottom: 10%;
+    align-self: flex-start;
+  }
 `;
 
 const DateInput = styled.input`
@@ -57,7 +61,7 @@ const Placeholder = styled.span`
 const Placeholder1 = styled.span`
   color: #757575;
   font-size: small;
-  padding: 0.1rem 1rem 0 0.1rem;
+  padding: 0.1rem 3rem 0 0.1rem;
 `;
 
 const H = styled.h1`
@@ -69,6 +73,13 @@ const Error = styled.span`
   font-size: 0.8rem;
   height: 1.5rem;
   padding-top: 0.2rem;
+`;
+
+const Div = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0 0.8rem;
+  gap: 5rem;
 `;
 
 const SignUp = () => {
@@ -295,22 +306,30 @@ const SignUp = () => {
       <Right>
         <Container>
           <H>회원가입</H>
-          <Profile onClick={onClickInputFile}>
-            <img src={previewUrl} alt="프로필사진" />
-            <input type="file" onChange={onChangFile} ref={inputFile} hidden />
-          </Profile>
-          <Input_ placeholder="*아이디" onChange={onChangeId} />
+          <Div>
+            <Placeholder>*프로필</Placeholder>
+            <Profile onClick={onClickInputFile} size={"9rem"}>
+              <img src={previewUrl} alt="프로필사진" />
+              <input
+                type="file"
+                onChange={onChangFile}
+                ref={inputFile}
+                hidden
+              />
+            </Profile>
+          </Div>
+          <InputBar placeholder="*아이디" onChange={onChangeId} />
           <Error> {idMessage}</Error>
-          <Input_ placeholder="*비밀번호" onChange={onChangePw} />
+          <InputBar placeholder="*비밀번호" onChange={onChangePw} />
           <Error>{pwMessage}</Error>
-          <Input_ placeholder="*닉네임" onChange={onChangeNick} />
+          <InputBar placeholder="*닉네임" onChange={onChangeNick} />
           <Error>{nickMessage}</Error>
           <Birth>
             <Placeholder>*생년월일</Placeholder>
             <DateInput type="date" onChange={onChangeBirth} />
           </Birth>
           <Error>{birthMessage}</Error>
-          <Input_ placeholder="*이메일" onChange={onChangeMail} />
+          <InputBar placeholder="*이메일" onChange={onChangeMail} />
           <Error>{emailMessage}</Error>
           <Gender>
             <Placeholder1>*성별</Placeholder1>

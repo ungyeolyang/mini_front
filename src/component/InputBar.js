@@ -12,7 +12,7 @@ const StyledInput = styled.input`
   }
 `;
 
-const Input_ = ({ onChange, placeholder, disabled, hidden }) => {
+const InputBar = ({ onChange, placeholder, disabled, hidden }) => {
   return (
     <StyledInput
       type="text"
@@ -24,4 +24,4 @@ const Input_ = ({ onChange, placeholder, disabled, hidden }) => {
   );
 };
 
-export default Input_;
+export default InputBar;

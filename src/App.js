@@ -9,6 +9,7 @@ import Meeting from "./meeting/Meeting";
 import MyPage from "./mypage/MyPage";
 import Boders from "./boder/Boders";
 import BoInser from "./boder/BoInser";
+import Letter from "./letter/Letter";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/main" element={<Main />} />
               <Route path="/meeting" element={<Meeting />} />
               <Route path="/mypage" element={<MyPage />} />
+              <Route path="/letter" element={<Letter />} />
               <Route path="/board" element={<Boders />} />
               <Route path="/boinser" element={<BoInser />} />
             </Route>

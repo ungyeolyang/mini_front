@@ -1,8 +1,7 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import LogoImg from "../image/로고.png";
 import LogoStImg from "../image/로고-문구.png";
 import styled from "styled-components";
-import Btn from "../component/Btn";
 import { useContext, useEffect, useState } from "react";
 import LoginAxiosApi from "../api/LoginAxiosApi";
 import { UserContext } from "../context/UserStore";
@@ -55,7 +54,6 @@ const Body = styled.div`
   display: ${({ isLogin }) => (isLogin ? "flex" : "none")};
   flex-direction: column;
   align-items: center;
-  height: 100%;
 
   footer {
     color: #707070;
@@ -95,13 +93,20 @@ const Button = styled.button`
     color: black;
   }
 `;
+
+const Div = styled.div`
+  display: flex;
+  background-color: ${(props) => props.color || `transparent`};
+  flex: 1;
+`;
+
 const Aside = () => {
   const [member, setMember] = useState(null);
 
   const navigate = useNavigate();
 
   const context = useContext(UserContext);
-  const { nick, imgUrl, isLogin } = context;
+  const { nick, imgUrl, isLogin, color } = context;
 
   const id = localStorage.getItem("id");
 
@@ -128,7 +133,7 @@ const Aside = () => {
       }
     };
     getMember();
-  }, [nick, imgUrl]);
+  }, [id, nick, imgUrl]);
 
   return (
     <Container>
@@ -150,9 +155,9 @@ const Aside = () => {
           </footer>
         </Body>
       </Side>
-      <div style={{ flex: 1 }}>
+      <Div color={color}>
         <Outlet />
-      </div>
+      </Div>
     </Container>
   );
 };

@@ -1,15 +1,15 @@
 import styled from "styled-components";
 
 const Container = styled.div`
-  width: 95%;
-  background-color: black;
+  width: 100%;
 `;
 const Head = styled.div`
   display: flex;
-  background-color: #94b9f3;
+  padding: 1% 0;
+  background-color: #b8d0fa;
 `;
 const Box = styled.div`
-  padding: 0.5% 0;
+  padding: 2% 0;
   text-align: center;
   font-weight: bold;
   width: ${(props) => {
@@ -28,10 +28,11 @@ const Box = styled.div`
   }};
 `;
 const Body = styled.div`
-  background-color: #b8d0fa;
+  background-color: #e5f3ff;
 `;
 const Line = styled.div`
   display: flex;
+  border-bottom: 1px solid gray;
 `;
 const Board = () => {
   return (
@@ -43,6 +44,30 @@ const Board = () => {
         <Box tyep="view">조회수</Box>
       </Head>
       <Body>
+        <Line>
+          <Box type="title">제목</Box>
+          <Box type="author">작성자</Box>
+          <Box type="date">작성일</Box>
+          <Box tyep="view">조회수</Box>
+        </Line>
+        <Line>
+          <Box type="title">제목</Box>
+          <Box type="author">작성자</Box>
+          <Box type="date">작성일</Box>
+          <Box tyep="view">조회수</Box>
+        </Line>
+        <Line>
+          <Box type="title">제목</Box>
+          <Box type="author">작성자</Box>
+          <Box type="date">작성일</Box>
+          <Box tyep="view">조회수</Box>
+        </Line>
+        <Line>
+          <Box type="title">제목</Box>
+          <Box type="author">작성자</Box>
+          <Box type="date">작성일</Box>
+          <Box tyep="view">조회수</Box>
+        </Line>
         <Line>
           <Box type="title">제목</Box>
           <Box type="author">작성자</Box>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import Right from "../component/Right";
-import Input_ from "../component/Input_";
+import InputBar from "../component/InputBar";
 import Btn from "../component/Btn";
 import { useContext, useEffect, useRef, useState } from "react";
 import LoginAxiosApi from "../api/LoginAxiosApi";
@@ -12,10 +12,6 @@ import Profile from "../component/Profile";
 import { storage } from "../api/FireBase";
 import Person from "../image/사람아이콘.png";
 
-const OutContainer = styled.div`
-  background-color: #b8d0fa;
-  height: 100vh;
-`;
 const InContainer = styled.div`
   position: absolute;
   bottom: 0;
@@ -84,12 +80,12 @@ const Pw = styled.span`
   }
 `;
 
-const MyPage = () => {
+const MyPage = ({ selectColor }) => {
   const id = localStorage.getItem("id");
   const navigate = useNavigate();
   const inputFile = useRef(null);
   const context = useContext(UserContext);
-  const { nick, setNick, setImgUrl } = context;
+  const { nick, setNick, setImgUrl, color, setColor } = context;
   //입력정보
   const [curPw, setCurPw] = useState("");
   const [inputPw, setInputPw] = useState("");
@@ -280,7 +276,7 @@ const MyPage = () => {
       }
     };
     getMember();
-  }, [id]);
+  }, [id, nick]);
 
   useEffect(() => {
     if (member && member.length > 0) {
@@ -289,112 +285,115 @@ const MyPage = () => {
     }
   }, [member]);
 
+  useEffect(() => {
+    setColor("#b8d0fa");
+    return () => setColor("transparent");
+  }, [color]);
+
   return (
     <>
       {member && (
-        <OutContainer>
-          <Right>
-            <InContainer>
-              <Head>
-                <Cdiv style={{ paddingTop: `3rem`, gap: `1rem` }}>
-                  <Profile size="9rem" onClick={onClickInputFile}>
-                    <img src={previewUrl} alt="프로필" />
-                    <input
-                      type="file"
-                      onChange={onChangFile}
-                      ref={inputFile}
-                      hidden
-                    />
-                  </Profile>
-                  <Btn onClick={onClickBasic}>기본 프로필</Btn>
-                </Cdiv>
-                <Cdiv>
-                  <SayHi>'{nick}'님 안녕하세요!</SayHi>
-                  <div>
-                    <Btn onClick={onClickProfileEdit}>프로필 사진 변경</Btn>
-                  </div>
-                </Cdiv>
-              </Head>
-              <Div>
-                <Pw curPw={curPw}>
-                  <span>현재 </span>비밀번호
-                </Pw>
-                <Input_
-                  placeholder={`*`.repeat(member[0]?.pw.length)}
-                  onChange={onChangeCurPw}
-                />
-                <Error>{curPwMessage}</Error>
-              </Div>
-              <Div style={{ display: !curPw && "none" }}>
-                <Pw curPw={curPw}>새 비밀번호</Pw>
-                <Input_
-                  placeholder="새로운 비밀번호를 입력해주세요"
-                  onChange={onChangePw}
-                  disabled={!isConPw}
-                />
-                <Error>{pwMessage}</Error>
-              </Div>
-              <Div>
-                <div>닉네임</div>
-                <Input_ placeholder={member[0]?.nick} onChange={onChangeNick} />
-              </Div>
-              <Div>
-                <div>생년월일</div>
-                <Input_ placeholder={member[0]?.birth} disabled={true} />
-              </Div>
-              <Div>
-                <div>이메일</div>
-                <Input_ placeholder={member[0]?.email} disabled={true} />
-              </Div>
-              <Div type="gender">
-                <div>성별</div>
-                <div>
-                  <label htmlFor="남">남</label>
+        <Right>
+          <InContainer>
+            <Head>
+              <Cdiv style={{ paddingTop: `3rem`, gap: `1rem` }}>
+                <Profile size="9rem" onClick={onClickInputFile}>
+                  <img src={previewUrl} alt="프로필" />
                   <input
-                    type="radio"
-                    id="남"
-                    name="gender"
-                    value="남자"
-                    onChange={onChangeGender}
-                    checked={inputGender === "남자"}
+                    type="file"
+                    onChange={onChangFile}
+                    ref={inputFile}
+                    hidden
                   />
-                </div>
+                </Profile>
+                <Btn onClick={onClickBasic}>기본 프로필</Btn>
+              </Cdiv>
+              <Cdiv>
+                <SayHi>'{member[0]?.nick}'님 안녕하세요!</SayHi>
                 <div>
-                  <label htmlFor="여">여</label>
-                  <input
-                    type="radio"
-                    id="여"
-                    name="gender"
-                    value="여자"
-                    onChange={onChangeGender}
-                    checked={inputGender === "여자"}
-                  />
+                  <Btn onClick={onClickProfileEdit}>프로필 사진 변경</Btn>
                 </div>
-                <div>
-                  <label htmlFor="비공개">비공개</label>
-                  <input
-                    type="radio"
-                    id="비공개"
-                    name="gender"
-                    value="비공개"
-                    onChange={onChangeGender}
-                    checked={inputGender === "비공개"}
-                  />
-                </div>
-              </Div>
-              <Div>
-                <div>자기소개</div>{" "}
-                <Input_
-                  placeholder={member[0]?.introdution}
-                  onChange={onChangeIntro}
+              </Cdiv>
+            </Head>
+            <Div>
+              <Pw curPw={curPw}>
+                <span>현재 </span>비밀번호
+              </Pw>
+              <InputBar
+                placeholder={`*`.repeat(member[0]?.pw.length)}
+                onChange={onChangeCurPw}
+              />
+              <Error>{curPwMessage}</Error>
+            </Div>
+            <Div style={{ display: !curPw && "none" }}>
+              <Pw curPw={curPw}>새 비밀번호</Pw>
+              <InputBar
+                placeholder="새로운 비밀번호를 입력해주세요"
+                onChange={onChangePw}
+                disabled={!isConPw}
+              />
+              <Error>{pwMessage}</Error>
+            </Div>
+            <Div>
+              <div>닉네임</div>
+              <InputBar placeholder={member[0]?.nick} onChange={onChangeNick} />
+            </Div>
+            <Div>
+              <div>생년월일</div>
+              <InputBar placeholder={member[0]?.birth} disabled={true} />
+            </Div>
+            <Div>
+              <div>이메일</div>
+              <InputBar placeholder={member[0]?.email} disabled={true} />
+            </Div>
+            <Div type="gender">
+              <div>성별</div>
+              <div>
+                <label htmlFor="남">남</label>
+                <input
+                  type="radio"
+                  id="남"
+                  name="gender"
+                  value="남자"
+                  onChange={onChangeGender}
+                  checked={inputGender === "남자"}
                 />
-              </Div>
-              <Button>
-                <Btn onClick={onClickEdit}>정보 수정</Btn>
-              </Button>
-            </InContainer>
-          </Right>
-        </OutContainer>
+              </div>
+              <div>
+                <label htmlFor="여">여</label>
+                <input
+                  type="radio"
+                  id="여"
+                  name="gender"
+                  value="여자"
+                  onChange={onChangeGender}
+                  checked={inputGender === "여자"}
+                />
+              </div>
+              <div>
+                <label htmlFor="비공개">비공개</label>
+                <input
+                  type="radio"
+                  id="비공개"
+                  name="gender"
+                  value="비공개"
+                  onChange={onChangeGender}
+                  checked={inputGender === "비공개"}
+                />
+              </div>
+            </Div>
+            <Div>
+              <div>자기소개</div>{" "}
+              <InputBar
+                placeholder={member[0]?.introdution}
+                onChange={onChangeIntro}
+              />
+            </Div>
+            <Button>
+              <Btn onClick={onClickEdit}>정보 수정</Btn>
+            </Button>
+          </InContainer>
+        </Right>
       )}
       <Modal open={modalOpen} close={closeModal} header={head} btn="확인">
         {modalContent}

@@ -14,6 +14,8 @@ const UserStore = (props) => {
     localStorage.getItem("isLogin") || "FALSE"
   );
 
+  const [color, setColor] = useState("transparent");
+
   useEffect(() => {
     localStorage.setItem("nick", nick);
   }, [nick]);
@@ -35,6 +37,8 @@ const UserStore = (props) => {
         setImgUrl,
         isLogin,
         setIsLogin,
+        color,
+        setColor,
       }}
     >
       {props.children}

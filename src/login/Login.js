@@ -86,16 +86,17 @@ const Login = () => {
   };
 
   const navigate = useNavigate();
-
+  //아이디 입력
   const onChangeId = (e) => {
     setInputId(e.target.value);
     e.target.value.length > 3 ? setIsId(true) : setIsId(false);
   };
+  //비밀번호 입력
   const onChangePw = (e) => {
     setInputPw(e.target.value);
     e.target.value.length >= 3 ? setIsPw(true) : setIsPw(false);
   };
-
+  //로그인버튼 클릭
   const onClickLogin = async () => {
     try {
       const rsp = await LoginAxiosApi.memberLogin(inputId, inputPw);
@@ -112,7 +113,7 @@ const Login = () => {
       setModalContent("서버가 응답하지 않습니다.");
     }
   };
-
+  //찾기버튼 클릭
   const onClickFind = (e) => {
     setFindOpen(true);
     setCategory(e.target.textContent);

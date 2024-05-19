@@ -1,22 +1,65 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Right from "../component/Right";
-import { useContext, useEffect, useState } from "react";
-import LoginAxiosApi from "../api/LoginAxiosApi";
-import { UserContext } from "../context/UserStore";
+import Paging from "../component/Paging";
+import Btn from "../component/Btn";
+import Recruit from "./Recruit";
+import KakaoMap from "../KakaoMap";
+import { useState } from "react";
 
 const H = styled.h1`
   font-size: 4rem;
 `;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const MoimBox = styled.div`
+  background-color: black;
+`;
+const Moim = styled.div`
+  display: flex;
+  align-items: center;
+  border-radius: 1rem;
+  padding: 1rem;
+  background-color: #e5f3ff;
+`;
 
 const Main = () => {
+  const [recruitOpen, setRecruitOpen] = useState(false);
+
+  const onClickRecruit = (e) => {
+    setRecruitOpen(true);
+  };
+  //모집창 닫기
+  const closeRecruit = () => {
+    setRecruitOpen(false);
+  };
   return (
-    <>
-      <Right>
+    <Right>
+      <Container>
         <H>메인</H>
         <Link to="/meeting">모임</Link>
-      </Right>
-    </>
+        <MoimBox>
+          <Moim>
+            <div>이미지</div>
+            <div>
+              <div>장소</div>
+              <div>시간</div>
+              <div>제한</div>
+              <div>모임장</div>
+            </div>
+          </Moim>
+        </MoimBox>
+        <Paging></Paging>
+      </Container>
+      <Btn onClick={onClickRecruit}>모집하기</Btn>
+      <Recruit
+        open={recruitOpen}
+        close={closeRecruit}
+        category="회원 모집"
+      ></Recruit>
+    </Right>
   );
 };
 

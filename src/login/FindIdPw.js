@@ -33,6 +33,7 @@ const ModalStyle = styled.div`
     overflow: hidden;
     header {
       position: relative;
+      text-align: center;
       padding: 16px 64px 16px 16px;
       background-color: #fefae0;
       font-weight: 700;
@@ -160,11 +161,11 @@ const FindIdPw = (props) => {
       setModalContent("서버가 응답하지 않습니다.");
     }
   };
-
+  //이메일 입력
   const onChangeEmail = (e) => {
     setInputEmail(e.target.value);
   };
-
+  //아이디 확인
   const onChangeId = async (e) => {
     setInputId(e.target.value);
 
@@ -174,8 +175,7 @@ const FindIdPw = (props) => {
       if (!inputId || inputId.length <= 3) {
         setContent("");
         setHasId(false);
-      }
-      if (!rsp.data && inputId.length >= 3) {
+      } else if (!rsp.data && inputId.length >= 3) {
         setContent("아이디를 재 확인 해 주세요.");
         setHasId(false);
       } else {
