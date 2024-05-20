@@ -28,5 +28,13 @@ const AxiosApi = {
       },
     });
   },
+  sersel: async (searchType, keyword) => {
+    return await axios.get(`${DOMAIN}${LOGO}/sersel`, {
+      params: {
+        searchType,
+        keyword,
+      },
+    });
+  },
 };
 export default AxiosApi;

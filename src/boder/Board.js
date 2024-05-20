@@ -1,11 +1,12 @@
-import styled from "styled-components"; // 화면 스타일링
+import styled from "styled-components";
 import backgroundImage from "/Users/82102/dev/mini_front/src/image/sp_main.74b52318.png";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import AxiosApi from "../api/AxiosApi";
+import AxiosApi from "../api/BoardAxiosApi";
 import BoardList from "./BoardList";
 import Paging from "../component/Paging";
 import Right from "../component/Right";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 
 const MainContainer = styled.div`
   display: flex;
@@ -157,16 +158,31 @@ const CategorySelect = styled.select`
 // 검색창
 const Cateinput = styled.input`
   width: 240px;
-  height: 30px;
+  height: 35px;
   border-radius: 4px;
   border-color: #ced4da;
 `;
-
-const Boders = () => {
+const InputButton = styled.button`
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  border: 0;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const Inputicon = styled.div`
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+`;
+const Board = () => {
   const [boardList, setBoardList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("자유게시판");
   const [seleuserId, setseleuserId] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [serchCategory, setserchCategory] = useState("제목");
+  const [serinput, setserinput] = useState("");
   const pageSize = 5;
   const navigate = useNavigate();
 
@@ -188,16 +204,15 @@ const Boders = () => {
     }
   };
 
-  useEffect(() => {
-    setSelectedCategory("자유게시판");
-  }, []);
-
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setCurrentPage(1);
     if (category === "kimfjd") {
       setseleuserId("kimfjd");
     }
+    // 검색 관련 상태 초기화
+    setserchCategory("제목");
+    setserinput("");
   };
 
   const handlePageChange = (page) => {
@@ -209,80 +224,101 @@ const Boders = () => {
     currentPage * pageSize
   );
 
+  const handleSerinputChange = (e) => {
+    setserinput(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const rsp = await AxiosApi.sersel(serchCategory, serinput);
+      setBoardList(rsp.data); // 검색 결과를 상태에 저장
+      setCurrentPage(1); // 검색 결과를 첫 페이지로 설정
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const handleClick = () => {
     navigate("/BoInser");
   };
 
   return (
-    <>
-      <Right>
-        <MainContainer>
-          <TopContainer>
-            <Title>게시판 </Title>
-            <Ham>
-              <Hamburger
-                style={{ backgroundImage: `url(${backgroundImage})` }}
-              ></Hamburger>
-            </Ham>
-          </TopContainer>
-          <SerchContainer>
-            <CategoryButton1 onClick={() => handleCategoryChange("자유게시판")}>
-              자유게시판
-            </CategoryButton1>
-            <CategoryButton1
-              onClick={() => handleCategoryChange("모임 후기 게시판")}
+    <Right>
+      <MainContainer>
+        <TopContainer>
+          <Title>게시판</Title>
+          <Ham>
+            <Hamburger style={{ backgroundImage: `url(${backgroundImage})` }} />
+          </Ham>
+        </TopContainer>
+        <SerchContainer>
+          <CategoryButton1 onClick={() => handleCategoryChange("자유게시판")}>
+            자유게시판
+          </CategoryButton1>
+          <CategoryButton1
+            onClick={() => handleCategoryChange("모임 후기 게시판")}
+          >
+            모임 후기 게시판
+          </CategoryButton1>
+          <CategoryButton1 onClick={() => handleCategoryChange("kimfjd")}>
+            내가 쓴 글
+          </CategoryButton1>
+          <CategoryButton1
+            style={{ position: "absolute", right: "1px" }}
+            onClick={handleClick}
+          >
+            글 쓰기
+          </CategoryButton1>
+        </SerchContainer>
+        <BoardBox>
+          <BoardTitleBox>
+            <BoardTitle
+              style={{ margin: "400px", marginTop: "0", marginBottom: "0" }}
             >
-              모임 후기 게시판
-            </CategoryButton1>
-            <CategoryButton1 onClick={() => handleCategoryChange("kimfjd")}>
-              내가 쓴 글
-            </CategoryButton1>
-            <CategoryButton1
-              style={{ position: "absolute", right: "1px" }}
-              onClick={handleClick}
+              제목
+            </BoardTitle>
+            <BoardTitle>작성자</BoardTitle>
+            <BoardTitle>작성일</BoardTitle>
+            <BoardTitle>조회수</BoardTitle>
+          </BoardTitleBox>
+          <BoardLi>
+            <BoardList boardList={paginatedData} />
+          </BoardLi>
+        </BoardBox>
+        <Fobox>
+          <Pageme>
+            <Paging
+              page={currentPage}
+              itemsCountPerPage={pageSize}
+              totalItemsCount={boardList.length}
+              onPageChange={handlePageChange}
+            />
+          </Pageme>
+          <SerBox>
+            <CategorySelect
+              defaultValue="title"
+              value={serchCategory}
+              onChange={(e) => setserchCategory(e.target.value)}
             >
-              글 쓰기
-            </CategoryButton1>
-          </SerchContainer>
-          <BoardBox>
-            <BoardTitleBox>
-              <BoardTitle
-                style={{ margin: "400px", marginTop: "0", marginBottom: "0" }}
-              >
-                제목
-              </BoardTitle>
-              <BoardTitle>작성자</BoardTitle>
-              <BoardTitle>작성일</BoardTitle>
-              <BoardTitle>조회수</BoardTitle>
-            </BoardTitleBox>
-            <BoardLi>
-              <BoardList boardList={paginatedData}></BoardList>
-            </BoardLi>
-          </BoardBox>
-          <Fobox>
-            <Pageme>
-              <Paging
-                page={currentPage}
-                itemsCountPerPage={pageSize}
-                totalItemsCount={boardList.length}
-                onPageChange={handlePageChange}
-              />
-            </Pageme>
-            <SerBox>
-              <CategorySelect defaultValue="free">
-                <option value="free">제목</option>
-                <option value="meetup">작성자</option>
-              </CategorySelect>
-              <Cateinput
-                type="text"
-                placeholder="검색어를 입력해 주세요"
-              ></Cateinput>
-            </SerBox>
-          </Fobox>
-        </MainContainer>
-      </Right>
-    </>
+              <option value="제목">제목</option>
+              <option value="작성자">작성자</option>
+            </CategorySelect>
+            <Cateinput
+              type="text"
+              placeholder="검색어를 입력해 주세요"
+              value={serinput}
+              onChange={handleSerinputChange}
+            />
+            <InputButton onClick={handleSubmit}>
+              <Inputicon>
+                <FaMagnifyingGlass />
+              </Inputicon>
+            </InputButton>
+          </SerBox>
+        </Fobox>
+      </MainContainer>
+    </Right>
   );
 };
 
-export default Boders;
+export default Board;
