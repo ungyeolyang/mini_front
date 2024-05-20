@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import styled from "styled-components";
 
 const StyledInput = styled.input`
@@ -12,7 +13,8 @@ const StyledInput = styled.input`
   }
 `;
 
-const InputBar = ({ onChange, placeholder, disabled, hidden }) => {
+const InputBar = ({ onChange, placeholder, disabled, hidden, ref }) => {
+  ref = useRef(null);
   return (
     <StyledInput
       type="text"
@@ -20,6 +22,7 @@ const InputBar = ({ onChange, placeholder, disabled, hidden }) => {
       onChange={onChange}
       disabled={disabled}
       hidden={hidden}
+      ref={ref}
     />
   );
 };

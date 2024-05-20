@@ -1,6 +1,6 @@
 import Right from "../component/Right";
-import styled from "styled-components"; // 화면 스타일링
-import backgroundImage from "/Users/82102/dev/mini_front/src/image/sp_main.74b52318.png";
+import styled from "styled-components";
+import backgroundImage from "../image/sp_main.74b52318.png";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AxiosApi from "../api/BoardAxiosApi";

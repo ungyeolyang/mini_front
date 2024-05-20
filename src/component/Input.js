@@ -9,7 +9,7 @@ const StyledInput = styled.input`
   cursor: pointer;
 `;
 
-const Input = ({ onChange, placeholder, color, disabled, hidden }) => {
+const Input = ({ onChange, placeholder, color, disabled, hidden, ref }) => {
   return (
     <StyledInput
       type="text"
@@ -18,6 +18,7 @@ const Input = ({ onChange, placeholder, color, disabled, hidden }) => {
       color={color}
       disabled={disabled}
       hidden={hidden}
+      ref={ref}
     />
   );
 };

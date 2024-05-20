@@ -4,6 +4,7 @@ import Modal from "../component/Modal";
 import LetterAxiosApi from "../api/LetterAxiosApi";
 import Btn from "../component/Btn";
 import InputBar from "../component/InputBar";
+import LoginAxiosApi from "../api/LoginAxiosApi";
 
 const ModalStyle = styled.div`
   .modal {
@@ -97,7 +98,16 @@ const Textarea = styled.textarea`
 `;
 const Div = styled.div`
   position: relative;
+  align-items: center;
   display: flex;
+  width: 25rem;
+`;
+
+const Search = styled.div`
+  display: flex;
+  border: 0.1rem solid silver;
+  padding: 0.8rem;
+  border-top: none;
   width: 25rem;
 `;
 
@@ -109,14 +119,29 @@ const Error = styled.span`
   font-size: 0.8rem;
   height: 1.5rem;
 `;
+const Input = styled.input`
+  width: 25rem;
+  height: 3rem;
+  padding-left: 1rem;
+  border: none;
+  border-bottom: 0.1rem solid silver;
+  cursor: ${(props) => !props.disabled && `pointer`};
+  &:focus {
+    outline: none;
+  }
+`;
 
 const Send = (props) => {
   const { open, close, category, onSelect } = props;
+  const inputId = useRef(null);
 
+  const [nick, setNick] = useState("");
   const [receive, setReceive] = useState("");
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [user, setUser] = useState([]);
+
+  const [isId, setIsId] = useState(false);
 
   const [idContents, setIdContents] = useState("");
   const [titleContents, setTitleContents] = useState("");
@@ -140,6 +165,14 @@ const Send = (props) => {
 
     try {
       const rsp = await LetterAxiosApi.searchId(receive);
+      const rsp1 = await LoginAxiosApi.memberConId(receive);
+      if (rsp1.data) {
+        console.log(rsp1.data);
+        setIsId(true);
+      } else {
+        console.log(rsp1.data);
+        setIsId(false);
+      }
       if (e.target.value.length < 3) {
         setUser([]);
         setIdContents("");
@@ -175,6 +208,19 @@ const Send = (props) => {
     }
   };
 
+  //아이디 선택
+  const onClickId = (e) => {
+    const idReg = /\((.*?)\)/;
+    const nickReg = /^(.*?)\(/;
+    const matcheId = idReg.exec(e.target.textContent);
+    const matcheNick = nickReg.exec(e.target.textContent);
+    if (matcheId) {
+      inputId.current.value = matcheId[1];
+    } else {
+      console.log("괄호 안의 문자열을 추출할 수 없습니다.");
+    }
+  };
+
   // // 송신버튼 누르기
   // const onClickCert = async () => {
   //   try {
@@ -207,18 +253,24 @@ const Send = (props) => {
                 <button onClick={close}>&times;</button>
               </header>
               <main>
-                <Div>
-                  <InputBar placeholder="받는사람" onChange={onChangeReceive} />
+                <Div type="nick">
+                  <Input
+                    placeholder="받는사람"
+                    onChange={onChangeReceive}
+                    ref={inputId}
+                  />
                   <Error>{idContents}</Error>
                 </Div>
-                <div>
-                  {user &&
-                    user.map((e) => (
+                {user &&
+                  !isId &&
+                  user.map((e) => (
+                    <Search onClick={onClickId}>
                       <span key={e.id}>
                         {e.nick}({e.id})
                       </span>
-                    ))}
-                </div>
+                    </Search>
+                  ))}
+
                 <Div>
                   <InputBar placeholder="제목" onChange={onChangeTitle} />
                   <Error>{titleContents}</Error>

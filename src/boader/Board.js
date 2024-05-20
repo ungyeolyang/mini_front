@@ -1,9 +1,5 @@
-<<<<<<< HEAD:src/boder/Board.js
 import styled from "styled-components";
-import backgroundImage from "/Users/82102/dev/mini_front/src/image/sp_main.74b52318.png";
-=======
-import styled from "styled-components"; // 화면 스타일링
->>>>>>> 5187d7d4cd760c81371b9fcaf061478bb73ca739:src/boder/Boders.js
+import backgroundImage from "../image/sp_main.74b52318.png";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import AxiosApi from "../api/BoardAxiosApi";
@@ -247,7 +243,6 @@ const Board = () => {
   };
 
   return (
-<<<<<<< HEAD:src/boder/Board.js
     <Right>
       <MainContainer>
         <TopContainer>
@@ -279,23 +274,6 @@ const Board = () => {
           <BoardTitleBox>
             <BoardTitle
               style={{ margin: "400px", marginTop: "0", marginBottom: "0" }}
-=======
-    <>
-      <Right>
-        <MainContainer>
-          <TopContainer>
-            <Title>게시판 </Title>
-            <Ham>
-              <Hamburger></Hamburger>
-            </Ham>
-          </TopContainer>
-          <SerchContainer>
-            <CategoryButton1 onClick={() => handleCategoryChange("자유게시판")}>
-              자유게시판
-            </CategoryButton1>
-            <CategoryButton1
-              onClick={() => handleCategoryChange("모임 후기 게시판")}
->>>>>>> 5187d7d4cd760c81371b9fcaf061478bb73ca739:src/boder/Boders.js
             >
               제목
             </BoardTitle>
