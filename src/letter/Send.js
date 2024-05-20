@@ -132,7 +132,7 @@ const Input = styled.input`
 `;
 
 const Send = (props) => {
-  const { open, close, category, onSelect } = props;
+  const { open, close, category, onSend, isSend } = props;
   const inputId = useRef(null);
   const id = localStorage.getItem("id");
 
@@ -142,7 +142,6 @@ const Send = (props) => {
   const [user, setUser] = useState(null);
 
   const [isId, setIsId] = useState(false);
-  const [isSend, setIsSend] = useState(false);
 
   const [idContents, setIdContents] = useState("");
   const [titleContents, setTitleContents] = useState("");
@@ -150,10 +149,6 @@ const Send = (props) => {
 
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-
-  const onClickCategory = (e) => {
-    onSelect(e.target.textContent);
-  };
 
   // 알림창 닫기
   const closeModal = () => {
@@ -176,7 +171,6 @@ const Send = (props) => {
       } else {
         setUser(rsp.data);
         setIdContents("");
-        console.log(rsp.data);
       }
     } catch (e) {
       console.log(e);
@@ -185,13 +179,11 @@ const Send = (props) => {
 
   //아이디 확인
   const conId = async () => {
-    const rsp1 = await LoginAxiosApi.memberConId(receive);
+    const rsp1 = await LoginAxiosApi.memberConId(receive[1]);
     try {
       if (rsp1.data) {
-        console.log(rsp1.data);
         setIsId(true);
       } else {
-        console.log(rsp1.data);
         setIsId(false);
       }
     } catch (e) {
@@ -241,12 +233,13 @@ const Send = (props) => {
   // 송신버튼 누르기
   const onClickSend = async () => {
     try {
-      const rsp = await LetterAxiosApi.send(id, receive, title, text);
+      console.log(receive[1]);
+      const rsp = await LetterAxiosApi.sendLetter(id, receive[1], title, text);
       if (!isId) {
         setModalOpen(true);
         setModalContent("아이디를 재 확인 해 주세요.");
       } else if (rsp.data) {
-        setIsSend(true);
+        onSend(true);
       } else {
         setModalOpen(true);
         setModalContent("송신 오류");
@@ -304,7 +297,9 @@ const Send = (props) => {
                 )}
               </main>
               <footer>
-                <Btn onClick={onClickSend}>보내기</Btn>
+                <Btn onClick={!isSend ? onClickSend : close}>
+                  {!isSend ? "보내기" : "확인"}
+                </Btn>
               </footer>
             </section>
           )}

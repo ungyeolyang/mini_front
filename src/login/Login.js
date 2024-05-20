@@ -54,6 +54,7 @@ const H = styled.h1`
 const Login = () => {
   const context = useContext(UserContext);
   const { setIsLogin } = context;
+  const navigate = useNavigate();
 
   const [inputId, setInputId] = useState("");
   const [inputPw, setInputPw] = useState("");
@@ -85,7 +86,6 @@ const Login = () => {
     setIsFind(false);
   };
 
-  const navigate = useNavigate();
   //아이디 입력
   const onChangeId = (e) => {
     setInputId(e.target.value);

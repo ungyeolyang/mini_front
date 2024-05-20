@@ -27,11 +27,15 @@ const Box = styled.div`
 `;
 
 const MailList = ({ mailList, category }) => {
+  const onClickLetter = (e) => {
+    console.log(e);
+  };
+
   return (
     <>
       {mailList &&
         mailList.map((mail) => (
-          <Line key={mail.no}>
+          <Line key={mail.no} onClick={onClickLetter}>
             <Box type="author">
               {category === "send" ? mail.sender : mail.receiver}
             </Box>

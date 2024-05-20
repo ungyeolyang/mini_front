@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
 import Right from "../component/Right";
 import InputBar from "../component/InputBar";
 import Btn from "../component/Btn";
@@ -11,6 +10,7 @@ import Modal from "../component/Modal";
 import Profile from "../component/Profile";
 import { storage } from "../api/FireBase";
 import Person from "../image/사람아이콘.png";
+import Title from "../component/Title";
 
 const InContainer = styled.div`
   position: absolute;
@@ -19,7 +19,7 @@ const InContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 90%;
+  height: 87%;
   width: 65%;
   border-top-left-radius: 85px;
   border-top-right-radius: 85px;
@@ -69,8 +69,8 @@ const Error = styled.span`
 
 const Button = styled.div`
   position: absolute;
-  right: 10rem;
-  bottom: 7rem;
+  right: 2rem;
+  bottom: 3rem;
 `;
 
 const Pw = styled.span`
@@ -80,9 +80,8 @@ const Pw = styled.span`
   }
 `;
 
-const MyPage = ({ selectColor }) => {
+const MyPage = () => {
   const id = localStorage.getItem("id");
-  const navigate = useNavigate();
   const inputFile = useRef(null);
   const context = useContext(UserContext);
   const { nick, setNick, setImgUrl, color, setColor } = context;
@@ -295,6 +294,7 @@ const MyPage = ({ selectColor }) => {
     <>
       {member && (
         <Right>
+          <Title>마이 페이지</Title>
           <InContainer>
             <Head>
               <Cdiv style={{ paddingTop: `3rem`, gap: `1rem` }}>

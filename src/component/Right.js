@@ -12,6 +12,7 @@ const rightShow = (isLogin) => keyframes`
 `;
 const StyledRight = styled.div`
   display: flex;
+  position: relative;
   background-color: ${({ backgroundColor }) => backgroundColor || `inherit`};
   ${({ isLogin }) => !isLogin && `flex-direction: column;`};
   justify-content: center;

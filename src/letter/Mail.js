@@ -27,7 +27,7 @@ const Box = styled.div`
 `;
 const Body = styled.div`
   background-color: #e5f3ff;
-  height: 20rem;
+  min-height: 20rem;
 `;
 
 const Mail = ({ mailList, category }) => {

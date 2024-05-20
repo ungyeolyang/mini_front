@@ -9,14 +9,14 @@ const LetterAxiosApi = {
     return await axios.get(DOMAIN + LOGO + `/searchid?id=${id}`);
   },
   //송신
-  send: async (myId, yourId, title, contents) => {
+  sendLetter: async (id, receive, title, text) => {
     const letter = {
-      sender: myId,
-      receiver: yourId,
+      sender: id,
+      receiver: receive,
       title: title,
-      contents: contents,
+      contents: text,
     };
-    return await axios.post(DOMAIN + LOGO + `/send`, letter);
+    return await axios.post(DOMAIN + LOGO + `/sendletter`, letter);
   },
   //편지리스트
   letterList: async (id, category) => {

@@ -7,6 +7,8 @@ import Mail from "./Mail";
 import LetterAxiosApi from "../api/LetterAxiosApi";
 import { TbMailOpened, TbSend } from "react-icons/tb";
 import { useEffect, useState } from "react";
+import Title from "../component/Title";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 
 const Container = styled.div`
   display: flex;
@@ -24,6 +26,14 @@ const LetterBox = styled.div`
   display: flex;
   width: 95%;
   flex-direction: column;
+  footer {
+    position: relative;
+    width: 100%;
+  }
+`;
+const Div = styled.div`
+  div {
+  }
 `;
 
 const Letter = () => {
@@ -32,6 +42,7 @@ const Letter = () => {
   const [letter, setLetter] = useState(null);
   const [category, setCategory] = useState("receive");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isSend, setIsSend] = useState(false);
 
   const pageSize = 5;
   const paginatedData = letter?.slice(
@@ -45,7 +56,13 @@ const Letter = () => {
 
   const closeLetter = () => {
     setLetterOpen(false);
+    setIsSend(false);
   };
+
+  const onSend = (props) => {
+    setIsSend(props);
+  };
+
   //보낸 편지함 클릭
   const onClickSend = () => {
     if (category !== "send") {
@@ -80,10 +97,11 @@ const Letter = () => {
       }
     };
     getLetter();
-  }, [id, category]);
+  }, [id, category, isSend]);
 
   return (
     <Right>
+      <Title>{category === "send" ? `보낸 ` : `받은 `} 편지함</Title>
       <Container>
         <BtnBox>
           <Btn onClick={onClickReceive}>
@@ -98,15 +116,40 @@ const Letter = () => {
         </BtnBox>
         <LetterBox>
           <Mail mailList={paginatedData} category={category}></Mail>
-          <Paging
-            page={currentPage}
-            itemsCountPerPage={pageSize}
-            totalItemsCount={letter?.length}
-            onPageChange={handlePageChange}
-          />
+          <footer>
+            <Paging
+              page={currentPage}
+              itemsCountPerPage={pageSize}
+              totalItemsCount={letter?.length}
+              onPageChange={handlePageChange}
+            />
+            <Div>
+              <select
+                defaultValue="title"
+                // onChange={(e) => setserchCategory(e.target.value)}
+              >
+                <option value="제목">제목</option>
+                <option value="작성자">작성자</option>
+              </select>
+              <input
+                type="text"
+                placeholder="검색어를 입력해 주세요"
+                // onChange={handleSerinputChange}
+              />
+              <button>
+                <FaMagnifyingGlass />
+              </button>
+            </Div>
+          </footer>
         </LetterBox>
       </Container>
-      <Send open={letterOpen} close={closeLetter} category="쪽지쓰기"></Send>
+      <Send
+        open={letterOpen}
+        close={closeLetter}
+        category="쪽지쓰기"
+        onSend={onSend}
+        isSend={isSend}
+      ></Send>
     </Right>
   );
 };

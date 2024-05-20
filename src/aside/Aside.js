@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import LogoImg from "../image/로고.png";
 import LogoStImg from "../image/로고-문구.png";
 import styled from "styled-components";
@@ -151,7 +151,7 @@ const Aside = () => {
             로그아웃<span>[→</span>
           </Button>
           <footer>
-            <Link to="/board">게시판</Link>ㅣ<Link to="/letter">쪽지함</Link>
+            <Link to="/board">게시판</Link>ㅣ<Link to="/letter">편지함</Link>
           </footer>
         </Body>
       </Side>

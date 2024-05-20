@@ -306,7 +306,6 @@ const Board = () => {
             <Cateinput
               type="text"
               placeholder="검색어를 입력해 주세요"
-              value={serinput}
               onChange={handleSerinputChange}
             />
             <InputButton onClick={handleSubmit}>

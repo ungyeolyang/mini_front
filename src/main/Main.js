@@ -6,10 +6,8 @@ import Btn from "../component/Btn";
 import Recruit from "./Recruit";
 import KakaoMap from "../KakaoMap";
 import { useState } from "react";
+import Title from "../component/Title";
 
-const H = styled.h1`
-  font-size: 4rem;
-`;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -35,13 +33,18 @@ const Main = () => {
   const closeRecruit = () => {
     setRecruitOpen(false);
   };
+  //모임창 클릭
+  const onClickMoim = (e) => {
+    console.log(e.target);
+  };
+
   return (
     <Right>
       <Container>
-        <H>메인</H>
+        <Title>메인</Title>
         <Link to="/meeting">모임</Link>
         <MoimBox>
-          <Moim>
+          <Moim onClick={onClickMoim}>
             <div>이미지</div>
             <div>
               <div>장소</div>
