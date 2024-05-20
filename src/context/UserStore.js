@@ -7,16 +7,14 @@ const UserStore = (props) => {
   );
 
   const [imgUrl, setImgUrl] = useState(
-    localStorage.getItem("imgUrl") || "이미지경로"
+    localStorage.getItem("imgUrl") || "이미지를 삽입하세요"
   );
 
   const [isLogin, setIsLogin] = useState(
     localStorage.getItem("isLogin") || "FALSE"
   );
 
-  // const [member, setMember] = useState(
-  //   localStorage.getItem("member") || "null"
-  // );
+  const [color, setColor] = useState("transparent");
 
   useEffect(() => {
     localStorage.setItem("nick", nick);
@@ -30,10 +28,6 @@ const UserStore = (props) => {
     localStorage.setItem("isLogin", isLogin);
   }, [isLogin]);
 
-  // useEffect(() => {
-  //   localStorage.setItem("member", member);
-  // }, [member]);
-
   return (
     <UserContext.Provider
       value={{
@@ -43,8 +37,8 @@ const UserStore = (props) => {
         setImgUrl,
         isLogin,
         setIsLogin,
-        // member,
-        // setMember,
+        color,
+        setColor,
       }}
     >
       {props.children}

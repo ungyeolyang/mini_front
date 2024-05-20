@@ -4,13 +4,12 @@ import { UserContext } from "../context/UserStore";
 
 const rightShow = (isLogin) => keyframes`
   0% {
-    width: ${isLogin ? "55vw" : "40vw"};
+    width: ${isLogin ? "60vw" : "40vw"};
   }
   100% {
-    width: ${isLogin ? "75vw" : "60vw"};
+    width: ${isLogin ? "80vw" : "60vw"};
   }
 `;
-
 const StyledRight = styled.div`
   display: flex;
   background-color: ${({ backgroundColor }) => backgroundColor || `inherit`};
@@ -18,14 +17,14 @@ const StyledRight = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  animation: ${({ isLogin }) => rightShow(isLogin)} 0.5s forwards;
-  width: ${({ isLogin }) => (isLogin ? "75vw" : "60vw")};
+  animation: ${({ isLogin }) => rightShow(isLogin)} 0.4s forwards;
+  width: ${({ isLogin }) => (isLogin ? "80vw" : "60vw")};
 `;
 
 // Right 컴포넌트 정의
 const Right = ({ children, backgroundColor }) => {
   const context = useContext(UserContext);
-  const { isLogin, setIsLogin } = context;
+  const { isLogin } = context;
 
   return (
     <StyledRight isLogin={isLogin} backgroundColor={backgroundColor}>

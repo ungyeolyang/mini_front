@@ -1,6 +1,10 @@
 import styled from "styled-components"; // 화면 스타일링
 import React, { useState } from "react";
+<<<<<<< HEAD
 import AxiosApi from "../api/BoardAxiosApi";
+=======
+import AxiosApi from "../api/AxiosApi";
+>>>>>>> 5187d7d4cd760c81371b9fcaf061478bb73ca739
 import Modal from "../component/Modal";
 import { useNavigate } from "react-router-dom";
 
