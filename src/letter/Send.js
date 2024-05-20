@@ -25,7 +25,7 @@ const ModalStyle = styled.div`
   }
 
   section {
-    width: 28%;
+    width: 24%;
     max-width: 750px;
     margin: 0 auto;
     border-radius: 0.6rem;
@@ -134,14 +134,15 @@ const Input = styled.input`
 const Send = (props) => {
   const { open, close, category, onSelect } = props;
   const inputId = useRef(null);
+  const id = localStorage.getItem("id");
 
-  const [nick, setNick] = useState("");
   const [receive, setReceive] = useState("");
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState(null);
 
   const [isId, setIsId] = useState(false);
+  const [isSend, setIsSend] = useState(false);
 
   const [idContents, setIdContents] = useState("");
   const [titleContents, setTitleContents] = useState("");
@@ -162,22 +163,15 @@ const Send = (props) => {
   //받을사람 입력
   const onChangeReceive = async (e) => {
     setReceive(e.target.value);
-
+  };
+  const searchId = async (e) => {
     try {
       const rsp = await LetterAxiosApi.searchId(receive);
-      const rsp1 = await LoginAxiosApi.memberConId(receive);
-      if (rsp1.data) {
-        console.log(rsp1.data);
-        setIsId(true);
-      } else {
-        console.log(rsp1.data);
-        setIsId(false);
-      }
-      if (e.target.value.length < 3) {
-        setUser([]);
+      if (receive < 3) {
+        setUser(null);
         setIdContents("");
-      } else if (rsp.data.length === 0 && e.target.value.length >= 3) {
-        setUser([]);
+      } else if (!rsp.data && receive.length >= 3) {
+        setUser(null);
         setIdContents("아이디를 재 확인 해 주세요.");
       } else {
         setUser(rsp.data);
@@ -188,6 +182,23 @@ const Send = (props) => {
       console.log(e);
     }
   };
+
+  //아이디 확인
+  const conId = async () => {
+    const rsp1 = await LoginAxiosApi.memberConId(receive);
+    try {
+      if (rsp1.data) {
+        console.log(rsp1.data);
+        setIsId(true);
+      } else {
+        console.log(rsp1.data);
+        setIsId(false);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   //제목입력
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
@@ -211,36 +222,40 @@ const Send = (props) => {
   //아이디 선택
   const onClickId = (e) => {
     const idReg = /\((.*?)\)/;
-    const nickReg = /^(.*?)\(/;
-    const matcheId = idReg.exec(e.target.textContent);
-    const matcheNick = nickReg.exec(e.target.textContent);
-    if (matcheId) {
-      inputId.current.value = matcheId[1];
+    const matchId = idReg.exec(e.target.textContent);
+    // const nickReg = /^(.*?)\(/;
+    // const matcheNick = nickReg.exec(e.target.textContent);
+    if (matchId) {
+      inputId.current.value = matchId[1];
+      setReceive(matchId);
     } else {
       console.log("괄호 안의 문자열을 추출할 수 없습니다.");
     }
   };
 
-  // // 송신버튼 누르기
-  // const onClickCert = async () => {
-  //   try {
-  //     const rsp = await LoginAxiosApi.memberCertEmail(inputEmail, category);
-  //     console.log(rsp.data);
-  //     if (!hasId) {
-  //       setModalOpen(true);
-  //       setModalContent("아이디와 이메일을 재 확인 해 주세요.");
-  //     } else if (rsp.data) {
-  //       onFind(true);
-  //       setContent(rsp.data);
-  //     } else {
-  //       setModalOpen(true);
-  //       setModalContent("이메일을 재 확인 해 주세요.");
-  //     }
-  //   } catch (e) {
-  //     setModalOpen(true);
-  //     setModalContent("서버가 응답하지 않습니다.");
-  //   }
-  // };
+  useEffect(() => {
+    searchId();
+    conId();
+  }, [receive]);
+
+  // 송신버튼 누르기
+  const onClickSend = async () => {
+    try {
+      const rsp = await LetterAxiosApi.send(id, receive, title, text);
+      if (!isId) {
+        setModalOpen(true);
+        setModalContent("아이디를 재 확인 해 주세요.");
+      } else if (rsp.data) {
+        setIsSend(true);
+      } else {
+        setModalOpen(true);
+        setModalContent("송신 오류");
+      }
+    } catch (e) {
+      setModalOpen(true);
+      setModalContent("서버가 응답하지 않습니다.");
+    }
+  };
 
   return (
     <>
@@ -253,38 +268,43 @@ const Send = (props) => {
                 <button onClick={close}>&times;</button>
               </header>
               <main>
-                <Div type="nick">
-                  <Input
-                    placeholder="받는사람"
-                    onChange={onChangeReceive}
-                    ref={inputId}
-                  />
-                  <Error>{idContents}</Error>
-                </Div>
-                {user &&
-                  !isId &&
-                  user.map((e) => (
-                    <Search onClick={onClickId}>
-                      <span key={e.id}>
-                        {e.nick}({e.id})
-                      </span>
-                    </Search>
-                  ))}
-
-                <Div>
-                  <InputBar placeholder="제목" onChange={onChangeTitle} />
-                  <Error>{titleContents}</Error>
-                </Div>
-                <Div>
-                  <Textarea
-                    placeholder="내용"
-                    onChange={onChangeContents}
-                  ></Textarea>
-                  <Error type="area">{textContents}</Error>
-                </Div>
+                {!isSend ? (
+                  <>
+                    <Div type="nick">
+                      <Input
+                        placeholder="받는사람"
+                        onChange={onChangeReceive}
+                        ref={inputId}
+                      />
+                      <Error>{idContents}</Error>
+                    </Div>
+                    {user &&
+                      !isId &&
+                      user.map((e) => (
+                        <Search key={e.id} onClick={onClickId}>
+                          <span>
+                            {e.nick}({e.id})
+                          </span>
+                        </Search>
+                      ))}
+                    <Div>
+                      <InputBar placeholder="제목" onChange={onChangeTitle} />
+                      <Error>{titleContents}</Error>
+                    </Div>
+                    <Div>
+                      <Textarea
+                        placeholder="내용"
+                        onChange={onChangeContents}
+                      ></Textarea>
+                      <Error type="area">{textContents}</Error>
+                    </Div>
+                  </>
+                ) : (
+                  <p>편지를 발송했습니다.</p>
+                )}
               </main>
               <footer>
-                <Btn onClick={close}>취소</Btn>
+                <Btn onClick={onClickSend}>보내기</Btn>
               </footer>
             </section>
           )}

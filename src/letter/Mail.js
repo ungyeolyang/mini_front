@@ -1,12 +1,9 @@
 import styled from "styled-components";
-import BoardList from "./BoardList";
+import MailList from "./MailList";
 
-const Container = styled.div`
-  width: 100%;
-`;
+const Container = styled.div``;
 const Head = styled.div`
   display: flex;
-  padding: 1% 0;
   background-color: #b8d0fa;
 `;
 const Box = styled.div`
@@ -30,23 +27,23 @@ const Box = styled.div`
 `;
 const Body = styled.div`
   background-color: #e5f3ff;
-  height: 69%;
+  height: 20rem;
 `;
 
-const Board = () => {
+const Mail = ({ mailList, category }) => {
   return (
     <Container>
       <Head>
-        <Box type="title">제목</Box>
         <Box type="author">작성자</Box>
+        <Box type="title">제목</Box>
         <Box type="date">작성일</Box>
-        <Box tyep="view">조회수</Box>
+        <Box type="view">조회수</Box>
       </Head>
       <Body>
-        <BoardList />
+        <MailList mailList={mailList} category={category} />
       </Body>
     </Container>
   );
 };
 
-export default Board;
+export default Mail;
