@@ -10,6 +10,7 @@ import MyPage from "./mypage/MyPage";
 import Boders from "./boder/Boders";
 import BoInser from "./boder/BoInser";
 import Letter from "./letter/Letter";
+import ImageUploader from "./mypage/ImageUploader";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <UserStore>
         <Router>
           <Routes>
+            yar
             <Route path="/" element={<Aside />}>
               <Route index element={<Login />} />
               <Route path="/signup" element={<SignUp />} />

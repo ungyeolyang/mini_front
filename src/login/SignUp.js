@@ -84,6 +84,8 @@ const Div = styled.div`
 
 const SignUp = () => {
   const context = useContext(UserContext);
+  const basic =
+    "https://firebasestorage.googleapis.com/v0/b/test-project-37d9c.appspot.com/o/basic.png?alt=media&token=5ea5abcb-4a3a-445b-a9b0-3cae92a9eccd";
   const { nick, setNick, isLogin, setIsLogin, imgUrl, setImgUrl } = context;
   const navigate = useNavigate();
   const inputFile = useRef(null);
@@ -257,16 +259,17 @@ const SignUp = () => {
 
   // 회원가입버튼 클릭
   const onClickSignUp = async () => {
-    const storageRef = storage.ref();
-    const fileRef = storageRef.child(file.name);
-
     try {
       if (file) {
+        const storageRef = storage.ref();
+        const fileRef = storageRef.child(file.name);
         await fileRef.put(file);
         console.log("파일이 정상적으로 업로드됨");
         const url = await fileRef.getDownloadURL();
         console.log("저장경로 확인 : " + url);
         setImgUrl(url);
+      } else {
+        setImgUrl(basic);
       }
 
       const rsp = await LoginAxiosApi.memberSignUp(
