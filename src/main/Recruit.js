@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "../component/Modal";
 import Btn from "../component/Btn";
 import InputBar from "../component/InputBar";
+import PopupDom from "../component/PopupDom";
+import PostCode from "../component/PostCode";
 
 const ModalStyle = styled.div`
   .modal {
@@ -88,10 +90,25 @@ const Recruit = (props) => {
 
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [address, setAddress] = useState("");
 
   // 알림창 닫기
   const closeModal = () => {
     setModalOpen(false);
+  };
+  // 팝업창 열기
+  const openPostCode = () => {
+    setIsPopupOpen(true);
+  };
+
+  // 팝업창 닫기
+  const closePostCode = () => {
+    setIsPopupOpen(false);
+  };
+
+  const resetAddress = () => {
+    setAddress("");
   };
 
   return (
@@ -123,12 +140,35 @@ const Recruit = (props) => {
                     <option value="">공부</option>
                   </select>
                 </div>
-                <div>위치</div>
-                <div></div>
+                <div>
+                  위치
+                  <button type="button" onClick={openPostCode}>
+                    우편번호 검색
+                  </button>
+                  <div id="popupDom">
+                    {isPopupOpen && (
+                      <PopupDom>
+                        <PostCode
+                          onClose={closePostCode}
+                          setAddress={setAddress}
+                        />
+                      </PopupDom>
+                    )}
+                  </div>
+                  <div>{address}</div> {}
+                </div>
                 <InputBar placeholder={"세부내용"} />
               </main>
               <footer>
-                <Btn onClick={close}>취소</Btn>
+                <Btn onClick={close}>등록</Btn>
+                <Btn
+                  onClick={() => {
+                    close();
+                    resetAddress();
+                  }}
+                >
+                  취소
+                </Btn>
               </footer>
             </section>
           )}

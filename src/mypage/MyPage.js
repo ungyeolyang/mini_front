@@ -112,6 +112,7 @@ const MyPage = ({ selectColor }) => {
   //모달창닫기
   const closeModal = () => {
     setModalOpen(false);
+    window.location.reload();
   };
 
   const onChangFile = (e) => {
