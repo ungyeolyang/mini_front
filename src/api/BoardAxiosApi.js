@@ -36,5 +36,12 @@ const AxiosApi = {
       },
     });
   },
+  detailapi: async (board_no) => {
+    return await axios.get(`${DOMAIN}${LOGO}/detail`, {
+      params: {
+        board_no,
+      },
+    });
+  },
 };
 export default AxiosApi;

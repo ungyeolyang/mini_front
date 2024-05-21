@@ -70,9 +70,9 @@ const DetailHearder = styled.div`
 const BoardDetail = () => {
   const { board_no } = useParams();
   const [board, setBoard] = useState("");
-  const [comments, setComments] = useState("");
-  const [inputComment, setInputComment] = useState("");
-  const [comAddFlag, setComAddFlag] = useState(false);
+  // const [comments, setComments] = useState("");
+  // const [inputComment, setInputComment] = useState("");
+  // const [comAddFlag, setComAddFlag] = useState(false);
   const user_id = localStorage.getItem("user_id");
   const navigate = useNavigate();
 
@@ -80,36 +80,15 @@ const BoardDetail = () => {
     const getBoardDetail = async () => {
       console.log("getBoardDetail : " + board_no);
       try {
-        const response = await AxiosApi.boardDetail(board_no);
+        const response = await AxiosApi.detailapi(board_no);
         setBoard(response.data);
-        const response2 = await AxiosApi.commentList(board_no);
-        setComments(response2.data);
       } catch (error) {
         console.log(error);
       }
     };
     getBoardDetail();
-  }, [comAddFlag, board_no]);
+  }, [board_no]);
 
-  const handleCommentChange = (e) => {
-    setInputComment(e.target.value);
-  };
-
-  const handleSubmitComment = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await AxiosApi.commentWrite(
-        user_id,
-        board_no,
-        inputComment
-      );
-      console.log(response);
-      setInputComment("");
-      setComAddFlag(!comAddFlag);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <Right>
       <MainContainer>

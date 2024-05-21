@@ -74,7 +74,7 @@ const SerchContainer = styled.div`
 const BoardBox = styled.div`
   position: relative;
   text-align: center;
-  width: 1200px;
+  width: 100%;
   height: 432px;
   margin: 0 35px;
   padding: 0;
@@ -83,7 +83,7 @@ const BoardBox = styled.div`
 `;
 const BoardTitleBox = styled.div`
   position: absolute;
-  width: 1200px;
+  width: 100%;
   height: 72px;
   margin: 0;
   padding: 0;
@@ -237,6 +237,10 @@ const Board = () => {
       console.log(e);
     }
   };
+  const handleDetailClick = (board_no) => {
+    console.log(board_no);
+    navigate(`/BoardDetail/${board_no}`);
+  };
 
   const handleClick = () => {
     navigate("/boinser");
@@ -282,7 +286,10 @@ const Board = () => {
             <BoardTitle>조회수</BoardTitle>
           </BoardTitleBox>
           <BoardLi>
-            <BoardList boardList={paginatedData} />
+            <BoardList
+              boardList={paginatedData}
+              handleDetailClick={handleDetailClick}
+            />
           </BoardLi>
         </BoardBox>
         <Fobox>

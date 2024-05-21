@@ -7,12 +7,16 @@ const BoardUl = styled.ul`
   padding: 0;
 `;
 
-const BoardList = ({ boardList }) => {
+const BoardList = ({ boardList, handleDetailClick }) => {
   return (
     <BoardUl>
       {boardList &&
         boardList.map((board) => (
-          <BoardListItem key={board.board_no} board={board} />
+          <BoardListItem
+            key={board.board_no}
+            board={board}
+            handleDetailClick={handleDetailClick} // handleDetailClick 함수 전달
+          />
         ))}
     </BoardUl>
   );
