@@ -9,22 +9,26 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
 `;
 
 const TopContainer = styled.div`
   padding: 0 30px;
-  width: 1200px;
+  width: 100%;
   position: relative;
   top: 0;
-  margin-bottom: 40px;
+  margin-bottom: 8px;
   z-index: 999;
   display: flex;
 `;
 
 const Title = styled.h3`
   color: #333;
+  font-size: 29px;
 `;
-// 햄버거 버튼
+
 const Ham = styled.button`
   position: absolute;
   right: 18px;
@@ -39,7 +43,7 @@ const Ham = styled.button`
     border-radius: 50%;
   }
 `;
-// 햄버거 아이콘
+
 const Hamburger = styled.div`
   background-repeat: no-repeat;
   background-size: 422px 405px;
@@ -49,72 +53,137 @@ const Hamburger = styled.div`
 `;
 
 const ColorBox = styled.div`
-  width: 100%;
+  width: 98%;
   height: 270px;
   background-color: #94b9f3;
-  margin-left: 50px;
   align-items: center;
+  text-align: center;
+  border-radius: 30px;
 `;
 
 const MainDetail = styled.div`
-  width: 80%;
-  border-radius: 30px;
+  width: 95%;
+  height: 100vh;
+  border-radius: 50px;
+  margin: 0 30px;
+  margin-top: 15px;
   background-color: white;
+  box-shadow: 10px 10px 20px #94b9f3;
 `;
 
 const DetailHearder = styled.div`
-  width: 80%;
+  width: 100%;
   font-weight: bold;
+  height: 40px;
+  padding-top: 15px;
+  font-size: 18px;
+`;
+const DetailCenter = styled.div`
+  width: 93%;
+  height: 60px;
+  background-color: #ced4da;
+  margin: 15px 40px;
+  display: flex;
+`;
+const Board_View = styled.p`
+  font-weight: bold;
+  color: black;
+  font-size: 15px;
+  text-align: center;
+  margin: 20px;
+`;
+
+const BoardDate = styled.p`
+  margin: 20px;
+  font-weight: bold;
+  color: black;
+  font-size: 15px;
+  margin-right: 30%;
+`;
+
+const UserId = styled.p`
+  font-style: italic;
+  margin: 20px;
+  font-weight: bold;
+  color: black;
+  font-size: 15px;
+  margin-right: 30%;
+`;
+const DetailContent = styled.p`
+  font-size: 15px;
+`;
+const BoardImage = styled.img`
+  width: 350px;
+  height: 350px;
+`;
+const ButtonBox = styled.div`
+  width: 100%;
+  height: 60px;
+  position: relative;
+`;
+const BrButton = styled.button`
+  width: 130px;
+  height: 40px;
+  padding: 10px;
+  background-color: #e9edc9;
+  border: 0;
+  &:hover {
+    background-color: #ccd5ae;
+    cursor: pointer;
+  }
 `;
 
 const BoardDetail = () => {
   const { board_no } = useParams();
-  const [board, setBoard] = useState("");
-  const [comments, setComments] = useState("");
-  const [inputComment, setInputComment] = useState("");
-  const [comAddFlag, setComAddFlag] = useState(false);
+  const [board, setBoard] = useState(null); // 초기 상태를 null로 설정
   const user_id = localStorage.getItem("user_id");
   const navigate = useNavigate();
+
+  //삭제
+  const deleteBoard = () => {
+    console.log("게시글 삭제하기 함수 호출");
+    if (window.confirm("정말 삭제하시겠습니까?")) {
+      const delBoardApi = async () => {
+        try {
+          const rsp = await AxiosApi.boardDelete(board_no);
+          if (rsp.data) {
+            alert("게시글이 삭제되었습니다.");
+            navigate("/Board");
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      };
+      delBoardApi();
+    }
+  };
 
   useEffect(() => {
     const getBoardDetail = async () => {
       console.log("getBoardDetail : " + board_no);
       try {
-        const response = await AxiosApi.boardDetail(board_no);
+        const response = await AxiosApi.detailapi(board_no);
+        console.log("API response:", response.data); // API 응답 로그 출력
         setBoard(response.data);
-        const response2 = await AxiosApi.commentList(board_no);
-        setComments(response2.data);
       } catch (error) {
-        console.log(error);
+        console.log("API error:", error); // 에러 로그 출력
       }
     };
     getBoardDetail();
-  }, [comAddFlag, board_no]);
+  }, [board_no]);
 
-  const handleCommentChange = (e) => {
-    setInputComment(e.target.value);
+  if (!board) {
+    return <div>Loading...</div>; // 데이터가 아직 로드되지 않은 경우 로딩 메시지 표시
+  }
+  const handleBack = () => {
+    navigate("/board");
   };
 
-  const handleSubmitComment = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await AxiosApi.commentWrite(
-        user_id,
-        board_no,
-        inputComment
-      );
-      console.log(response);
-      setInputComment("");
-      setComAddFlag(!comAddFlag);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <Right>
       <MainContainer>
         <TopContainer>
-          <Title>게시판 </Title>
+          <Title>게시판</Title>
           <Ham>
             <Hamburger
               style={{ backgroundImage: `url(${backgroundImage})` }}
@@ -123,7 +192,30 @@ const BoardDetail = () => {
         </TopContainer>
         <ColorBox>
           <MainDetail>
-            <DetailHearder>{board.board_title}</DetailHearder>
+            <DetailHearder>{board[0].board_title}</DetailHearder>
+            <DetailCenter>
+              <UserId>작성자: {board[0].user_id}</UserId>
+              <BoardDate>작성일: {board[0].board_date}</BoardDate>
+              <Board_View>조회수: {board[0].board_view}</Board_View>
+            </DetailCenter>
+            <BoardImage src={board[0].imageurl} alt="Board image" />
+            <DetailContent>{board[0].board_de}</DetailContent>
+            <ButtonBox>
+              <BrButton
+                style={{ position: "absolute", left: "1px", margin: "5px" }}
+                onClick={handleBack}
+              >
+                돌아가기
+              </BrButton>
+              {user_id === board.user_id && (
+                <BrButton
+                  style={{ position: "absolute", right: "1px", margin: "5px" }}
+                  onClick={deleteBoard}
+                >
+                  삭제하기
+                </BrButton>
+              )}
+            </ButtonBox>
           </MainDetail>
         </ColorBox>
       </MainContainer>

@@ -6,6 +6,10 @@ const BoardLi = styled.li`
   margin: 10px 0;
   display: flex;
   align-items: center;
+  border-bottom: 2px solid #ced4da;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 const OdContain = styled.div`
   align-items: right;

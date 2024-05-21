@@ -74,7 +74,7 @@ const SerchContainer = styled.div`
 const BoardBox = styled.div`
   position: relative;
   text-align: center;
-  width: 1200px;
+  width: 100%;
   height: 432px;
   margin: 0 35px;
   padding: 0;
@@ -83,7 +83,7 @@ const BoardBox = styled.div`
 `;
 const BoardTitleBox = styled.div`
   position: absolute;
-  width: 1200px;
+  width: 100%;
   height: 72px;
   margin: 0;
   padding: 0;
@@ -198,7 +198,8 @@ const Board = () => {
       } else {
         response = await AxiosApi.boardList(selectedCategory);
       }
-      setBoardList(response.data);
+      const sortedData = response.data.sort((a, b) => b.board_no - a.board_no);
+      setBoardList(sortedData);
     } catch (error) {
       console.error("Error fetching board list:", error);
     }
@@ -231,11 +232,16 @@ const Board = () => {
   const handleSubmit = async () => {
     try {
       const rsp = await AxiosApi.sersel(serchCategory, serinput);
-      setBoardList(rsp.data); // 검색 결과를 상태에 저장
+      const sortedData = rsp.data.sort((a, b) => b.board_no - a.board_no);
+      setBoardList(sortedData); // 검색 결과를 상태에 저장
       setCurrentPage(1); // 검색 결과를 첫 페이지로 설정
     } catch (e) {
       console.log(e);
     }
+  };
+  const handleDetailClick = (board_no) => {
+    console.log(board_no);
+    navigate(`/BoardDetail/${board_no}`);
   };
 
   const handleClick = () => {
@@ -282,7 +288,10 @@ const Board = () => {
             <BoardTitle>조회수</BoardTitle>
           </BoardTitleBox>
           <BoardLi>
-            <BoardList boardList={paginatedData} />
+            <BoardList
+              boardList={paginatedData}
+              handleDetailClick={handleDetailClick}
+            />
           </BoardLi>
         </BoardBox>
         <Fobox>
