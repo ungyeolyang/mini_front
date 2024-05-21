@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "../context/UserStore";
 
 const StyledHeader = styled.div`
-  display: flex;
+  display: ${({ isLogin }) => (isLogin ? `flex` : `none`)};
   width: 95%;
   position: absolute;
   top: 0px;
@@ -26,6 +26,7 @@ const Circle = styled.div`
 `;
 
 const StyledGiHamburgerMenu = styled(GiHamburgerMenu)`
+  display: ${({ isOpen }) => (isOpen ? `none` : ``)};
   font-size: 3rem;
   position: absolute;
   right: 3rem;
@@ -33,10 +34,10 @@ const StyledGiHamburgerMenu = styled(GiHamburgerMenu)`
   z-index: 1;
 `;
 
-const Header = ({ title }) => {
+const Header = ({ title, isLogin }) => {
   const [isHover, setIsHover] = useState(false);
   const context = useContext(UserContext);
-  const { setIsOpen } = context;
+  const { setIsOpen, isOpen } = context;
   const onMouseEnter = () => {
     setIsHover(true);
   };
@@ -47,12 +48,13 @@ const Header = ({ title }) => {
     setIsOpen(true);
   };
   return (
-    <StyledHeader>
+    <StyledHeader isLogin={isLogin}>
       <Title>{title}</Title>
       <StyledGiHamburgerMenu
         onClick={onClickHam}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        isOpen={isOpen}
       />
       <Circle hover={isHover} />
     </StyledHeader>

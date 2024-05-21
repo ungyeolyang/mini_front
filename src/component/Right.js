@@ -34,7 +34,7 @@ const Right = ({ children, backgroundColor, title }) => {
       backgroundColor={backgroundColor}
       title={title}
     >
-      <Header title={title} />
+      <Header title={title} isLogin={isLogin} />
       {children}
     </StyledRight>
   );

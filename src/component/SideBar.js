@@ -11,6 +11,12 @@ const openSide = (open) => keyframes`
 }
 `;
 
+const Container = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+`;
 const StyledSideBar = styled.div`
   position: fixed;
   right: 0;
@@ -18,14 +24,25 @@ const StyledSideBar = styled.div`
   background-color: #fefae0;
   /* border-top-left-radius: 85px; */
   width: 20vw;
-  display: ${({ open }) => (open ? "flex" : "none")};
-  animation: ${({ open }) => openSide(open)} 0.4s forwards;
+  animation: ${({ isOpen }) => openSide(isOpen)} 0.4s forwards;
 `;
 
-const SideBar = ({ children }) => {
-  const context = useContext(UserContext);
-  const { isOpen } = context;
+const SideBar = ({ children, isOpen, setIsOpen }) => {
+  const onClickOut = () => {
+    setIsOpen(false);
+  };
 
-  return <StyledSideBar open={isOpen}>{children}</StyledSideBar>;
+  const onClickSide = (e) => {
+    e.stopPropagation();
+  };
+
+  return (
+    <Container isOpen={isOpen} onClick={onClickOut}>
+      <StyledSideBar isOpen={isOpen} onClick={onClickSide}>
+        {children}
+      </StyledSideBar>
+      ;
+    </Container>
+  );
 };
 export default SideBar;

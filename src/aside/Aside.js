@@ -108,7 +108,7 @@ const Aside = () => {
   const navigate = useNavigate();
 
   const context = useContext(UserContext);
-  const { nick, imgUrl, isLogin, color, isOpen } = context;
+  const { nick, imgUrl, isLogin, color, isOpen, setIsOpen } = context;
 
   const id = localStorage.getItem("id");
 
@@ -160,7 +160,7 @@ const Aside = () => {
       <Div color={color}>
         <Outlet />
       </Div>
-      <SideBar></SideBar>
+      <SideBar isOpen={isOpen} setIsOpen={setIsOpen}></SideBar>
     </Container>
   );
 };
