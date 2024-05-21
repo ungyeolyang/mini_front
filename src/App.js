@@ -12,6 +12,7 @@ import BoardDetail from "./boader/BoardDetail";
 import BoInser from "./boader/BoInser";
 import Letter from "./letter/Letter";
 import ImageUploader from "./mypage/ImageUploader";
+import Test from "./Test";
 
 function App() {
   return (

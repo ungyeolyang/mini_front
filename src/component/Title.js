@@ -3,8 +3,7 @@ import styled from "styled-components";
 
 const StyledTitle = styled.span`
   position: absolute;
-  top: 4%;
-  left: 4%;
+  left: 0;
   font-size: 3rem;
   font-weight: bold;
   cursor: ${({ point }) => (point ? "pointer" : "default")};

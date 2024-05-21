@@ -1,14 +1,13 @@
 import styled from "styled-components";
 import Btn from "../component/Btn";
 import Right from "../component/Right";
-import Paging from "../component/Paging";
 import Send from "./Send";
-import Mail from "./Mail";
 import LetterAxiosApi from "../api/LetterAxiosApi";
 import { TbMailOpened, TbSend } from "react-icons/tb";
 import { useEffect, useState } from "react";
 import Title from "../component/Title";
-import { FaMagnifyingGlass } from "react-icons/fa6";
+import LetterBox from "./LetterBox";
+import LetterDetail from "./LetterDetail";
 
 const Container = styled.div`
   display: flex;
@@ -22,19 +21,6 @@ const BtnBox = styled.div`
   width: 15%;
   gap: 1rem;
 `;
-const LetterBox = styled.div`
-  display: flex;
-  width: 95%;
-  flex-direction: column;
-  footer {
-    position: relative;
-    width: 100%;
-  }
-`;
-const Div = styled.div`
-  div {
-  }
-`;
 
 const Letter = () => {
   const id = localStorage.getItem("id");
@@ -42,13 +28,10 @@ const Letter = () => {
   const [letter, setLetter] = useState(null);
   const [category, setCategory] = useState("receive");
   const [currentPage, setCurrentPage] = useState(1);
-  const [isSend, setIsSend] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const pageSize = 5;
-  const paginatedData = letter?.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
-  );
+  const [isSend, setIsSend] = useState(false);
+  const [isDetail, setIsDetail] = useState(false);
 
   const onClickLetter = () => {
     setLetterOpen(true);
@@ -65,6 +48,7 @@ const Letter = () => {
 
   //보낸 편지함 클릭
   const onClickSend = () => {
+    setIsDetail(false);
     if (category !== "send") {
       setCategory("send");
       setCurrentPage(1);
@@ -72,6 +56,7 @@ const Letter = () => {
   };
   //받은 편지함 클릭
   const onClickReceive = () => {
+    setIsDetail(false);
     if (category !== "receive") {
       setCategory("receive");
       setCurrentPage(1);
@@ -81,9 +66,35 @@ const Letter = () => {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+  //메일 자세히보기
+  const onClickDetail = (props) => {
+    setIsDetail(true);
+    setUser(props);
+    if (props.receiver === id && props.view === "FALSE") {
+      setView(props.no);
+    }
+  };
+
+  //읽음으로 변경
+  const setView = async (props) => {
+    try {
+      const rsp = await LetterAxiosApi.setView(props);
+      if (rsp.data) {
+        console.log("성공");
+      } else {
+        console.log("실패");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onClickBack = () => {
+    setIsDetail(false);
+  };
 
   useEffect(() => {
-    const getLetter = async (e) => {
+    const getLetter = async () => {
       try {
         const rsp = await LetterAxiosApi.letterList(id, category);
         if (rsp.data) {
@@ -97,11 +108,10 @@ const Letter = () => {
       }
     };
     getLetter();
-  }, [id, category, isSend]);
+  }, [id, category, isSend, isDetail]);
 
   return (
-    <Right>
-      <Title>{category === "send" ? `보낸 ` : `받은 `} 편지함</Title>
+    <Right title={`${category === "send" ? `보낸 ` : `받은 `} 편지함`}>
       <Container>
         <BtnBox>
           <Btn onClick={onClickReceive}>
@@ -114,34 +124,19 @@ const Letter = () => {
           </Btn>
           <Btn onClick={onClickLetter}>쪽지 쓰기</Btn>
         </BtnBox>
-        <LetterBox>
-          <Mail mailList={paginatedData} category={category}></Mail>
-          <footer>
-            <Paging
-              page={currentPage}
-              itemsCountPerPage={pageSize}
-              totalItemsCount={letter?.length}
-              onPageChange={handlePageChange}
-            />
-            <Div>
-              <select
-                defaultValue="title"
-                // onChange={(e) => setserchCategory(e.target.value)}
-              >
-                <option value="제목">제목</option>
-                <option value="작성자">작성자</option>
-              </select>
-              <input
-                type="text"
-                placeholder="검색어를 입력해 주세요"
-                // onChange={handleSerinputChange}
-              />
-              <button>
-                <FaMagnifyingGlass />
-              </button>
-            </Div>
-          </footer>
-        </LetterBox>
+        {!isDetail ? (
+          <LetterBox
+            category={category}
+            onClickDetail={onClickDetail}
+            currentPage={currentPage}
+            letter={letter}
+            handlePageChange={handlePageChange}
+          />
+        ) : (
+          <>
+            <LetterDetail user={user} onClickBack={onClickBack} />
+          </>
+        )}
       </Container>
       <Send
         open={letterOpen}
@@ -149,6 +144,7 @@ const Letter = () => {
         category="쪽지쓰기"
         onSend={onSend}
         isSend={isSend}
+        user={user}
       ></Send>
     </Right>
   );

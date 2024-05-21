@@ -1,10 +1,11 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import LogoImg from "../image/로고.png";
 import LogoStImg from "../image/로고-문구.png";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import LoginAxiosApi from "../api/LoginAxiosApi";
 import { UserContext } from "../context/UserStore";
+import SideBar from "../component/SideBar";
 
 const Container = styled.div`
   display: flex;
@@ -96,8 +97,9 @@ const Button = styled.button`
 
 const Div = styled.div`
   display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background-color: ${(props) => props.color || `transparent`};
-  flex: 1;
 `;
 
 const Aside = () => {
@@ -106,7 +108,7 @@ const Aside = () => {
   const navigate = useNavigate();
 
   const context = useContext(UserContext);
-  const { nick, imgUrl, isLogin, color } = context;
+  const { nick, imgUrl, isLogin, color, isOpen } = context;
 
   const id = localStorage.getItem("id");
 
@@ -158,6 +160,7 @@ const Aside = () => {
       <Div color={color}>
         <Outlet />
       </Div>
+      <SideBar></SideBar>
     </Container>
   );
 };

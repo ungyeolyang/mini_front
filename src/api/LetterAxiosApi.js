@@ -4,20 +4,29 @@ const DOMAIN = "http://localhost:8111";
 const LOGO = "/dooin";
 
 const LetterAxiosApi = {
+  //닉네임검색
+  getNick: async (id) => {
+    return await axios.get(DOMAIN + LOGO + `/getnick?id=${id}`);
+  },
+
   //id검색
   searchId: async (id) => {
     return await axios.get(DOMAIN + LOGO + `/searchid?id=${id}`);
   },
+
   //송신
-  sendLetter: async (id, receive, title, text) => {
+  send: async (id, nick, receive, receiveNick, title, text) => {
     const letter = {
       sender: id,
+      senderNick: nick,
       receiver: receive,
+      receiverNick: receiveNick,
       title: title,
       contents: text,
     };
-    return await axios.post(DOMAIN + LOGO + `/sendletter`, letter);
+    return await axios.post(DOMAIN + LOGO + `/send`, letter);
   },
+
   //편지리스트
   letterList: async (id, category) => {
     const letter = {
@@ -25,6 +34,11 @@ const LetterAxiosApi = {
       category: category,
     };
     return await axios.post(DOMAIN + LOGO + `/letterList`, letter);
+  },
+
+  //편지리스트
+  setView: async (no) => {
+    return await axios.get(DOMAIN + LOGO + `/setview?no=${no}`);
   },
 };
 

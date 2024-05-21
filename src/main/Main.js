@@ -8,6 +8,11 @@ import KakaoMap from "../KakaoMap";
 import { useState } from "react";
 import Title from "../component/Title";
 
+const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,7 +46,6 @@ const Main = () => {
   return (
     <Right>
       <Container>
-        <Title>메인</Title>
         <Link to="/meeting">모임</Link>
         <MoimBox>
           <Moim onClick={onClickMoim}>

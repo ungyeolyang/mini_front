@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Modal from "../component/Modal";
 import LetterAxiosApi from "../api/LetterAxiosApi";
 import Btn from "../component/Btn";
 import InputBar from "../component/InputBar";
-import LoginAxiosApi from "../api/LoginAxiosApi";
+import { UserContext } from "../context/UserStore";
 
 const ModalStyle = styled.div`
   .modal {
@@ -135,8 +135,11 @@ const Send = (props) => {
   const { open, close, category, onSend, isSend } = props;
   const inputId = useRef(null);
   const id = localStorage.getItem("id");
+  const context = useContext(UserContext);
+  const { nick } = context;
 
   const [receive, setReceive] = useState("");
+  const [receiveNick, setReceiveNick] = useState("");
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [user, setUser] = useState(null);
@@ -159,7 +162,8 @@ const Send = (props) => {
   const onChangeReceive = async (e) => {
     setReceive(e.target.value);
   };
-  const searchId = async (e) => {
+
+  const searchId = async () => {
     try {
       const rsp = await LetterAxiosApi.searchId(receive);
       if (receive < 3) {
@@ -179,10 +183,12 @@ const Send = (props) => {
 
   //아이디 확인
   const conId = async () => {
-    const rsp1 = await LoginAxiosApi.memberConId(receive[1]);
+    const rsp = await LetterAxiosApi.getNick(receive);
     try {
-      if (rsp1.data) {
+      if (rsp.data) {
         setIsId(true);
+        inputId.current.value = `${rsp.data}(${receive})`;
+        setReceiveNick(rsp.data);
       } else {
         setIsId(false);
       }
@@ -213,13 +219,10 @@ const Send = (props) => {
 
   //아이디 선택
   const onClickId = (e) => {
-    const idReg = /\((.*?)\)/;
-    const matchId = idReg.exec(e.target.textContent);
-    // const nickReg = /^(.*?)\(/;
-    // const matcheNick = nickReg.exec(e.target.textContent);
-    if (matchId) {
-      inputId.current.value = matchId[1];
-      setReceive(matchId);
+    if (e) {
+      inputId.current.value = `${e.nick}(${e.id})`;
+      setReceive(e.id);
+      setReceiveNick(e.nick);
     } else {
       console.log("괄호 안의 문자열을 추출할 수 없습니다.");
     }
@@ -228,13 +231,19 @@ const Send = (props) => {
   useEffect(() => {
     searchId();
     conId();
-  }, [receive]);
+  }, [receive, isId]);
 
   // 송신버튼 누르기
   const onClickSend = async () => {
     try {
-      console.log(receive[1]);
-      const rsp = await LetterAxiosApi.sendLetter(id, receive[1], title, text);
+      const rsp = await LetterAxiosApi.send(
+        id,
+        nick,
+        receive,
+        receiveNick,
+        title,
+        text
+      );
       if (!isId) {
         setModalOpen(true);
         setModalContent("아이디를 재 확인 해 주세요.");
@@ -274,7 +283,7 @@ const Send = (props) => {
                     {user &&
                       !isId &&
                       user.map((e) => (
-                        <Search key={e.id} onClick={onClickId}>
+                        <Search key={e.id} onClick={() => onClickId(e)}>
                           <span>
                             {e.nick}({e.id})
                           </span>

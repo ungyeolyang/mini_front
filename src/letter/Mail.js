@@ -7,8 +7,25 @@ const Head = styled.div`
   background-color: #b8d0fa;
 `;
 const Box = styled.div`
-  padding: 2% 0;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  justify-content: ${(props) => {
+    switch (props.type) {
+      case "title":
+        return "";
+      case "author":
+        return "";
+      case "date":
+        return "center";
+      case "view":
+        return "center";
+      case "check":
+        return "center";
+      default:
+        return "auto";
+    }
+  }};
   font-weight: bold;
   width: ${(props) => {
     switch (props.type) {
@@ -19,7 +36,9 @@ const Box = styled.div`
       case "date":
         return "20%";
       case "view":
-        return "10%";
+        return "7%";
+      case "check":
+        return "5%";
       default:
         return "auto";
     }
@@ -30,17 +49,24 @@ const Body = styled.div`
   min-height: 20rem;
 `;
 
-const Mail = ({ mailList, category }) => {
+const Mail = ({ mailList, category, onClickDetail }) => {
   return (
     <Container>
       <Head>
-        <Box type="author">작성자</Box>
+        <Box type="check">
+          <input type="checkbox" />
+        </Box>
+        <Box type="view">읽음</Box>
+        <Box type="author">{category === "send" ? `수신자` : `작성자`}</Box>
         <Box type="title">제목</Box>
         <Box type="date">작성일</Box>
-        <Box type="view">조회수</Box>
       </Head>
       <Body>
-        <MailList mailList={mailList} category={category} />
+        <MailList
+          mailList={mailList}
+          category={category}
+          onClickDetail={onClickDetail}
+        />
       </Body>
     </Container>
   );

@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import styled, { keyframes } from "styled-components";
 import { UserContext } from "../context/UserStore";
+import Header from "./Header";
 
 const rightShow = (isLogin) => keyframes`
   0% {
@@ -23,12 +24,17 @@ const StyledRight = styled.div`
 `;
 
 // Right 컴포넌트 정의
-const Right = ({ children, backgroundColor }) => {
+const Right = ({ children, backgroundColor, title }) => {
   const context = useContext(UserContext);
   const { isLogin } = context;
 
   return (
-    <StyledRight isLogin={isLogin} backgroundColor={backgroundColor}>
+    <StyledRight
+      isLogin={isLogin}
+      backgroundColor={backgroundColor}
+      title={title}
+    >
+      <Header title={title} />
       {children}
     </StyledRight>
   );
