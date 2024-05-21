@@ -4,12 +4,13 @@ const DOMAIN = "http://localhost:8111";
 const LOGO = "/dooin";
 
 const AxiosApi = {
-  BoInser: async (board_title, board_category, board_de, user_id) => {
+  BoInser: async (board_title, board_category, board_de, user_id, imageurl) => {
     const BoInser = {
       board_title: board_title,
       board_category: board_category,
       board_de: board_de,
       user_id: user_id,
+      imageurl: imageurl,
     };
     return await axios.post(DOMAIN + LOGO + "/notboinsert", BoInser);
   },
@@ -42,6 +43,10 @@ const AxiosApi = {
         board_no,
       },
     });
+  },
+  // 게시글 삭제
+  boardDelete: async (board_no) => {
+    return await axios.delete(`${DOMAIN}${LOGO}/delete/${board_no}`);
   },
 };
 export default AxiosApi;

@@ -8,10 +8,13 @@ const BoardUl = styled.ul`
 `;
 
 const BoardList = ({ boardList, handleDetailClick }) => {
+  const sortedBoardList = boardList
+    .slice()
+    .sort((a, b) => b.board_no - a.board_no);
   return (
     <BoardUl>
-      {boardList &&
-        boardList.map((board) => (
+      {sortedBoardList &&
+        sortedBoardList.map((board) => (
           <BoardListItem
             key={board.board_no}
             board={board}

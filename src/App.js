@@ -29,6 +29,7 @@ function App() {
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/board" element={<Board />} />
               <Route path="/boarddetail" element={<BoardDetail />} />
+              <Route path="/boarddetail/:board_no" element={<BoardDetail />} />
               <Route path="/letter" element={<Letter />} />
               <Route path="/boinser" element={<BoInser />} />
             </Route>

@@ -198,7 +198,8 @@ const Board = () => {
       } else {
         response = await AxiosApi.boardList(selectedCategory);
       }
-      setBoardList(response.data);
+      const sortedData = response.data.sort((a, b) => b.board_no - a.board_no);
+      setBoardList(sortedData);
     } catch (error) {
       console.error("Error fetching board list:", error);
     }
@@ -231,7 +232,8 @@ const Board = () => {
   const handleSubmit = async () => {
     try {
       const rsp = await AxiosApi.sersel(serchCategory, serinput);
-      setBoardList(rsp.data); // 검색 결과를 상태에 저장
+      const sortedData = rsp.data.sort((a, b) => b.board_no - a.board_no);
+      setBoardList(sortedData); // 검색 결과를 상태에 저장
       setCurrentPage(1); // 검색 결과를 첫 페이지로 설정
     } catch (e) {
       console.log(e);
