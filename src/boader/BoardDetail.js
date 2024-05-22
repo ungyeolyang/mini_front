@@ -1,9 +1,9 @@
 import Right from "../component/Right";
 import styled from "styled-components";
-import backgroundImage from "../image/sp_main.74b52318.png";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AxiosApi from "../api/BoardAxiosApi";
+import Update from "./Update";
 
 const MainContainer = styled.div`
   display: flex;
@@ -27,29 +27,6 @@ const TopContainer = styled.div`
 const Title = styled.h3`
   color: #333;
   font-size: 29px;
-`;
-
-const Ham = styled.button`
-  position: absolute;
-  right: 18px;
-  margin: 10px;
-  padding: 10px;
-  display: inline-block;
-  background-color: white;
-  border: 0;
-  &:hover {
-    cursor: pointer;
-    background-color: #fefae0;
-    border-radius: 50%;
-  }
-`;
-
-const Hamburger = styled.div`
-  background-repeat: no-repeat;
-  background-size: 422px 405px;
-  background-position: -298px -310px;
-  width: 27px;
-  height: 21px;
 `;
 
 const ColorBox = styled.div`
@@ -146,6 +123,7 @@ const BoardDetail = () => {
       const delBoardApi = async () => {
         try {
           const rsp = await AxiosApi.boardDelete(board_no);
+          console.log(board_no);
           if (rsp.data) {
             alert("게시글이 삭제되었습니다.");
             navigate("/Board");
@@ -156,6 +134,16 @@ const BoardDetail = () => {
       };
       delBoardApi();
     }
+  };
+
+  const onClickUpdate = () => {
+    navigate(`/update/${board_no}`, {
+      state: {
+        board_title: board[0].board_title,
+        board_de: board[0].board_de,
+        imageurl: board[0].imageurl,
+      },
+    });
   };
 
   useEffect(() => {
@@ -184,11 +172,6 @@ const BoardDetail = () => {
       <MainContainer>
         <TopContainer>
           <Title>게시판</Title>
-          <Ham>
-            <Hamburger
-              style={{ backgroundImage: `url(${backgroundImage})` }}
-            ></Hamburger>
-          </Ham>
         </TopContainer>
         <ColorBox>
           <MainDetail>
@@ -207,12 +190,25 @@ const BoardDetail = () => {
               >
                 돌아가기
               </BrButton>
-              {user_id === board.user_id && (
+
+              {user_id === board[0].user_id && (
                 <BrButton
                   style={{ position: "absolute", right: "1px", margin: "5px" }}
                   onClick={deleteBoard}
                 >
                   삭제하기
+                </BrButton>
+              )}
+              {user_id === board[0].user_id && (
+                <BrButton
+                  style={{
+                    position: "absolute",
+                    right: "150px",
+                    margin: "5px",
+                  }}
+                  onClick={onClickUpdate}
+                >
+                  수정하기
                 </BrButton>
               )}
             </ButtonBox>

@@ -7,7 +7,7 @@ const BoardUl = styled.ul`
   padding: 0;
 `;
 
-const BoardList = ({ boardList, handleDetailClick }) => {
+const BoardList = ({ boardList, handleDetailClick, handleView }) => {
   const sortedBoardList = boardList
     .slice()
     .sort((a, b) => b.board_no - a.board_no);
@@ -19,6 +19,7 @@ const BoardList = ({ boardList, handleDetailClick }) => {
             key={board.board_no}
             board={board}
             handleDetailClick={handleDetailClick} // handleDetailClick 함수 전달
+            handleView={handleView}
           />
         ))}
     </BoardUl>

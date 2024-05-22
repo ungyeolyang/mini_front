@@ -46,9 +46,13 @@ const UserId = styled.p`
   margin-right: 50px;
 `;
 
-const BoardListItem = ({ board, handleDetailClick }) => {
+const BoardListItem = ({ board, handleDetailClick, handleView }) => {
+  const handleClick = (boardNo) => {
+    handleDetailClick(boardNo);
+    handleView(boardNo);
+  };
   return (
-    <BoardLi onClick={() => handleDetailClick(board.board_no)}>
+    <BoardLi onClick={() => handleClick(board.board_no)}>
       <TiContain>
         <BoardTitle>{board.board_title}</BoardTitle>
       </TiContain>
