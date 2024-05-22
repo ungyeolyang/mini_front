@@ -143,6 +143,7 @@ const Letter = () => {
         category="쪽지쓰기"
         onSend={onSend}
         isSend={isSend}
+        setIsSend={setIsSend}
       ></Send>
     </Right>
   );

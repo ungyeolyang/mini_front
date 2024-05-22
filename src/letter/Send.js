@@ -97,10 +97,11 @@ const Textarea = styled.textarea`
   }
 `;
 const Div = styled.div`
-  position: relative;
+  /* position: absolute; */
   align-items: center;
   display: flex;
   width: 25rem;
+  flex-direction: ${({ type }) => (type === "id" ? `column` : "row")};
 `;
 
 const Search = styled.div`
@@ -140,6 +141,7 @@ const Id = styled.div`
   border-bottom: 0.1rem solid silver;
 `;
 const Body = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -201,6 +203,11 @@ const Send = (props) => {
     try {
       if (rsp.data) {
         setIsId(true);
+        if (receive !== id) {
+          inputId.current.value = `${rsp.data}(${receive})`;
+        } else {
+          inputId.current.value = "나에게 쓰기";
+        }
         setReceiveNick(rsp.data);
       } else {
         setIsId(false);
@@ -232,13 +239,13 @@ const Send = (props) => {
 
   //아이디 선택
   const onClickId = (e) => {
-    if (e) {
+    if (e.id !== id) {
       inputId.current.value = `${e.nick}(${e.id})`;
-      setReceive(e.id);
-      setReceiveNick(e.nick);
     } else {
-      console.log("괄호 안의 문자열을 추출할 수 없습니다.");
+      inputId.current.value = "나에게 쓰기";
     }
+    setReceive(e.id);
+    setReceiveNick(e.nick);
   };
 
   useEffect(() => {
@@ -296,9 +303,13 @@ const Send = (props) => {
                     <>
                       <Div type="nick">
                         {user ? (
-                          <Id>
-                            {user?.nick}({user?.id})
-                          </Id>
+                          user.id !== id ? (
+                            <Id>
+                              {user?.nick}({user?.id})
+                            </Id>
+                          ) : (
+                            <Id>나에게 쓰기</Id>
+                          )
                         ) : (
                           <>
                             <Input
@@ -310,15 +321,17 @@ const Send = (props) => {
                           </>
                         )}
                       </Div>
-                      {searchUser &&
-                        !isId &&
-                        searchUser.map((e) => (
-                          <Search key={e.id} onClick={() => onClickId(e)}>
-                            <span>
-                              {e.nick}({e.id})
-                            </span>
-                          </Search>
-                        ))}
+                      <Div type="id">
+                        {searchUser &&
+                          !isId &&
+                          searchUser.map((e) => (
+                            <Search key={e.id} onClick={() => onClickId(e)}>
+                              <span>
+                                {e.nick}({e.id})
+                              </span>
+                            </Search>
+                          ))}
+                      </Div>
                       <Div>
                         <InputBar placeholder="제목" onChange={onChangeTitle} />
                         <Error>{titleContents}</Error>

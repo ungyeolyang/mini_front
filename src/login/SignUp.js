@@ -138,6 +138,7 @@ const SignUp = () => {
     const idRegex = /^[a-zA-Z0-9]{5,20}$/;
     const idCurrent = e.target.value;
     setInputId(idCurrent);
+
     if (!idCurrent) {
       setIdMessage("필수 정보입니다.");
       setIsId(false);
@@ -146,19 +147,17 @@ const SignUp = () => {
       setIsId(false);
     } else {
       setIdMessage("");
-      certId(e);
+      certId(idCurrent);
     }
   };
 
   //아이디 중복확인
-  const certId = async (e) => {
-    setInputId(e.target.value);
-
+  const certId = async (id) => {
     try {
-      const rsp = await LoginAxiosApi.memberConId(inputId);
+      const rsp = await LoginAxiosApi.memberConId(id);
       console.log(rsp.data);
       if (rsp.data) {
-        setIdMessage("사용할수 없는 아이디입니다. 다른아이디를 입력해주세요");
+        setIdMessage("사용할 수 없는 아이디입니다. 다른 아이디를 입력해주세요");
         setIsId(false);
       } else {
         setIdMessage("");
@@ -279,7 +278,7 @@ const SignUp = () => {
         InputBirth,
         inputEmail,
         inputGender,
-        imgUrl
+        basic
       );
 
       if (rsp.data) {
@@ -308,7 +307,7 @@ const SignUp = () => {
     <>
       <Right>
         <Container>
-          <H>회원가입</H>
+          <H onClick={() => {}}>회원가입</H>
           <Div>
             <Placeholder>*프로필</Placeholder>
             <Profile onClick={onClickInputFile} size={"9rem"}>

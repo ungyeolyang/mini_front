@@ -52,8 +52,7 @@ const Box = styled.div`
 `;
 
 const LetterList = ({ mailList, category, onClickDetail }) => {
-  const [allChecked, setAllChecked] = useState([]);
-  const [checked, setChecked] = useState([]);
+  const [mailNoList, setMailNoList] = useState([]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -64,22 +63,31 @@ const LetterList = ({ mailList, category, onClickDetail }) => {
     return `${year}-${month}-${day}`;
   };
 
-  const onChangeCheck = (mail) => {
-    setAllChecked([...allChecked, mail.no]);
+  const onChangeCheck = (e, mail) => {
+    const checkbox = e.currentTarget;
+    if (checkbox.checked) {
+      setMailNoList((prev) => [...prev, mail.no]);
+    } else {
+      setMailNoList((prev) => prev.filter((no) => no !== mail.no));
+    }
   };
 
   useEffect(() => {
-    setChecked([...new Set(allChecked)]);
-    console.log(checked);
-  }, [allChecked]);
+    console.log(mailNoList);
+  }, [mailNoList]);
 
   return (
     <>
       {mailList &&
         mailList.map((mail) => (
           <Line key={mail.no} onClick={() => onClickDetail(mail)}>
-            <Box type="check" onChange={() => onChangeCheck(mail)}>
-              <input type="checkbox" onClick={(e) => e.stopPropagation()} />
+            <Box type="check">
+              <input
+                type="checkbox"
+                value={mail.no}
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => onChangeCheck(e, mail)}
+              />
             </Box>
             <Box type="view">
               {mail.view === "TRUE" ? (
@@ -98,4 +106,5 @@ const LetterList = ({ mailList, category, onClickDetail }) => {
     </>
   );
 };
+
 export default LetterList;

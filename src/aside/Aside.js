@@ -108,7 +108,18 @@ const Aside = () => {
   const navigate = useNavigate();
 
   const context = useContext(UserContext);
-  const { nick, imgUrl, isLogin, color, isOpen, setIsOpen } = context;
+  const {
+    nick,
+    setNick,
+    imgUrl,
+    setImgUrl,
+    isLogin,
+    color,
+    isOpen,
+    setIsOpen,
+    onDisplay,
+    setOnDisplay,
+  } = context;
 
   const id = localStorage.getItem("id");
 
@@ -129,12 +140,14 @@ const Aside = () => {
     const getMember = async () => {
       try {
         const rsp = await LoginAxiosApi.memberGetOne(id);
-        setMember(rsp.data);
+        setMember(rsp.data[0]);
       } catch (e) {
         console.log(e);
       }
     };
     getMember();
+    setNick(member.nick);
+    setImgUrl(member.profile);
   }, [id, nick, imgUrl]);
 
   return (
@@ -145,9 +158,9 @@ const Aside = () => {
         </Logo>
         <Body isLogin={isLogin}>
           <Profil onClick={onClickProfil} isLogin={isLogin}>
-            <img src={member ? member[0]?.profile : imgUrl} alt="User" />
+            <img src={member ? member?.profile : imgUrl} alt="User" />
           </Profil>
-          <Nick>{member ? member[0]?.nick : nick}</Nick>
+          <Nick>{member ? member?.nick : nick}</Nick>
           <Id>{"(" + id + ")"}</Id>
           <Button onClick={onClickLogOut}>
             로그아웃<span>[→</span>
@@ -160,7 +173,12 @@ const Aside = () => {
       <Div color={color}>
         <Outlet />
       </Div>
-      <SideBar isOpen={isOpen} setIsOpen={setIsOpen}></SideBar>
+      <SideBar
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        onDisplay={onDisplay}
+        setOnDisplay={setOnDisplay}
+      ></SideBar>
     </Container>
   );
 };

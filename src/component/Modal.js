@@ -30,7 +30,8 @@ const ModalStyle = styled.div`
     overflow: hidden;
     header {
       position: relative;
-      padding: 16px 64px 16px 16px;
+      text-align: center;
+      padding: 16px 64px;
       background-color: #fefae0;
       font-weight: 700;
       button {

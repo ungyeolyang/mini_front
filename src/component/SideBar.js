@@ -1,15 +1,26 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { UserContext } from "../context/UserStore";
 
-const openSide = (open) => keyframes`
+const openSide = keyframes`
 0% {
   right: -20vw;
 }
 100% {
   right: 0;
+}`;
+
+const closeSide = keyframes`
+0% {
+  right: 0;
 }
-`;
+100% {
+  right: -20vw;
+}`;
+
+const sideBar = (onDisplay) => {
+  return onDisplay ? openSide : closeSide;
+};
 
 const Container = styled.div`
   position: fixed;
@@ -22,14 +33,15 @@ const StyledSideBar = styled.div`
   right: 0;
   height: 100vh;
   background-color: #fefae0;
-  /* border-top-left-radius: 85px; */
   width: 20vw;
-  animation: ${({ isOpen }) => openSide(isOpen)} 0.4s forwards;
+  animation: ${({ onDisplay }) => sideBar(onDisplay)} 0.4s forwards;
 `;
 
-const SideBar = ({ children, isOpen, setIsOpen }) => {
+const SideBar = ({ children, isOpen, setIsOpen, onDisplay, setOnDisplay }) => {
   const onClickOut = () => {
-    setIsOpen(false);
+    setOnDisplay(false);
+    const timer = setTimeout(() => setIsOpen(false), 300);
+    return () => clearTimeout(timer);
   };
 
   const onClickSide = (e) => {
@@ -38,7 +50,11 @@ const SideBar = ({ children, isOpen, setIsOpen }) => {
 
   return (
     <Container isOpen={isOpen} onClick={onClickOut}>
-      <StyledSideBar isOpen={isOpen} onClick={onClickSide}>
+      <StyledSideBar
+        isOpen={isOpen}
+        onDisplay={onDisplay}
+        onClick={onClickSide}
+      >
         {children}
       </StyledSideBar>
       ;

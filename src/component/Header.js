@@ -32,13 +32,14 @@ const StyledGiHamburgerMenu = styled(GiHamburgerMenu)`
   position: absolute;
   right: 3rem;
   cursor: pointer;
+  pointer-events: auto;
   z-index: 1;
 `;
 
 const Header = ({ title, isLogin }) => {
   const [isHover, setIsHover] = useState(false);
   const context = useContext(UserContext);
-  const { setIsOpen, isOpen } = context;
+  const { setIsOpen, isOpen, setOnDisplay } = context;
   const onMouseEnter = () => {
     setIsHover(true);
   };
@@ -46,8 +47,8 @@ const Header = ({ title, isLogin }) => {
     setIsHover(false);
   };
   const onClickHam = (e) => {
-    e.stopPropagtion();
     setIsOpen(true);
+    setOnDisplay(true);
   };
   return (
     <StyledHeader isLogin={isLogin}>

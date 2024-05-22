@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "./Modal";
 import Profile from "./Profile";
@@ -7,6 +7,8 @@ import LoginAxiosApi from "../api/LoginAxiosApi";
 import { LuUserPlus2, LuMail } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import Send from "../letter/Send";
+import LetterAxiosApi from "../api/LetterAxiosApi";
+import { UserContext } from "../context/UserStore";
 
 const ModalStyle = styled.div`
   .modal {
@@ -129,6 +131,7 @@ const Line = styled.div`
 
 const Footer = styled.div`
   display: flex;
+  justify-content: center;
   gap: 3rem;
   font-size: 3.5rem;
   span {
@@ -168,7 +171,8 @@ const Info = styled.div`
 
 const UserDetail = (props) => {
   const navigate = useNavigate();
-  const { open, close, title, id } = props;
+  const { open, close, title, userId, nick, imgUrl } = props;
+  const id = localStorage.getItem("id");
 
   const [user, setUser] = useState("");
   const [letterOpen, setLetterOpen] = useState(false);
@@ -201,17 +205,30 @@ const UserDetail = (props) => {
     setLetterOpen(true);
   };
 
+  const onClickFriend = () => {
+    console.log(id, nick, imgUrl);
+    console.log(user.id, user.nick, user.profile);
+    // setModalOpen(true);
+    // setModalContent("친구신청이 완료되었습니다.");
+  };
+
+  const plusFriend = async () => {
+    // try {
+    //   const rsp = await LetterAxiosApi.plusFriend(id, nick, imgUrl,user.id,user.nick,user.profile);
+    // } catch (e) {}
+  };
+
   useEffect(() => {
     const getMember = async () => {
       try {
-        const rsp = await LoginAxiosApi.memberGetOne(id);
+        const rsp = await LoginAxiosApi.memberGetOne(userId);
         setUser(rsp.data[0]);
       } catch (e) {
         console.log(e);
       }
     };
     getMember();
-  }, [id]);
+  }, [userId]);
 
   return (
     <>
@@ -240,12 +257,14 @@ const UserDetail = (props) => {
                   <span>{user?.introdution}</span>
                   <Line></Line>
                   <Footer>
-                    <Cdiv>
-                      <div>
-                        <LuUserPlus2 />
-                      </div>
-                      <span>친구 추가</span>
-                    </Cdiv>
+                    {id !== user.id && (
+                      <Cdiv onClick={onClickFriend}>
+                        <div>
+                          <LuUserPlus2 />
+                        </div>
+                        <span>친구 추가</span>
+                      </Cdiv>
+                    )}
                     <Cdiv onClick={onClickLetter}>
                       <div>
                         <LuMail />
@@ -270,7 +289,7 @@ const UserDetail = (props) => {
           user={user}
         ></Send>
       </ModalStyle>
-      <Modal open={modalOpen} close={closeModal} header="오류" btn="확인">
+      <Modal open={modalOpen} close={closeModal} header="친구추가" btn="확인">
         {modalContent}
       </Modal>
     </>

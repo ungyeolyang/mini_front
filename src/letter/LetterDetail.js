@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { FaChevronDown, FaChevronUp, FaChevronLeft } from "react-icons/fa";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Btn from "../component/Btn";
 import UserDetail from "../component/UserDetail";
+import { UserContext } from "../context/UserStore";
 
 const StyledLetterDetail = styled.div`
   display: flex;
@@ -23,6 +24,8 @@ const Div = styled.div`
       case "title":
         return `1rem 4rem 0.5rem`;
       case "receive":
+        return `0 4rem 0.5rem`;
+      case "my":
         return `0 4rem 0.5rem`;
       case "date":
         return `0 4rem 1rem`;
@@ -77,6 +80,9 @@ const Body = styled.div`
 `;
 
 const LetterDetail = ({ user, onClickBack }) => {
+  const context = useContext(UserContext);
+  const { nick, imgUrl } = context;
+
   const [isUp, setIsUp] = useState(true);
   const [info, setInfo] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
@@ -124,26 +130,30 @@ const LetterDetail = ({ user, onClickBack }) => {
         <Div type="title">
           <Bold>{user.title}</Bold>
         </Div>
-        <Div>
-          <StyledUp onClick={onClickArrow} isUp={isUp} />
-          <StyledDown onClick={onClickArrow} isUp={isUp} />
-          <Bold>보낸 사람</Bold>
-          <User onClick={onClickUser} user={user.sender}>
-            {user.senderNick}({user.sender})
-          </User>
-        </Div>
-        <Div type="receive" isUp={isUp}>
-          {user.receiver !== user.sender ? (
-            <>
+        {user.receiver !== user.sender ? (
+          <>
+            <Div>
+              <StyledUp onClick={onClickArrow} isUp={isUp} />
+              <StyledDown onClick={onClickArrow} isUp={isUp} />
+              <Bold>보낸 사람</Bold>
+              <User onClick={onClickUser} user={user.sender}>
+                {user.senderNick}({user.sender})
+              </User>
+            </Div>
+
+            <Div type="receive" isUp={isUp}>
               <Bold>받는 사람</Bold>
               <User onClick={onClickUser} user={user.receiver}>
                 {user.receiverNick}({user.receiver})
               </User>
-            </>
-          ) : (
-            <Bold>내게 쓴 편지</Bold>
-          )}
-        </Div>
+            </Div>
+          </>
+        ) : (
+          <Div type="my">
+            <Bold>나에게 쓴 편지</Bold>
+          </Div>
+        )}
+
         <Div type="date">{formatDate(user.date)}</Div>
       </Body>
       <Div type="contents">{user.contents}</Div>
@@ -151,7 +161,9 @@ const LetterDetail = ({ user, onClickBack }) => {
         open={userOpen}
         close={closeUser}
         title="회원정보"
-        id={info}
+        userId={info}
+        nick={nick}
+        imgUrl={imgUrl}
       ></UserDetail>
     </StyledLetterDetail>
   );

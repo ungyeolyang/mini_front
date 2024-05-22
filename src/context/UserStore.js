@@ -16,6 +16,7 @@ const UserStore = (props) => {
 
   const [color, setColor] = useState("transparent");
   const [isOpen, setIsOpen] = useState(false);
+  const [onDisplay, setOnDisplay] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("nick", nick);
@@ -42,6 +43,8 @@ const UserStore = (props) => {
         setColor,
         isOpen,
         setIsOpen,
+        onDisplay,
+        setOnDisplay,
       }}
     >
       {props.children}
