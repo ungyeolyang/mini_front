@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import MailList from "./MailList";
+import LetterList from "./LetterList";
 
 const Container = styled.div``;
 const Head = styled.div`
@@ -49,7 +49,7 @@ const Body = styled.div`
   min-height: 20rem;
 `;
 
-const Mail = ({ mailList, category, onClickDetail }) => {
+const Letters = ({ mailList, category, onClickDetail }) => {
   return (
     <Container>
       <Head>
@@ -62,7 +62,7 @@ const Mail = ({ mailList, category, onClickDetail }) => {
         <Box type="date">작성일</Box>
       </Head>
       <Body>
-        <MailList
+        <LetterList
           mailList={mailList}
           category={category}
           onClickDetail={onClickDetail}
@@ -72,4 +72,4 @@ const Mail = ({ mailList, category, onClickDetail }) => {
   );
 };
 
-export default Mail;
+export default Letters;

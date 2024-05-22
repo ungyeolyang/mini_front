@@ -10,7 +10,6 @@ import Modal from "../component/Modal";
 import Profile from "../component/Profile";
 import { storage } from "../api/FireBase";
 import Person from "../image/사람아이콘.png";
-import Header from "../component/Header";
 
 const InContainer = styled.div`
   position: absolute;
@@ -389,7 +388,7 @@ const MyPage = () => {
               <Div>
                 <div>자기소개</div>{" "}
                 <InputBar
-                  placeholder={member[0]?.introduction}
+                  placeholder={member[0]?.introdution}
                   onChange={onChangeIntro}
                 />
               </Div>

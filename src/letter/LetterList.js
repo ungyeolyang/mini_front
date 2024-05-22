@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IoIosMail } from "react-icons/io";
 import { IoIosMailOpen } from "react-icons/io";
@@ -51,22 +51,34 @@ const Box = styled.div`
   }};
 `;
 
-const MailList = ({ mailList, category, onClickDetail }) => {
+const LetterList = ({ mailList, category, onClickDetail }) => {
+  const [allChecked, setAllChecked] = useState([]);
+  const [checked, setChecked] = useState([]);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const day = date.getDate();
 
     return `${year}-${month}-${day}`;
   };
+
+  const onChangeCheck = (mail) => {
+    setAllChecked([...allChecked, mail.no]);
+  };
+
+  useEffect(() => {
+    setChecked([...new Set(allChecked)]);
+    console.log(checked);
+  }, [allChecked]);
+
   return (
     <>
       {mailList &&
         mailList.map((mail) => (
           <Line key={mail.no} onClick={() => onClickDetail(mail)}>
-            <Box type="check">
+            <Box type="check" onChange={() => onChangeCheck(mail)}>
               <input type="checkbox" onClick={(e) => e.stopPropagation()} />
             </Box>
             <Box type="view">
@@ -86,4 +98,4 @@ const MailList = ({ mailList, category, onClickDetail }) => {
     </>
   );
 };
-export default MailList;
+export default LetterList;

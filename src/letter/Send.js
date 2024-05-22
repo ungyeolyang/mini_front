@@ -130,10 +130,24 @@ const Input = styled.input`
     outline: none;
   }
 `;
+const Id = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 3rem;
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  border-bottom: 0.1rem solid silver;
+`;
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const Send = (props) => {
-  const { open, close, category, onSend, isSend } = props;
-  const inputId = useRef(null);
+  const { open, close, category, setIsSend, isSend, user } = props;
+  const inputId = useRef();
   const id = localStorage.getItem("id");
   const context = useContext(UserContext);
   const { nick } = context;
@@ -142,7 +156,7 @@ const Send = (props) => {
   const [receiveNick, setReceiveNick] = useState("");
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const [user, setUser] = useState(null);
+  const [searchUser, setSearchUser] = useState(null);
 
   const [isId, setIsId] = useState(false);
 
@@ -167,13 +181,13 @@ const Send = (props) => {
     try {
       const rsp = await LetterAxiosApi.searchId(receive);
       if (receive < 3) {
-        setUser(null);
+        setSearchUser(null);
         setIdContents("");
       } else if (!rsp.data && receive.length >= 3) {
-        setUser(null);
+        setSearchUser(null);
         setIdContents("아이디를 재 확인 해 주세요.");
       } else {
-        setUser(rsp.data);
+        setSearchUser(rsp.data);
         setIdContents("");
       }
     } catch (e) {
@@ -187,7 +201,6 @@ const Send = (props) => {
     try {
       if (rsp.data) {
         setIsId(true);
-        inputId.current.value = `${rsp.data}(${receive})`;
         setReceiveNick(rsp.data);
       } else {
         setIsId(false);
@@ -233,6 +246,12 @@ const Send = (props) => {
     conId();
   }, [receive, isId]);
 
+  useEffect(() => {
+    setReceive(user?.id);
+    setReceiveNick(user?.nick);
+    setIsId(true);
+  }, [user]);
+
   // 송신버튼 누르기
   const onClickSend = async () => {
     try {
@@ -244,16 +263,18 @@ const Send = (props) => {
         title,
         text
       );
+      console.log(rsp.data);
       if (!isId) {
         setModalOpen(true);
         setModalContent("아이디를 재 확인 해 주세요.");
       } else if (rsp.data) {
-        onSend(true);
+        setIsSend(true);
       } else {
         setModalOpen(true);
         setModalContent("송신 오류");
       }
     } catch (e) {
+      setIsSend(true);
       setModalOpen(true);
       setModalContent("서버가 응답하지 않습니다.");
     }
@@ -270,40 +291,50 @@ const Send = (props) => {
                 <button onClick={close}>&times;</button>
               </header>
               <main>
-                {!isSend ? (
-                  <>
-                    <Div type="nick">
-                      <Input
-                        placeholder="받는사람"
-                        onChange={onChangeReceive}
-                        ref={inputId}
-                      />
-                      <Error>{idContents}</Error>
-                    </Div>
-                    {user &&
-                      !isId &&
-                      user.map((e) => (
-                        <Search key={e.id} onClick={() => onClickId(e)}>
-                          <span>
-                            {e.nick}({e.id})
-                          </span>
-                        </Search>
-                      ))}
-                    <Div>
-                      <InputBar placeholder="제목" onChange={onChangeTitle} />
-                      <Error>{titleContents}</Error>
-                    </Div>
-                    <Div>
-                      <Textarea
-                        placeholder="내용"
-                        onChange={onChangeContents}
-                      ></Textarea>
-                      <Error type="area">{textContents}</Error>
-                    </Div>
-                  </>
-                ) : (
-                  <p>편지를 발송했습니다.</p>
-                )}
+                <Body>
+                  {!isSend ? (
+                    <>
+                      <Div type="nick">
+                        {user ? (
+                          <Id>
+                            {user?.nick}({user?.id})
+                          </Id>
+                        ) : (
+                          <>
+                            <Input
+                              placeholder="받는사람"
+                              onChange={onChangeReceive}
+                              ref={inputId}
+                            />
+                            <Error>{idContents}</Error>
+                          </>
+                        )}
+                      </Div>
+                      {searchUser &&
+                        !isId &&
+                        searchUser.map((e) => (
+                          <Search key={e.id} onClick={() => onClickId(e)}>
+                            <span>
+                              {e.nick}({e.id})
+                            </span>
+                          </Search>
+                        ))}
+                      <Div>
+                        <InputBar placeholder="제목" onChange={onChangeTitle} />
+                        <Error>{titleContents}</Error>
+                      </Div>
+                      <Div>
+                        <Textarea
+                          placeholder="내용"
+                          onChange={onChangeContents}
+                        ></Textarea>
+                        <Error type="area">{textContents}</Error>
+                      </Div>
+                    </>
+                  ) : (
+                    <p>편지를 발송했습니다.</p>
+                  )}
+                </Body>
               </main>
               <footer>
                 <Btn onClick={!isSend ? onClickSend : close}>

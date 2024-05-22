@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Mail from "./Mail";
+import Letters from "./Letters";
 import Paging from "../component/Paging";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
@@ -28,11 +28,11 @@ const LetterBox = ({
 
   return (
     <StyledLetterBox>
-      <Mail
+      <Letters
         mailList={paginatedData}
         category={category}
         onClickDetail={onClickDetail}
-      ></Mail>
+      ></Letters>
       <footer>
         <Paging
           page={currentPage}

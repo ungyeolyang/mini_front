@@ -5,7 +5,6 @@ import Send from "./Send";
 import LetterAxiosApi from "../api/LetterAxiosApi";
 import { TbMailOpened, TbSend } from "react-icons/tb";
 import { useEffect, useState } from "react";
-import Title from "../component/Title";
 import LetterBox from "./LetterBox";
 import LetterDetail from "./LetterDetail";
 
@@ -80,9 +79,9 @@ const Letter = () => {
     try {
       const rsp = await LetterAxiosApi.setView(props);
       if (rsp.data) {
-        console.log("성공");
+        // console.log("성공");
       } else {
-        console.log("실패");
+        // console.log("실패");
       }
     } catch (e) {
       console.log(e);
@@ -122,7 +121,7 @@ const Letter = () => {
             <TbSend />
             보낸 편지함
           </Btn>
-          <Btn onClick={onClickLetter}>쪽지 쓰기</Btn>
+          <Btn onClick={onClickLetter}>편지 쓰기</Btn>
         </BtnBox>
         {!isDetail ? (
           <LetterBox
@@ -144,7 +143,6 @@ const Letter = () => {
         category="쪽지쓰기"
         onSend={onSend}
         isSend={isSend}
-        user={user}
       ></Send>
     </Right>
   );

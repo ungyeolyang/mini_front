@@ -23,6 +23,7 @@ function App() {
           <Routes>
             yar
             <Route path="/" element={<Aside />}>
+              {/* <Route index element={<ImageUploader />} /> */}
               <Route index element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/main" element={<Main />} />
