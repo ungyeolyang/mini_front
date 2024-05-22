@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import backgroundImage from "../image/sp_main.74b52318.png";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import AxiosApi from "../api/BoardAxiosApi";
@@ -25,29 +24,6 @@ const TopContainer = styled.div`
 
 const Title = styled.h3`
   color: #333;
-`;
-// 햄버거 버튼
-const Ham = styled.button`
-  position: absolute;
-  right: 18px;
-  margin: 10px;
-  padding: 10px;
-  display: inline-block;
-  background-color: white;
-  border: 0;
-  &:hover {
-    cursor: pointer;
-    background-color: #fefae0;
-    border-radius: 50%;
-  }
-`;
-// 햄버거 아이콘
-const Hamburger = styled.div`
-  background-repeat: no-repeat;
-  background-size: 422px 405px;
-  background-position: -298px -310px;
-  width: 27px;
-  height: 21px;
 `;
 // 선택 버튼
 const CategoryButton1 = styled.button`
@@ -179,6 +155,7 @@ const Inputicon = styled.div`
 const Board = () => {
   const [boardList, setBoardList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("자유게시판");
+  const id = localStorage.getItem("id");
   const [seleuserId, setseleuserId] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [serchCategory, setserchCategory] = useState("제목");
@@ -193,7 +170,7 @@ const Board = () => {
   const fetchData = async () => {
     try {
       let response;
-      if (selectedCategory === "kimfjd") {
+      if (selectedCategory === id) {
         response = await AxiosApi.myboardList(seleuserId);
       } else {
         response = await AxiosApi.boardList(selectedCategory);
@@ -208,8 +185,8 @@ const Board = () => {
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
     setCurrentPage(1);
-    if (category === "kimfjd") {
-      setseleuserId("kimfjd");
+    if (category === id) {
+      setseleuserId(id);
     }
     // 검색 관련 상태 초기화
     setserchCategory("제목");
@@ -243,7 +220,14 @@ const Board = () => {
     console.log(board_no);
     navigate(`/BoardDetail/${board_no}`);
   };
-
+  const handleView = async (board_no) => {
+    console.log(board_no);
+    try {
+      const rsp = await AxiosApi.BoView(board_no);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const handleClick = () => {
     navigate("/boinser");
   };
@@ -253,9 +237,6 @@ const Board = () => {
       <MainContainer>
         <TopContainer>
           <Title>게시판</Title>
-          <Ham>
-            <Hamburger style={{ backgroundImage: `url(${backgroundImage})` }} />
-          </Ham>
         </TopContainer>
         <SerchContainer>
           <CategoryButton1 onClick={() => handleCategoryChange("자유게시판")}>
@@ -266,7 +247,7 @@ const Board = () => {
           >
             모임 후기 게시판
           </CategoryButton1>
-          <CategoryButton1 onClick={() => handleCategoryChange("kimfjd")}>
+          <CategoryButton1 onClick={() => handleCategoryChange(id)}>
             내가 쓴 글
           </CategoryButton1>
           <CategoryButton1
@@ -291,6 +272,7 @@ const Board = () => {
             <BoardList
               boardList={paginatedData}
               handleDetailClick={handleDetailClick}
+              handleView={handleView}
             />
           </BoardLi>
         </BoardBox>

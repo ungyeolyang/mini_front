@@ -4,24 +4,14 @@ import AxiosApi from "../api/BoardAxiosApi";
 import Modal from "../component/Modal";
 import { useNavigate } from "react-router-dom";
 import { storage } from "../api/FireBase";
-
-const Left = styled.div`
-  width: 250px;
-  height: 100vw;
-  background-color: #fefae0;
-  z-index: 1;
-`;
-
-const InserContainer = styled.div`
-  display: flex;
-`;
+import Right from "../component/Right";
 
 const InserMainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-left: 300px;
+  height: 100vh;
 `;
 
 const Titinput = styled.input`
@@ -36,7 +26,6 @@ const Cabox = styled.div`
   width: 600px;
   height: 100px;
   text-align: left;
-  margin-left: 0;
 `;
 const Explan = styled.h5`
   color: #333;
@@ -70,7 +59,7 @@ const InsertBu = styled.button`
 // 글 내용 입력창
 const TextInfo = styled.textarea`
   width: 600px;
-  height: 500px;
+  height: 40%;
   border: 1px solid black;
   background-color: #ced4da;
   padding: 10px;
@@ -104,7 +93,7 @@ const BoInser = () => {
   const [Board_de, setBoard_de] = useState("");
   const [file, setFile] = useState(null); // 로컬에 있는 파일의 경로
   const [imageurl, setImageurl] = useState(null); // 파이어베이스 업로드 경로
-  const user_id = localStorage.getItem("user_id");
+  const id = localStorage.getItem("id");
   const navigate = useNavigate();
 
   const [modalContent, setModalContent] = useState("");
@@ -146,14 +135,14 @@ const BoInser = () => {
   };
 
   const handleSubmit = async () => {
-    console.log(Board_title, Board_category, Board_de, imageurl);
+    console.log(Board_title, Board_category, Board_de, id, imageurl);
 
     try {
       const rsp = await AxiosApi.BoInser(
         Board_title,
         Board_category,
         Board_de,
-        user_id,
+        id,
         imageurl
       );
       if (rsp.data) {
@@ -191,8 +180,7 @@ const BoInser = () => {
   };
   return (
     <>
-      <InserContainer>
-        <Left></Left>
+      <Right>
         <InserMainContainer>
           <Titinput
             type="text"
@@ -226,16 +214,17 @@ const BoInser = () => {
             <InsertBu onClick={handleReset}>취소</InsertBu>
           </ButtBox>
         </InserMainContainer>
-        <Modal
-          open={modalOpen}
-          close={closeModal}
-          header={modalHeader}
-          type
-          confirm={confirm}
-        >
-          {modalContent}
-        </Modal>
-      </InserContainer>
+      </Right>
+
+      <Modal
+        open={modalOpen}
+        close={closeModal}
+        header={modalHeader}
+        type
+        confirm={confirm}
+      >
+        {modalContent}
+      </Modal>
     </>
   );
 };

@@ -13,6 +13,7 @@ import BoInser from "./boader/BoInser";
 import Letter from "./letter/Letter";
 import ImageUploader from "./mypage/ImageUploader";
 import Test from "./Test";
+import Update from "./boader/Update";
 
 function App() {
   return (
@@ -21,7 +22,6 @@ function App() {
       <UserStore>
         <Router>
           <Routes>
-            yar
             <Route path="/" element={<Aside />}>
               <Route index element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
@@ -33,6 +33,8 @@ function App() {
               <Route path="/boarddetail/:board_no" element={<BoardDetail />} />
               <Route path="/letter" element={<Letter />} />
               <Route path="/boinser" element={<BoInser />} />
+              <Route path="/update" element={<Update />} />
+              <Route path="/update/:board_no" element={<Update />} />
             </Route>
           </Routes>
         </Router>

@@ -12,6 +12,7 @@ const StyledHeader = styled.div`
   justify-content: center;
   align-items: top;
   padding: 2rem;
+  pointer-events: none;
 `;
 
 const Circle = styled.div`
@@ -44,7 +45,8 @@ const Header = ({ title, isLogin }) => {
   const onMouseLeave = () => {
     setIsHover(false);
   };
-  const onClickHam = () => {
+  const onClickHam = (e) => {
+    e.stopPropagtion();
     setIsOpen(true);
   };
   return (

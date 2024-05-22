@@ -48,5 +48,21 @@ const AxiosApi = {
   boardDelete: async (board_no) => {
     return await axios.delete(`${DOMAIN}${LOGO}/delete/${board_no}`);
   },
+  //게시글 수정
+  BoUpdate: async (UpBoard_title, board_de, imageurl, board_no) => {
+    const BoUpdate = {
+      board_title: UpBoard_title,
+      board_de: board_de,
+      imageurl: imageurl,
+      board_no: board_no,
+    };
+    return await axios.post(DOMAIN + LOGO + "/notboupdate", BoUpdate);
+  },
+  BoView: async (board_no) => {
+    const BoView = {
+      board_no: board_no,
+    };
+    return await axios.post(DOMAIN + LOGO + "/upView", BoView);
+  },
 };
 export default AxiosApi;
