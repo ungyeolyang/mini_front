@@ -146,8 +146,8 @@ const Aside = () => {
       }
     };
     getMember();
-    setNick(member.nick);
-    setImgUrl(member.profile);
+    setNick(member?.nick);
+    setImgUrl(member?.profile);
   }, [id, nick, imgUrl]);
 
   return (
