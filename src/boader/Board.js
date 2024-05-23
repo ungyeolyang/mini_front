@@ -163,6 +163,7 @@ const Board = () => {
   const pageSize = 5;
   const navigate = useNavigate();
 
+  // 게시판에 글 띄우기
   useEffect(() => {
     fetchData();
   }, [selectedCategory, seleuserId]);
