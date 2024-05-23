@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import LogoImg from "../image/로고.png";
 import LogoStImg from "../image/로고-문구.png";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import LoginAxiosApi from "../api/LoginAxiosApi";
 import { UserContext } from "../context/UserStore";
@@ -141,13 +141,13 @@ const Aside = () => {
       try {
         const rsp = await LoginAxiosApi.memberGetOne(id);
         setMember(rsp.data[0]);
+        setNick(rsp.data[0]?.nick);
+        setImgUrl(rsp.data[0]?.profile);
       } catch (e) {
         console.log(e);
       }
     };
     getMember();
-    setNick(member?.nick);
-    setImgUrl(member?.profile);
   }, [id, nick, imgUrl]);
 
   return (
@@ -178,6 +178,7 @@ const Aside = () => {
         setIsOpen={setIsOpen}
         onDisplay={onDisplay}
         setOnDisplay={setOnDisplay}
+        id={id}
       ></SideBar>
     </Container>
   );

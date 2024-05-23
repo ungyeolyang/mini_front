@@ -52,6 +52,7 @@ const Box = styled.div`
 `;
 
 const LetterList = ({ mailList, category, onClickDetail }) => {
+  const id = localStorage.getItem("id");
   const [mailNoList, setMailNoList] = useState([]);
 
   const formatDate = (dateString) => {
@@ -73,7 +74,7 @@ const LetterList = ({ mailList, category, onClickDetail }) => {
   };
 
   useEffect(() => {
-    console.log(mailNoList);
+    // console.log(mailNoList);
   }, [mailNoList]);
 
   return (
@@ -97,7 +98,11 @@ const LetterList = ({ mailList, category, onClickDetail }) => {
               )}
             </Box>
             <Box type="author">
-              {category === "send" ? mail.receiverNick : mail.senderNick}
+              {id !== mail.receiver
+                ? category === "send"
+                  ? mail.receiverNick
+                  : mail.senderNick
+                : `나에게 쓴 편지`}
             </Box>
             <Box type="title">{mail.title}</Box>
             <Box type="date">{formatDate(mail.date)}</Box>

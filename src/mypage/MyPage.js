@@ -269,7 +269,7 @@ const MyPage = () => {
     const getMember = async () => {
       try {
         const rsp = await LoginAxiosApi.memberGetOne(id);
-        setMember(rsp.data);
+        setMember(rsp.data[0]);
       } catch (e) {
         console.log(e);
       }
@@ -278,9 +278,9 @@ const MyPage = () => {
   }, [id, nick]);
 
   useEffect(() => {
-    if (member && member.length > 0) {
-      setInputGender(member[0].gender);
-      setPreviewUrl(member[0].profile);
+    if (member) {
+      setInputGender(member.gender);
+      setPreviewUrl(member.profile);
     }
   }, [member]);
 
@@ -309,7 +309,7 @@ const MyPage = () => {
                   <Btn onClick={onClickBasic}>기본 프로필</Btn>
                 </Cdiv>
                 <Cdiv>
-                  <SayHi>'{member[0]?.nick}'님 안녕하세요!</SayHi>
+                  <SayHi>'{member?.nick}'님 안녕하세요!</SayHi>
                   <div>
                     <Btn onClick={onClickProfileEdit}>프로필 사진 변경</Btn>
                   </div>
@@ -320,7 +320,7 @@ const MyPage = () => {
                   <span>현재 </span>비밀번호
                 </Pw>
                 <InputBar
-                  placeholder={`*`.repeat(member[0]?.pw.length)}
+                  placeholder={`*`.repeat(member?.pw.length)}
                   onChange={onChangeCurPw}
                 />
                 <Error>{curPwMessage}</Error>
@@ -336,18 +336,15 @@ const MyPage = () => {
               </Div>
               <Div>
                 <div>닉네임</div>
-                <InputBar
-                  placeholder={member[0]?.nick}
-                  onChange={onChangeNick}
-                />
+                <InputBar placeholder={member?.nick} onChange={onChangeNick} />
               </Div>
               <Div>
                 <div>생년월일</div>
-                <InputBar placeholder={member[0]?.birth} disabled={true} />
+                <InputBar placeholder={member?.birth} disabled={true} />
               </Div>
               <Div>
                 <div>이메일</div>
-                <InputBar placeholder={member[0]?.email} disabled={true} />
+                <InputBar placeholder={member?.email} disabled={true} />
               </Div>
               <Div type="gender">
                 <div>성별</div>
@@ -388,7 +385,7 @@ const MyPage = () => {
               <Div>
                 <div>자기소개</div>{" "}
                 <InputBar
-                  placeholder={member[0]?.introdution}
+                  placeholder={member?.introdution}
                   onChange={onChangeIntro}
                 />
               </Div>

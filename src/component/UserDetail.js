@@ -1,14 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "./Modal";
 import Profile from "./Profile";
 import Btn from "./Btn";
 import LoginAxiosApi from "../api/LoginAxiosApi";
-import { LuUserPlus2, LuMail } from "react-icons/lu";
-import { useNavigate } from "react-router-dom";
+import { LuUserPlus2, LuMail, LuUserMinus2, LuUserCog2 } from "react-icons/lu";
 import Send from "../letter/Send";
-import LetterAxiosApi from "../api/LetterAxiosApi";
-import { UserContext } from "../context/UserStore";
+import FriendAxiosApi from "../api/FriendAxiosApi";
 
 const ModalStyle = styled.div`
   .modal {
@@ -89,29 +87,6 @@ const ModalStyle = styled.div`
   }
 `;
 
-const Button = styled.button`
-  outline: none;
-  cursor: pointer;
-  margin-right: 10px;
-  border: 0;
-  padding: 0.9rem 1rem;
-  border-radius: 0.5rem;
-  background-color: #e9edc9;
-  &:hover {
-    background-color: #ccd5ae;
-    color: #fff;
-  }
-`;
-
-const Span = styled.span`
-  padding: 1rem;
-  cursor: pointer;
-  border: 1px solid silver;
-  color: ${(props) => (props.active ? "#94B9F3" : "inherit")};
-  border-bottom: ${(props) =>
-    props.active ? "1px solid white" : "1px solid silver"};
-`;
-
 const Body = styled.div`
   display: flex;
   flex-direction: column;
@@ -170,11 +145,12 @@ const Info = styled.div`
 `;
 
 const UserDetail = (props) => {
-  const navigate = useNavigate();
   const { open, close, title, userId, nick, imgUrl } = props;
   const id = localStorage.getItem("id");
-
+  const [refresh, setRefresh] = useState(false);
   const [user, setUser] = useState("");
+  const [isAready, setIsAready] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
   const [letterOpen, setLetterOpen] = useState(false);
 
   const [modalContent, setModalContent] = useState("");
@@ -206,29 +182,91 @@ const UserDetail = (props) => {
   };
 
   const onClickFriend = () => {
-    console.log(id, nick, imgUrl);
-    console.log(user.id, user.nick, user.profile);
-    // setModalOpen(true);
-    // setModalContent("친구신청이 완료되었습니다.");
+    plusFriend();
+    setModalOpen(true);
+    setRefresh(!refresh);
+    setModalContent("친구신청이 완료되었습니다.");
+  };
+
+  const onClickDelete = () => {
+    delFriend();
+    setRefresh(!refresh);
+    setModalOpen(true);
+    setModalContent("친구삭제가 완료되었습니다.");
   };
 
   const plusFriend = async () => {
-    // try {
-    //   const rsp = await LetterAxiosApi.plusFriend(id, nick, imgUrl,user.id,user.nick,user.profile);
-    // } catch (e) {}
+    try {
+      const rsp = await FriendAxiosApi.addFriend(
+        id,
+        nick,
+        imgUrl,
+        user.id,
+        user.nick,
+        user.profile
+      );
+      if (rsp.data) {
+        console.log("친구신청 성공");
+      } else {
+        console.log("친구신청 실패");
+      }
+    } catch (e) {}
+  };
+
+  const delFriend = async () => {
+    try {
+      const rsp = await FriendAxiosApi.delFriend(id, user.id);
+      if (rsp.data) {
+        console.log("친구삭제 성공");
+      } else {
+        console.log("친구삭제 실패");
+      }
+    } catch (e) {}
+  };
+
+  //신청여부 확인
+  const conSend = async () => {
+    try {
+      const rsp = await FriendAxiosApi.conSend(id, userId);
+      if (rsp.data) {
+        setIsAready(true);
+        console.log("신청중");
+      } else {
+        setIsAready(false);
+        console.log("신청안함");
+      }
+    } catch (e) {}
+  };
+
+  //친구여부 확인
+  const conFriend = async () => {
+    try {
+      const rsp = await FriendAxiosApi.conFriend(id, userId);
+      if (rsp.data) {
+        setIsFriend(true);
+        console.log("친구");
+      } else {
+        setIsFriend(false);
+        console.log("친구아님");
+      }
+    } catch (e) {}
+  };
+
+  //넘겨받은 아이디로 정보 조회
+  const getMember = async () => {
+    try {
+      const rsp = await LoginAxiosApi.memberGetOne(userId);
+      setUser(rsp.data[0]);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
-    const getMember = async () => {
-      try {
-        const rsp = await LoginAxiosApi.memberGetOne(userId);
-        setUser(rsp.data[0]);
-      } catch (e) {
-        console.log(e);
-      }
-    };
+    conSend();
+    conFriend();
     getMember();
-  }, [userId]);
+  }, [userId, refresh, isAready, isFriend]);
 
   return (
     <>
@@ -257,12 +295,29 @@ const UserDetail = (props) => {
                   <span>{user?.introdution}</span>
                   <Line></Line>
                   <Footer>
-                    {id !== user.id && (
+                    {id === user?.id && <></>}
+                    {id !== user?.id && isAready && (
+                      <Cdiv>
+                        <div>
+                          <LuUserCog2 />
+                        </div>
+                        <span>친구 신청중</span>
+                      </Cdiv>
+                    )}
+                    {id !== user?.id && !isAready && isFriend && (
+                      <Cdiv onClick={onClickDelete}>
+                        <div>
+                          <LuUserMinus2 />
+                        </div>
+                        <span>친구 삭제</span>
+                      </Cdiv>
+                    )}
+                    {id !== user?.id && !isAready && !isFriend && (
                       <Cdiv onClick={onClickFriend}>
                         <div>
                           <LuUserPlus2 />
                         </div>
-                        <span>친구 추가</span>
+                        <span>친구 신청</span>
                       </Cdiv>
                     )}
                     <Cdiv onClick={onClickLetter}>
