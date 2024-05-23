@@ -57,6 +57,14 @@ const Calendar = () => {
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
 
+  function formatNumber(number) {
+    return number.toString().padStart(2, "0");
+  }
+
+  const onClickDay = (e) => {
+    console.log(`${year}-${formatNumber(month + 1)}-${formatNumber(e)}`);
+  };
+
   const createCalendar = () => {
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const daysInLastMonth = new Date(year, month, 0).getDate();
@@ -70,7 +78,7 @@ const Calendar = () => {
         calendar.push(
           <Day
             key={`last-${i + 1}`}
-            onClick={(e) => console.log(`last-${preDay}`)}
+            onClick={() => onClickDay(preDay)}
             style={{ color: `#707070` }}
           >
             <span>{preDay}</span>
@@ -82,7 +90,7 @@ const Calendar = () => {
           <Day
             key={`day-${day}`}
             style={{ fontWeight: `bold` }}
-            onClick={(e) => console.log(`day-${day}`)}
+            onClick={() => onClickDay(day)}
           >
             <span>{day}</span>
           </Day>
@@ -95,7 +103,7 @@ const Calendar = () => {
         calendar.push(
           <Day
             key={`next-${i + 1}`}
-            onClick={(e) => console.log(`next-${i + 1}`)}
+            onClick={(e) => onClickDay(i + 1)}
             style={{ color: `#707070` }}
           >
             <span>{i + 1}</span>

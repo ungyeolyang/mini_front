@@ -98,11 +98,8 @@ const LetterList = ({ mailList, category, onClickDetail }) => {
               )}
             </Box>
             <Box type="author">
-              {id !== mail.receiver
-                ? category === "send"
-                  ? mail.receiverNick
-                  : mail.senderNick
-                : `나에게 쓴 편지`}
+              {category === "send" && id === mail.receiver && `나에게 쓴 편지`}
+              {category === "send" ? mail.receiverNick : mail.senderNick}
             </Box>
             <Box type="title">{mail.title}</Box>
             <Box type="date">{formatDate(mail.date)}</Box>
