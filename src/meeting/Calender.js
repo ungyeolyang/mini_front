@@ -61,7 +61,18 @@ const Calendar = () => {
     return number.toString().padStart(2, "0");
   }
 
-  const onClickDay = (e) => {
+  const onClickDay = (e, type) => {
+    switch (type) {
+      case `-`:
+        setMonth(month === 0 ? 11 : month - 1);
+        break;
+      case `+`:
+        setMonth(month === 0 ? 11 : month + 1);
+        break;
+      default:
+        break;
+    }
+
     console.log(`${year}-${formatNumber(month + 1)}-${formatNumber(e)}`);
   };
 
@@ -78,7 +89,7 @@ const Calendar = () => {
         calendar.push(
           <Day
             key={`last-${i + 1}`}
-            onClick={() => onClickDay(preDay)}
+            onClick={() => onClickDay(preDay, `-`)}
             style={{ color: `#707070` }}
           >
             <span>{preDay}</span>
@@ -103,7 +114,7 @@ const Calendar = () => {
         calendar.push(
           <Day
             key={`next-${i + 1}`}
-            onClick={(e) => onClickDay(i + 1)}
+            onClick={(e) => onClickDay(i + 1, `+`)}
             style={{ color: `#707070` }}
           >
             <span>{i + 1}</span>

@@ -3,6 +3,7 @@ import MeetingAxiosApi from "../api/MeetingAxiosApi";
 import { UserContext } from "../context/UserStore";
 import styled from "styled-components";
 import Btn from "../component/Btn";
+import { LuSend } from "react-icons/lu";
 
 const ChatOutBox = styled.div`
   width: 30vw;
@@ -130,15 +131,15 @@ const Chatting = () => {
     } catch (e) {}
   };
 
-  const getChat = async () => {
-    try {
-      const rsp = await MeetingAxiosApi.chatList(1);
-      setChat(rsp.data);
-      if (rsp.data) {
-      } else {
-      }
-    } catch (e) {}
-  };
+  // const getChat = async () => {
+  //   try {
+  //     const rsp = await MeetingAxiosApi.chatList(1);
+  //     setChat(rsp.data);
+  //     if (rsp.data) {
+  //     } else {
+  //     }
+  //   } catch (e) {}
+  // };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -156,24 +157,30 @@ const Chatting = () => {
     return `${ampm} ${hour}:${minute}`;
   };
 
-  // useEffect(() => {
-  //   const getChat = async () => {
-  //     try {
-  //       const rsp = await MeetingAxiosApi.chatList(1);
-  //       if (rsp.data) {
-  //         setChat(rsp.data);
-  //       } else {
-  //         console.log("값을 못가지고옴");
-  //       }
-  //     } catch (e) {
-  //       console.log("에러");
-  //     }
-  //   };
+  const onKeyDownEnter = (e) => {
+    if (e.key === "Enter") {
+      onClickSend();
+    }
+  };
 
-  //   const interval = setInterval(getChat, 1000);
+  useEffect(() => {
+    const getChat = async () => {
+      try {
+        const rsp = await MeetingAxiosApi.chatList(1);
+        if (rsp.data) {
+          setChat(rsp.data);
+        } else {
+          console.log("값을 못가지고옴");
+        }
+      } catch (e) {
+        console.log("에러");
+      }
+    };
 
-  //   return () => clearInterval(interval);
-  // }, []);
+    const interval = setInterval(getChat, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <ChatOutBox>
@@ -196,8 +203,14 @@ const Chatting = () => {
           )}
         </Chat>
         <InputBox>
-          <Input onChange={onChangeDe} ref={input}></Input>
-          <Btn onClick={onClickSend}>전송</Btn>
+          <Input
+            onChange={onChangeDe}
+            ref={input}
+            onKeyDown={onKeyDownEnter}
+          ></Input>
+          <Btn onClick={onClickSend}>
+            <LuSend style={{ fontSize: `1.5rem` }} />
+          </Btn>
         </InputBox>
       </ChatInBox>
     </ChatOutBox>

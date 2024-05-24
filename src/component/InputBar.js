@@ -13,13 +13,21 @@ const StyledInput = styled.input`
   }
 `;
 
-const InputBar = ({ onChange, placeholder, disabled, hidden, ref }) => {
+const InputBar = ({
+  onChange,
+  onKeyDown,
+  placeholder,
+  disabled,
+  hidden,
+  ref,
+}) => {
   ref = useRef(null);
   return (
     <StyledInput
       type="text"
       placeholder={placeholder}
       onChange={onChange}
+      onKeyDown={onKeyDown}
       disabled={disabled}
       hidden={hidden}
       ref={ref}

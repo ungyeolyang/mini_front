@@ -2,6 +2,9 @@ import styled from "styled-components";
 
 const StyledBtn = styled.button`
   outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
   margin-right: 10px;
   background-color: #e9edc9;

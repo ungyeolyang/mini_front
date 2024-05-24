@@ -118,6 +118,11 @@ const Login = () => {
     setFindOpen(true);
     setCategory(e.target.textContent);
   };
+  const onKeyDownEnter = (e) => {
+    if (e.key === "Enter") {
+      onClickLogin();
+    }
+  };
 
   useEffect(() => {
     setIsLogin(false);
@@ -131,11 +136,13 @@ const Login = () => {
           type="text"
           placeholder="아이디를 입력해주세요."
           onChange={onChangeId}
+          onKeyDown={onKeyDownEnter}
         />
         <Input
           type="text"
           placeholder="비밀번호를 입력해주세요."
           onChange={onChangePw}
+          onKeyDown={onKeyDownEnter}
         />
         <BBtn disabled={!(isId && isPw)} onClick={onClickLogin}>
           로그인

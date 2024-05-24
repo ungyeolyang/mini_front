@@ -179,7 +179,7 @@ const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {
   useEffect(() => {
     sendList();
     friendList();
-  }, [isOpen]);
+  }, [isOpen, refresh]);
 
   return (
     <Container isOpen={isOpen} onClick={onClickOut}>
