@@ -16,7 +16,7 @@ const StyledRight = styled.div`
   position: relative;
   background-color: ${({ backgroundColor }) => backgroundColor || `inherit`};
   ${({ isLogin }) => !isLogin && `flex-direction: column;`};
-  justify-content: center;
+  justify-content: ${({ center }) => center !== "center" && `center`};
   align-items: center;
   height: 100vh;
   animation: ${({ isLogin }) => rightShow(isLogin)} 0.4s forwards;
@@ -24,7 +24,7 @@ const StyledRight = styled.div`
 `;
 
 // Right 컴포넌트 정의
-const Right = ({ children, backgroundColor, title }) => {
+const Right = ({ children, backgroundColor, title, center }) => {
   const context = useContext(UserContext);
   const { isLogin } = context;
 
@@ -33,6 +33,7 @@ const Right = ({ children, backgroundColor, title }) => {
       isLogin={isLogin}
       backgroundColor={backgroundColor}
       title={title}
+      center={center}
     >
       <Header title={title} isLogin={isLogin} />
       {children}

@@ -160,7 +160,7 @@ const Board = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [serchCategory, setserchCategory] = useState("제목");
   const [serinput, setserinput] = useState("");
-  const pageSize = 5;
+  const pageSize = 6;
   const navigate = useNavigate();
 
   // 게시판에 글 띄우기
@@ -260,11 +260,7 @@ const Board = () => {
         </SerchContainer>
         <BoardBox>
           <BoardTitleBox>
-            <BoardTitle
-              style={{ margin: "400px", marginTop: "0", marginBottom: "0" }}
-            >
-              제목
-            </BoardTitle>
+            <BoardTitle style={{ margin: "0 33%" }}>제목</BoardTitle>
             <BoardTitle>작성자</BoardTitle>
             <BoardTitle>작성일</BoardTitle>
             <BoardTitle>조회수</BoardTitle>

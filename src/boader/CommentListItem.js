@@ -39,8 +39,8 @@ const Delbutton = styled.button`
   color: #adb5bd;
   background-color: white;
   font-size: 8px;
-  width: 8px;
-  height: 8px;
+  width: 20px;
+  height: 20px;
   position: absolute;
   right: 1px;
   margin: 0;
@@ -54,6 +54,7 @@ const Delbutton = styled.button`
 `;
 
 const CommentListItem = ({ comment }) => {
+  const user_id = localStorage.getItem("id");
   const deleteComment = () => {
     console.log("댓글 삭제하기 함수 호출");
     if (window.confirm("정말 삭제하시겠습니까?")) {
@@ -75,13 +76,13 @@ const CommentListItem = ({ comment }) => {
   return (
     <CommentLi>
       <TiContain>
-        <CommentId>
-          {comment.comment_id} {comment.comment_no}
-        </CommentId>
+        <CommentId>{comment.comment_id}</CommentId>
         <Commentde>{comment.comment_detail}</Commentde>
         <CommentDate>{comment.comment_date}</CommentDate>
       </TiContain>
-      <Delbutton onClick={deleteComment}>삭제</Delbutton>
+      {user_id === comment.comment_id && (
+        <Delbutton onClick={deleteComment}>삭제</Delbutton>
+      )}
     </CommentLi>
   );
 };

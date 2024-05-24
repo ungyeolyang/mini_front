@@ -16,7 +16,7 @@ const CommentList = ({ comments }) => {
 
   const sortedCommentList = comments
     .slice()
-    .sort((a, b) => b.comment_no - a.comment_no);
+    .sort((a, b) => a.comment_no - b.comment_no);
   return (
     <CommentUl>
       {sortedCommentList &&

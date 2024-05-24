@@ -17,12 +17,11 @@ const OdContain = styled.div`
 `;
 const TiContain = styled.div`
   align-items: center;
-  margin: 0px 363px 10px 0px;
+  margin: 0px 36% 10px 0px;
   text-align: center;
 `;
 
 const BoardTitle = styled.h3`
-  font-size: 1.4em;
   width: 500px;
   color: black;
   margin: 0px 0px 10px 0px;
@@ -51,10 +50,13 @@ const BoardListItem = ({ board, handleDetailClick, handleView }) => {
     handleDetailClick(boardNo);
     handleView(boardNo);
   };
+  const truncateTitle = (title) => {
+    return title.length > 25 ? title.substring(0, 25) + "..." : title;
+  };
   return (
     <BoardLi onClick={() => handleClick(board.board_no)}>
       <TiContain>
-        <BoardTitle>{board.board_title}</BoardTitle>
+        <BoardTitle>{truncateTitle(board.board_title)}</BoardTitle>
       </TiContain>
       <OdContain>
         <UserId>{board.user_id}</UserId>

@@ -6,6 +6,7 @@ import AxiosApi from "../api/BoardAxiosApi";
 import Update from "./Update";
 import Modal from "../component/Modal";
 import CommentList from "./CommentList";
+import Paging from "../component/Paging";
 
 const MainContainer = styled.div`
   display: flex;
@@ -39,7 +40,6 @@ const ColorBox = styled.div`
   background-color: #94b9f3;
   align-items: center;
   text-align: center;
-  border-radius: 30px;
 `;
 
 const MainDetail = styled.div`
@@ -142,7 +142,24 @@ const CommentTextarea = styled.textarea`
 `;
 const Fooder = styled.div`
   width: 100%;
-  height: 500px;
+  height: 700px;
+`;
+const Profil = styled.div`
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+  background-color: silver;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    object-fit: cover;
+  }
 `;
 
 const BoardDetail = () => {
@@ -151,7 +168,8 @@ const BoardDetail = () => {
   const user_id = localStorage.getItem("id");
   const [comments, setComments] = useState(""); // 댓글에 대한 상태 관리
   const [inputComment, setInputComment] = useState(""); // 댓글 입력
-  const [comAddFlag, setComAddFlag] = useState(false); // 댓글 추가 성공 여부
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const navigate = useNavigate();
 
   const [modalContent, setModalContent] = useState("");
@@ -198,10 +216,12 @@ const BoardDetail = () => {
       let response1;
       response1 = await AxiosApi.CommentSel(board_no);
       const sortedData = response1.data.sort(
-        (a, b) => b.comment_no - a.comment_no
+        (a, b) => a.comment_no - b.comment_no
       );
       console.log("API response1:", response1.data);
       setComments(sortedData);
+      const totalPages = Math.ceil(sortedData.length / pageSize);
+      setCurrentPage(totalPages);
     } catch (error) {
       console.error("Error fetching board list:", error);
     }
@@ -258,6 +278,13 @@ const BoardDetail = () => {
   const confirm = () => {
     window.location.reload();
   };
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  const paginatedData = comments.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
 
   return (
     <>
@@ -274,7 +301,9 @@ const BoardDetail = () => {
                 <BoardDate>작성일: {board[0].board_date}</BoardDate>
                 <Board_View>조회수: {board[0].board_view}</Board_View>
               </DetailCenter>
-              <BoardImage src={board[0].imageurl} alt="Board image" />
+              {board[0].imageurl && (
+                <BoardImage src={board[0].imageurl} alt="Board image" />
+              )}
               <DetailContent>{board[0].board_de}</DetailContent>
               <ButtonBox>
                 <BrButton
@@ -311,20 +340,26 @@ const BoardDetail = () => {
               </ButtonBox>
               <CommentBox>
                 <CommTit> 댓글</CommTit>
-                <CommentdeBox>
-                  <CommentList comments={comments} />
-                </CommentdeBox>
                 <CommentTextarea
                   placeholder="댓글 입력"
                   value={inputComment}
                   onChange={handleCommentChange}
                 />
                 <BrButton onClick={handleCommentSubmit}>댓글 쓰기</BrButton>
+
+                <Paging
+                  page={currentPage}
+                  itemsCountPerPage={pageSize}
+                  totalItemsCount={comments.length}
+                  onPageChange={handlePageChange}
+                />
+                <CommentdeBox>
+                  <CommentList comments={paginatedData} />
+                </CommentdeBox>
               </CommentBox>
             </MainDetail>
           </ColorBox>
         </MainContainer>
-        <Fooder />
       </Right>
       <Modal
         open={modalOpen}
