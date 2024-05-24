@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { UserContext } from "../context/UserStore";
 
 const Line = styled.div`
   display: flex;
@@ -26,15 +27,8 @@ const Box = styled.div`
 `;
 
 const ScheduleList = ({ scheduleList, onClickDetail }) => {
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    return `${year}-${month}-${day}`;
-  };
-
+  const context = useContext(UserContext);
+  const { formatDate } = context;
   return (
     <>
       {scheduleList &&
@@ -42,7 +36,7 @@ const ScheduleList = ({ scheduleList, onClickDetail }) => {
           <Line key={schedule.sno} onClick={() => onClickDetail(schedule)}>
             <Box type="title">{schedule.title}</Box>
             <Box type="author">{schedule.nick}</Box>
-            <Box type="date">{formatDate(schedule.bdate)}</Box>
+            <Box type="date">{formatDate(schedule.sdate)}</Box>
           </Line>
         ))}
     </>

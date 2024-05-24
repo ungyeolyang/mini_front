@@ -2,7 +2,7 @@ import styled from "styled-components";
 import ScheduleList from "./ScheduleList";
 
 const Container = styled.div`
-  width: 100%;
+  width: 90%;
 `;
 const Head = styled.div`
   display: flex;
@@ -30,7 +30,8 @@ const Box = styled.div`
 `;
 const Body = styled.div`
   background-color: #e5f3ff;
-  height: 69%;
+  height: 6.3rem;
+  overflow: hidden;
 `;
 
 const Schedule = ({ schedule, onClickDetail }) => {
@@ -39,7 +40,7 @@ const Schedule = ({ schedule, onClickDetail }) => {
       <Head>
         <Box type="title">제목</Box>
         <Box type="author">작성자</Box>
-        <Box type="date">작성일</Box>
+        <Box type="date">일정</Box>
       </Head>
       <Body>
         <ScheduleList scheduleList={schedule} onClickDetail={onClickDetail} />

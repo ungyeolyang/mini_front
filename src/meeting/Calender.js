@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import MeetingAxiosApi from "../api/MeetingAxiosApi";
 
 const Week = styled.div`
   width: 14%;
@@ -9,6 +10,8 @@ const Week = styled.div`
 `;
 
 const Day = styled.div`
+  overflow: hidden;
+  display: flex;
   width: 14%;
   height: 5vw;
   background-color: aliceblue;
@@ -52,7 +55,7 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const Calendar = () => {
+const Calendar = ({ meetingNo }) => {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
@@ -60,6 +63,16 @@ const Calendar = () => {
   function formatNumber(number) {
     return number.toString().padStart(2, "0");
   }
+
+  const writerList = async (sdate) => {
+    try {
+      const rsp = await MeetingAxiosApi.writerList(meetingNo, sdate);
+      if(rsp.data){
+        return rsp.data;
+      }
+      else return null;
+    } catch (e) {}
+  };
 
   const onClickDay = (e, type) => {
     switch (type) {
@@ -97,13 +110,14 @@ const Calendar = () => {
         );
       } else {
         const day = i - firstDayOfWeek + 1;
+        const sdate = `${year}-${formatNumber(month + 1)}-${formatNumber(day)}`;
         calendar.push(
           <Day
             key={`day-${day}`}
             style={{ fontWeight: `bold` }}
             onClick={() => onClickDay(day)}
           >
-            <span>{day}</span>
+            <span>{writerList(sdate)&&writerList(sdate).map((nick) => <div>{nick}</div>}</span>
           </Day>
         );
       }

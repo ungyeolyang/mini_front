@@ -25,6 +25,14 @@ const MeetingAxiosApi = {
   chatList: async (meetingNo) => {
     return await axios.get(DOMAIN + LOGO + `/chatlist?meetingNo=${meetingNo}`);
   },
+  //그 일정에 글쓴사람 불러오기
+  writerList: async (mno, sdate) => {
+    const writer = {
+      mno: mno,
+      sdate: sdate,
+    };
+    return await axios.post(DOMAIN + LOGO + `/writerlist`, writer);
+  },
 };
 
 export default MeetingAxiosApi;

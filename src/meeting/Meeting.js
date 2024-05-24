@@ -7,12 +7,12 @@ import Calendar from "./Calender";
 import Member from "../component/Member";
 import MeetingAxiosApi from "../api/MeetingAxiosApi";
 import Schedule from "./Schedule";
+import ScheduleDetail from "./ScheduleDetail";
 
 const Container = styled.div`
   display: flex;
   align-items: center;
   min-height: 80vh;
-  overflow: hidden;
 `;
 const FullBox = styled.div`
   display: flex;
@@ -27,13 +27,14 @@ const MemberBox = styled.div`
   width: 100%;
   height: 100px;
   display: flex;
-  background-color: blue;
 `;
 const Meeting = () => {
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [member, setMember] = useState([]);
+  const [user, setUser] = useState();
   const [schedule, setSchedule] = useState([]);
+  const [isDetail, setIstDetail] = useState(false);
 
   const closeModal = () => {
     setModalOpen(false);
@@ -70,7 +71,12 @@ const Meeting = () => {
   };
 
   const onclickDetail = (props) => {
-    console.log(props);
+    setIstDetail(true);
+    setUser(props);
+  };
+
+  const onClickBack = () => {
+    setIstDetail(false);
   };
 
   useEffect(() => {
@@ -82,20 +88,26 @@ const Meeting = () => {
     <>
       <Right>
         <Container>
-          <FullBox>
-            <MemberBox>
-              {member &&
-                member.map((user) => (
-                  <Member key={user.id} size={`3rem`} user={user}></Member>
-                ))}
-            </MemberBox>
-            <Schedule
-              schedule={schedule}
-              onClickDetail={onclickDetail}
-            ></Schedule>
-            <Calendar />
-          </FullBox>
-          <Chatting />
+          {!isDetail ? (
+            <>
+              <FullBox>
+                <MemberBox>
+                  {member &&
+                    member.map((user) => (
+                      <Member key={user.id} size={`3rem`} user={user}></Member>
+                    ))}
+                </MemberBox>
+                <Schedule
+                  schedule={schedule}
+                  onClickDetail={onclickDetail}
+                ></Schedule>
+                <Calendar meetingNo={meetingNo} />
+              </FullBox>
+              <Chatting />
+            </>
+          ) : (
+            <ScheduleDetail user={user} onClickBack={onClickBack} />
+          )}
         </Container>
       </Right>
       <Modal open={modalOpen} close={closeModal} header="오류">

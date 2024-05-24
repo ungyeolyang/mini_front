@@ -240,9 +240,7 @@ const FindIdPw = (props) => {
                   </>
                 )}
               </main>
-              <footer>
-                <Btn onClick={close}>취소</Btn>
-              </footer>
+              <footer></footer>
             </section>
           )}
         </div>

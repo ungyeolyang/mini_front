@@ -30,6 +30,40 @@ const UserStore = (props) => {
     localStorage.setItem("isLogin", isLogin);
   }, [isLogin]);
 
+  function formatNumber2(number) {
+    return number.toString().padStart(2, "0");
+  }
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    return `${year}-${formatNumber2(month)}-${formatNumber2(day)}`;
+  };
+
+  const formatDetailDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    let hour = date.getHours();
+    const minute = ("0" + date.getMinutes()).slice(-2);
+    const ampm = hour < 12 ? "오전" : "오후";
+
+    if (hour >= 12) {
+      hour -= 12;
+    }
+    if (hour === 0) {
+      hour = 12;
+    }
+
+    return `${year}-${formatNumber2(month)}-${formatNumber2(
+      day
+    )} ${ampm} ${hour}:${minute}`;
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -45,6 +79,8 @@ const UserStore = (props) => {
         setIsOpen,
         onDisplay,
         setOnDisplay,
+        formatDate,
+        formatDetailDate,
       }}
     >
       {props.children}
