@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import Right from "../component/Right";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Modal from "../component/Modal";
 import Chatting from "./Chatting";
 import Calendar from "./Calender";
 import Member from "../component/Member";
 import MeetingAxiosApi from "../api/MeetingAxiosApi";
-import Schedule from "./Schedule";
 import ScheduleDetail from "./ScheduleDetail";
+import { UserContext } from "../context/UserStore";
+import ScheduleBox from "./ScheduleBox";
 
 const Container = styled.div`
   display: flex;
@@ -15,9 +16,11 @@ const Container = styled.div`
   min-height: 80vh;
 `;
 const FullBox = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 40vw;
   height: 85vh;
   background-color: gray;
@@ -27,14 +30,21 @@ const MemberBox = styled.div`
   width: 100%;
   height: 100px;
   display: flex;
+  position: absolute;
+  top: 0;
 `;
+
 const Meeting = () => {
+  const context = useContext(UserContext);
+  const { formatDetailDate, formatDate } = context;
+
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [member, setMember] = useState([]);
   const [user, setUser] = useState();
   const [schedule, setSchedule] = useState([]);
-  const [isDetail, setIstDetail] = useState(false);
+  const [isDetail, setIsDetail] = useState(false);
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const closeModal = () => {
     setModalOpen(false);
@@ -58,7 +68,7 @@ const Meeting = () => {
   const scheduleList = async (meetingNo) => {
     try {
       const rsp = await MeetingAxiosApi.scheduleList(meetingNo);
-      console.log(rsp.data);
+      // console.log(rsp.data);
       if (rsp.data) {
         setSchedule(rsp.data);
       } else {
@@ -71,12 +81,16 @@ const Meeting = () => {
   };
 
   const onclickDetail = (props) => {
-    setIstDetail(true);
+    setDetailOpen(true);
     setUser(props);
   };
 
   const onClickBack = () => {
-    setIstDetail(false);
+    setDetailOpen(false);
+  };
+
+  const onClickSchedule = () => {
+    setIsDetail(true);
   };
 
   useEffect(() => {
@@ -88,31 +102,34 @@ const Meeting = () => {
     <>
       <Right>
         <Container>
-          {!isDetail ? (
-            <>
-              <FullBox>
-                <MemberBox>
-                  {member &&
-                    member.map((user) => (
-                      <Member key={user.id} size={`3rem`} user={user}></Member>
-                    ))}
-                </MemberBox>
-                <Schedule
-                  schedule={schedule}
-                  onClickDetail={onclickDetail}
-                ></Schedule>
-                <Calendar meetingNo={meetingNo} />
-              </FullBox>
-              <Chatting />
-            </>
-          ) : (
-            <ScheduleDetail user={user} onClickBack={onClickBack} />
-          )}
+          <FullBox>
+            <MemberBox>
+              {member &&
+                member.map((user) => (
+                  <Member key={user.id} size={`3rem`} user={user}></Member>
+                ))}
+            </MemberBox>
+            <span onClick={() => setIsDetail(true)}>공지</span>
+            <span onClick={() => setIsDetail(false)}>캘린더</span>
+            {!isDetail ? (
+              <Calendar meetingNo={meetingNo} />
+            ) : (
+              <ScheduleBox schedule={schedule} onClickDetail={onclickDetail} />
+            )}
+          </FullBox>
+          <Chatting />
         </Container>
       </Right>
       <Modal open={modalOpen} close={closeModal} header="오류">
         {modalContent}
       </Modal>
+      <ScheduleDetail
+        open={detailOpen}
+        close={onClickBack}
+        user={user}
+        formatDetailDate={formatDetailDate}
+        formatDate={formatDate}
+      ></ScheduleDetail>
     </>
   );
 };

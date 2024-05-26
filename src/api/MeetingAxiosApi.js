@@ -4,6 +4,36 @@ const DOMAIN = "http://localhost:8111";
 const LOGO = "/dooin";
 
 const MeetingAxiosApi = {
+  //모집하기
+  recruit: async (
+    id,
+    title,
+    name,
+    personnel,
+    category,
+    duration1,
+    duration2,
+    location,
+    detail
+  ) => {
+    const meeting = {
+      id: id,
+      title: title,
+      name: name,
+      personnel: personnel,
+      category: category,
+      duration1: duration1,
+      duration2: duration2,
+      location: location,
+      detail: detail,
+    };
+    return await axios.post(DOMAIN + LOGO + "/recruit", meeting);
+  },
+  //모임 list
+  meetingList: async () => {
+    return await axios.get(DOMAIN + LOGO + `/meetinglist`);
+  },
+
   //참여자 list
   memberList: async (no) => {
     return await axios.get(DOMAIN + LOGO + `/memberlist?meetingNo=${no}`);
@@ -26,10 +56,11 @@ const MeetingAxiosApi = {
     return await axios.get(DOMAIN + LOGO + `/chatlist?meetingNo=${meetingNo}`);
   },
   //그 일정에 글쓴사람 불러오기
-  writerList: async (mno, sdate) => {
+  writerList: async (mno, year, month) => {
     const writer = {
       mno: mno,
-      sdate: sdate,
+      year: year,
+      month: month,
     };
     return await axios.post(DOMAIN + LOGO + `/writerlist`, writer);
   },

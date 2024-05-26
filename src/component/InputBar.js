@@ -11,6 +11,7 @@ const StyledInput = styled.input`
   &:focus {
     outline: none;
   }
+  display: ${(props) => props.display || "block"};
 `;
 
 const InputBar = ({
@@ -20,6 +21,8 @@ const InputBar = ({
   disabled,
   hidden,
   ref,
+  display,
+  value,
 }) => {
   ref = useRef(null);
   return (
@@ -31,6 +34,8 @@ const InputBar = ({
       disabled={disabled}
       hidden={hidden}
       ref={ref}
+      display={display}
+      value={value}
     />
   );
 };

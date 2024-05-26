@@ -5,6 +5,7 @@ import { UserContext } from "../context/UserStore";
 const Line = styled.div`
   display: flex;
   border-bottom: 1px solid gray;
+  cursor: pointer;
 `;
 const Box = styled.div`
   padding: 2% 0;

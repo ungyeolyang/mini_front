@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "../component/Modal";
 import Btn from "../component/Btn";
 import InputBar from "../component/InputBar";
 import PopupDom from "../component/PopupDom";
 import PostCode from "../component/PostCode";
+import { UserContext } from "../context/UserStore";
+import MeetingAxiosApi from "../api/MeetingAxiosApi";
 
 const ModalStyle = styled.div`
   .modal {
@@ -25,7 +27,7 @@ const ModalStyle = styled.div`
   }
 
   section {
-    width: 90%;
+    width: 40rem;
     max-width: 750px;
     margin: 0 auto;
     border-radius: 0.6rem;
@@ -61,7 +63,6 @@ const ModalStyle = styled.div`
     }
     footer {
       padding: 12px 16px;
-      text-align: right;
     }
   }
 
@@ -84,19 +85,128 @@ const ModalStyle = styled.div`
     }
   }
 `;
+const Box = styled.div`
+  display: flex;
+  align-items: ${({ type }) => {
+    switch (type) {
+      case "footer":
+        return `flex-end`;
+      default:
+        return `center`;
+    }
+  }};
+  width: ${({ type }) => {
+    switch (type) {
+      case "footer":
+        return `50rem`;
+      case "duration":
+        return `50rem`;
+      case "location":
+        return `50rem`;
+      default:
+        return `25rem`;
+    }
+  }};
+  height: ${({ type }) => {
+    switch (type) {
+      case "footer":
+        return `10rem`;
+      default:
+        return `3rem`;
+    }
+  }};
+  padding-left: ${({ type }) => {
+    switch (type) {
+      case "footer":
+        return `0`;
+      case "location":
+        return `0`;
+      default:
+        return `1rem`;
+    }
+  }};
+  gap: ${({ type }) => {
+    switch (type) {
+      case "footer":
+        return `5rem`;
+      default:
+        return `1.5rem`;
+    }
+  }};
+  margin-top: 0.1rem;
+
+  span,
+  label {
+    color: #757575;
+    font-size: small;
+  }
+  input,
+  select {
+    height: 100%;
+    padding-left: 1rem;
+    border: none;
+    border-bottom: 0.1rem solid silver;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+    }
+  }
+`;
+
+const Number = styled.input`
+  width: 3rem;
+  margin-right: 4rem;
+`;
+
+const Select = styled.select`
+  width: 5rem;
+`;
+const Input = styled.div`
+  display: flex;
+  align-items: center;
+  width: 25rem;
+  height: 3rem;
+  padding-left: 1rem;
+  gap: 1.5rem;
+  cursor: pointer;
+  border-bottom: 0.1rem solid silver;
+  span {
+    color: #757575;
+    font-size: small;
+  }
+`;
+const Text = styled.textarea`
+  resize: none;
+  width: 25rem;
+  font-size: 0.9rem;
+  min-height: 10rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  &:focus {
+    outline: none;
+  }
+`;
 
 const Recruit = (props) => {
-  const { open, close, category } = props;
+  const { open, close, setModalOpen, setModalContent, setHeader } = props;
+  const context = useContext(UserContext);
+  const { rpad } = context;
+  const id = localStorage.getItem("id");
 
-  const [modalContent, setModalContent] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
+  const [personnel, setPersonnel] = useState("");
+  const [category, setCategory] = useState("운동");
+  const [isDuration, setIsDuration] = useState(1);
+  const [duration1, setDuration1] = useState("");
+  const [duration2, setDuration2] = useState("");
+  const [isLocation, setIsLocation] = useState("오프라인");
+  const [location, setLocation] = useState("");
+  const [detail, setDetail] = useState("");
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [address, setAddress] = useState("");
 
-  // 알림창 닫기
-  const closeModal = () => {
-    setModalOpen(false);
-  };
   // 팝업창 열기
   const openPostCode = () => {
     setIsPopupOpen(true);
@@ -111,6 +221,85 @@ const Recruit = (props) => {
     setAddress("");
   };
 
+  const onChangeTitle = (e) => {
+    setTitle(e.target.value);
+  };
+  const onChangeName = (e) => {
+    setName(e.target.value);
+  };
+  const onChangePersonnel = (e) => {
+    e.target.value < 2 && (e.target.value = 2);
+    setPersonnel(e.target.value);
+  };
+  const onChangeCategory = (e) => {
+    setCategory(e.target.value);
+  };
+  const onChangeIsDuration = (e) => {
+    setIsDuration(parseInt(e.target.id));
+  };
+  const onChangeDuration1 = (e) => {
+    setDuration1(e.target.value);
+  };
+  const onChangeDuration2 = (e) => {
+    setDuration2(e.target.value);
+  };
+  const onChangeIsLocation = (e) => {
+    setIsLocation(e.target.id);
+    e.target.id === "온라인" ? setAddress("온라인") : setAddress("");
+  };
+  const onChangeDetail = (e) => {
+    setDetail(e.target.value);
+  };
+
+  const duration = () => {
+    switch (isDuration) {
+      case 1:
+        return <input type="date" onChange={onChangeDuration1} />;
+      case 2:
+        return (
+          <>
+            <input type="date" onChange={onChangeDuration1} />
+            <span>~</span>
+            <input type="date" onChange={onChangeDuration2} />
+          </>
+        );
+      case 3:
+        return <></>;
+      default:
+        return <></>;
+    }
+  };
+
+  const onClickRecruit = async () => {
+    try {
+      const rsp = await MeetingAxiosApi.recruit(
+        id,
+        title,
+        name,
+        personnel,
+        category,
+        duration1,
+        duration2,
+        location,
+        detail
+      );
+      if (rsp.data) {
+        setModalOpen(true);
+        setModalContent("모임 등록성공");
+        setHeader("모임 등록");
+        close();
+      } else {
+        setModalOpen(true);
+        setModalContent("모임 등록실패");
+        setHeader("모임 등록");
+      }
+    } catch (e) {
+      setModalOpen(true);
+      setModalContent("서버가 응답하지 않습니다.");
+      setHeader("오류");
+    }
+  };
+
   return (
     <>
       <ModalStyle>
@@ -118,65 +307,121 @@ const Recruit = (props) => {
           {open && (
             <section>
               <header>
-                {category}
+                회원모집
                 <button onClick={close}>&times;</button>
               </header>
               <main>
-                <InputBar placeholder={"제목"} />
-                <InputBar placeholder={"모임명"} />
-                <div>
-                  인원
-                  <input type="number" />
+                <InputBar placeholder="제목" onChange={onChangeTitle} />
+                <InputBar placeholder="모임명" onChange={onChangeName} />
+                <Box>
+                  <span>인원</span>
+                  <Number type="number" onChange={onChangePersonnel} />
+
+                  <span>카테고리</span>
+                  <Select name="" id="" onChange={onChangeCategory}>
+                    <option value="운동">운동</option>
+                    <option value="취미">취미</option>
+                    <option value="공부">공부</option>
+                  </Select>
+                </Box>
+                <Box type="duration">
+                  <span>기간</span>
+                  {duration()}
+                  <Box>
+                    <label htmlFor={1}>
+                      하루
+                      <input
+                        type="radio"
+                        id={1}
+                        name="duration"
+                        onChange={onChangeIsDuration}
+                        checked={isDuration === 1}
+                      />
+                    </label>
+
+                    <label htmlFor={2}>
+                      기간
+                      <input
+                        type="radio"
+                        id={2}
+                        name="duration"
+                        onChange={onChangeIsDuration}
+                        checked={isDuration === 2}
+                      />
+                    </label>
+
+                    <label htmlFor={3}>
+                      매일
+                      <input
+                        type="radio"
+                        id={3}
+                        name="duration"
+                        onChange={onChangeIsDuration}
+                        checked={isDuration === 3}
+                      />
+                    </label>
+                  </Box>
+                </Box>
+                <div id="popupDom">
+                  {isPopupOpen ? (
+                    <PopupDom>
+                      <PostCode
+                        onClose={closePostCode}
+                        setAddress={setAddress}
+                      />
+                    </PopupDom>
+                  ) : (
+                    <Box type="location">
+                      <Input
+                        onClick={
+                          isLocation === "오프라인" ? openPostCode : undefined
+                        }
+                      >
+                        {address ? (
+                          <div>
+                            {address.length < 32
+                              ? address
+                              : rpad(address.substring(0, 30), 33, ".")}
+                          </div>
+                        ) : (
+                          <span>장소</span>
+                        )}
+                      </Input>
+                      <Box>
+                        <label htmlFor="오프라인">
+                          오프라인
+                          <input
+                            type="radio"
+                            id="오프라인"
+                            name="location"
+                            onChange={onChangeIsLocation}
+                            checked={isLocation === "오프라인"}
+                          />
+                        </label>
+                        <label htmlFor="온라인">
+                          온라인
+                          <input
+                            type="radio"
+                            id="온라인"
+                            name="location"
+                            onChange={onChangeIsLocation}
+                            checked={isLocation === "온라인"}
+                          />
+                        </label>
+                      </Box>
+                    </Box>
+                  )}
                 </div>
-                <div>
-                  기간
-                  <input type="date" /> ~ <input type="date" />
-                </div>
-                <div>
-                  카테고리{" "}
-                  <select name="" id="">
-                    <option value="">운동</option>
-                    <option value="">취미</option>
-                    <option value="">공부</option>
-                  </select>
-                </div>
-                <div>
-                  위치
-                  <button type="button" onClick={openPostCode}>
-                    우편번호 검색
-                  </button>
-                  <div id="popupDom">
-                    {isPopupOpen && (
-                      <PopupDom>
-                        <PostCode
-                          onClose={closePostCode}
-                          setAddress={setAddress}
-                        />
-                      </PopupDom>
-                    )}
-                  </div>
-                  <div>{address}</div> {}
-                </div>
-                <InputBar placeholder={"세부내용"} />
+                <Box type="footer">
+                  <Text placeholder="세부내용" onChange={onChangeDetail} />
+                  <Btn onClick={onClickRecruit}>등록</Btn>
+                </Box>
               </main>
-              <footer>
-                <Btn onClick={close}>등록</Btn>
-                <Btn
-                  onClick={() => {
-                    close();
-                    resetAddress();
-                  }}
-                >
-                  취소
-                </Btn>
-              </footer>
+              <footer></footer>
             </section>
           )}
         </div>
       </ModalStyle>
-      <Modal open={modalOpen} close={closeModal} header="오류" btn="확인">
-        {modalContent}
-      </Modal>
     </>
   );
 };

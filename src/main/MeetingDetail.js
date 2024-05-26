@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Btn from "../component/Btn";
 import Modal from "../component/Modal";
 import UserDetail from "../component/UserDetail";
 import { UserContext } from "../context/UserStore";
+import LetterAxiosApi from "../api/LetterAxiosApi";
 
 const ModalStyle = styled.div`
   .modal {
@@ -24,8 +25,11 @@ const ModalStyle = styled.div`
   }
 
   section {
-    min-width: 1000px;
-    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 700px;
+    min-height: 900px;
     margin: 0 auto;
     border-radius: 0.6rem;
     background-color: #e5f3ff;
@@ -34,6 +38,7 @@ const ModalStyle = styled.div`
     header {
       position: relative;
       text-align: center;
+      width: 100%;
       padding: 16px 64px 16px 64px;
       background-color: #fefae0;
       font-weight: 700;
@@ -62,76 +67,40 @@ const ModalStyle = styled.div`
       padding: 12px 16px;
       text-align: right;
     }
-  }
 
-  @keyframes modal-show {
-    from {
-      opacity: 0;
-      margin-top: -50px;
+    @keyframes modal-show {
+      from {
+        opacity: 0;
+        margin-top: -50px;
+      }
+      to {
+        opacity: 1;
+        margin-top: 0;
+      }
     }
-    to {
-      opacity: 1;
-      margin-top: 0;
-    }
-  }
-  @keyframes modal-bg-show {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
+    @keyframes modal-bg-show {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
   }
 `;
 
-const Div = styled.div`
-  display: flex;
-  align-content: center;
-  gap: ${({ type }) => {
-    switch (type) {
-      case "title":
-        return `35rem`;
-      default:
-        return `1rem`;
-    }
-  }};
-  align-items: center;
-  padding: ${({ type }) => {
-    switch (type) {
-      case "head":
-        return `1.5rem 0.5rem`;
-      case "title":
-        return `1rem 3.8rem 0.5rem`;
-      case "receive":
-        return `0 4rem 0.5rem`;
-      case "my":
-        return `0 4rem 0.5rem`;
-      case "date":
-        return `0 4rem 1rem`;
-      case "contents":
-        return `1rem 4rem`;
-      default:
-        return `0`;
-    }
-  }};
-  font-size: ${({ type }) => {
-    switch (type) {
-      case "title":
-        return `1.5rem`;
-      case "date":
-        return `0.9rem`;
-      default:
-        return `1rem`;
-    }
-  }};
-  ${({ type }) => (type === "date" ? `0.9rem` : `1rem`)};
-  color: ${({ type }) => (type === "date" ? `gray` : `black`)};
-  ${(props) => props.type === "receive" && props.isUp && `display:none`}
-`;
+const Div = styled.div``;
 
 const Bold = styled.span`
   font-weight: bold;
   font-size: inherit;
+`;
+const Title = styled.div`
+  font-size: 3rem;
+  padding: 1rem;
+  width: 90%;
+  text-align: center;
+  border-bottom: 1px solid gray;
 `;
 const User = styled.span`
   padding: 0.2rem 0.8rem;
@@ -142,21 +111,28 @@ const User = styled.span`
     background-color: #ccd5ae;
   }
 `;
+
 const Body = styled.div`
-  width: 100%;
+  width: 80%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #b8d0fa;
+  align-items: center;
+  background-color: #fff;
+  border-top-left-radius: 85px;
+  border-top-right-radius: 85px;
+  padding: 2rem;
 `;
 
-const ScheduleDetail = (props) => {
-  const { open, close, user, formatDate, formatDetailDate } = props;
+const MeetingDetail = (props) => {
+  const { open, close, moim } = props;
   const id = localStorage.getItem("id");
 
   const context = useContext(UserContext);
-  const { nick, imgUrl } = context;
+  const { nick, imgUrl, formatDate, formatDetailDate } = context;
 
   const [userOpen, setUserOpen] = useState(false);
+  const [userNick, setUserNick] = useState("");
 
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -174,6 +150,18 @@ const ScheduleDetail = (props) => {
     setUserOpen(false);
   };
 
+  useEffect(() => {
+    const getNick = async () => {
+      try {
+        const rsp = await LetterAxiosApi.getNick(moim?.id);
+        if (rsp.data) {
+          setUserNick(rsp.data);
+        }
+      } catch (e) {}
+    };
+    getNick();
+  }, []);
+
   return (
     <>
       <ModalStyle>
@@ -181,27 +169,31 @@ const ScheduleDetail = (props) => {
           {open && (
             <section>
               <header>
-                공지사항
+                모임
                 <button onClick={close}>&times;</button>
               </header>
               <main>
                 <Body>
-                  <Div type="title">
-                    <Bold>{user.title}</Bold>
-                    <Div>
-                      <span>일정 : {formatDate(user.sdate)}</span>
-                      {id === user.id && <Btn>삭제</Btn>}
-                    </Div>
-                  </Div>
+                  <Title>{moim?.name}</Title>
+                  <span>
+                    기간 :
+                    {moim?.duration1 ? formatDate(moim?.duration1) : "매일"}
+                    {moim?.duration2 && ` ~ ${formatDate(moim?.duration2)}`}
+                  </span>
+                  {id === moim?.id && <Btn>삭제</Btn>}
+                  <Div>{moim.category}</Div>
+                  <Div>{moim.title}</Div>
+                  <Div>{moim.personnel}</Div>
+                  <Div>{moim.detail}</Div>
+
+                  <Div>{moim.location || "온라인"}</Div>
                   <Div type="receive">
                     <Bold>작성자</Bold>
-                    <User onClick={onClickUser} user={user.id}>
-                      {user.nick}({user.id})
+                    <User onClick={onClickUser} user={moim?.id}>
+                      {userNick}({moim?.id})
                     </User>
                   </Div>
-                  <Div type="date">{formatDetailDate(user.bdate)}</Div>
                 </Body>
-                <Div type="contents">{user.contents}</Div>
               </main>
             </section>
           )}
@@ -213,11 +205,11 @@ const ScheduleDetail = (props) => {
       <UserDetail
         open={userOpen}
         close={closeUser}
-        userId={user?.id}
+        userId={moim?.id}
         nick={nick}
         imgUrl={imgUrl}
       ></UserDetail>
     </>
   );
 };
-export default ScheduleDetail;
+export default MeetingDetail;

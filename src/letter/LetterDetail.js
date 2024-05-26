@@ -160,7 +160,6 @@ const LetterDetail = ({ user, onClickBack }) => {
       <UserDetail
         open={userOpen}
         close={closeUser}
-        title="회원정보"
         userId={info}
         nick={nick}
         imgUrl={imgUrl}

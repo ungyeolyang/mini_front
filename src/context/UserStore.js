@@ -30,9 +30,9 @@ const UserStore = (props) => {
     localStorage.setItem("isLogin", isLogin);
   }, [isLogin]);
 
-  function formatNumber2(number) {
+  const formatNumber2 = (number) => {
     return number.toString().padStart(2, "0");
-  }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -64,6 +64,13 @@ const UserStore = (props) => {
     )} ${ampm} ${hour}:${minute}`;
   };
 
+  const rpad = (str, length, padString) => {
+    while (str.length < length) {
+      str += padString;
+    }
+    return str;
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -81,6 +88,7 @@ const UserStore = (props) => {
         setOnDisplay,
         formatDate,
         formatDetailDate,
+        rpad,
       }}
     >
       {props.children}

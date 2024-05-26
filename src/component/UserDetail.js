@@ -145,7 +145,7 @@ const Info = styled.div`
 `;
 
 const UserDetail = (props) => {
-  const { open, close, title, userId, nick, imgUrl } = props;
+  const { open, close, userId, nick, imgUrl } = props;
   const id = localStorage.getItem("id");
   const [refresh, setRefresh] = useState(false);
   const [user, setUser] = useState("");
@@ -230,10 +230,10 @@ const UserDetail = (props) => {
       const rsp = await FriendAxiosApi.conSend(id, userId);
       if (rsp.data) {
         setIsAready(true);
-        console.log("신청중");
+        // console.log("신청중");
       } else {
         setIsAready(false);
-        console.log("신청안함");
+        // console.log("신청안함");
       }
     } catch (e) {}
   };
@@ -244,10 +244,10 @@ const UserDetail = (props) => {
       const rsp = await FriendAxiosApi.conFriend(id, userId);
       if (rsp.data) {
         setIsFriend(true);
-        console.log("친구");
+        // console.log("친구");
       } else {
         setIsFriend(false);
-        console.log("친구아님");
+        // console.log("친구아님");
       }
     } catch (e) {}
   };
@@ -275,7 +275,7 @@ const UserDetail = (props) => {
           {open && (
             <section>
               <header>
-                {title}
+                회원정보
                 <button onClick={close}>&times;</button>
               </header>
               <main>

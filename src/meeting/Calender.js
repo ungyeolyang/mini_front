@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import MeetingAxiosApi from "../api/MeetingAxiosApi";
 
@@ -9,19 +9,36 @@ const Week = styled.div`
   text-align: center;
 `;
 
-const Day = styled.div`
+const DayBox = styled.div`
   overflow: hidden;
   display: flex;
+  flex-direction: column;
   width: 14%;
   height: 5vw;
-  background-color: aliceblue;
   position: relative;
   border: 1px solid silver;
-  span {
-    position: absolute;
-    top: 0.2rem;
-    left: 0.5rem;
-  }
+  cursor: pointer;
+`;
+
+const Day = styled.div`
+  padding-left: 0.7rem;
+  padding-top: 0.5rem;
+`;
+const NickBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-left: 0.7rem;
+  padding-top: 0.5rem;
+  gap: 0.3rem;
+`;
+
+const Nick = styled.div`
+  padding-left: 0.3rem;
+  padding-right: 1rem;
+  overflow: hidden;
+  font-size: 0.8rem;
+  background-color: aliceblue;
 `;
 
 const Box = styled.div`
@@ -59,20 +76,29 @@ const Calendar = ({ meetingNo }) => {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
+  const [writer, setWriter] = useState();
 
   function formatNumber(number) {
     return number.toString().padStart(2, "0");
   }
 
-  const writerList = async (sdate) => {
+  const writerList = async () => {
     try {
-      const rsp = await MeetingAxiosApi.writerList(meetingNo, sdate);
-      if(rsp.data){
-        return rsp.data;
+      const rsp = await MeetingAxiosApi.writerList(meetingNo, year, month + 1);
+      if (rsp.data) {
+        // console.log(rsp.data);
+        setWriter(rsp.data);
+      } else {
+        console.log(`글쓴이가 없습니다.`);
       }
-      else return null;
-    } catch (e) {}
+    } catch (e) {
+      console.log(`오류입니다.`);
+    }
   };
+
+  useEffect(() => {
+    writerList();
+  }, [year, month]);
 
   const onClickDay = (e, type) => {
     switch (type) {
@@ -100,25 +126,36 @@ const Calendar = ({ meetingNo }) => {
       if (i < firstDayOfWeek) {
         const preDay = daysInLastMonth - firstDayOfWeek + i + 1;
         calendar.push(
-          <Day
+          <DayBox
             key={`last-${i + 1}`}
             onClick={() => onClickDay(preDay, `-`)}
             style={{ color: `#707070` }}
           >
-            <span>{preDay}</span>
-          </Day>
+            <Day>{preDay}</Day>
+          </DayBox>
         );
       } else {
         const day = i - firstDayOfWeek + 1;
-        const sdate = `${year}-${formatNumber(month + 1)}-${formatNumber(day)}`;
         calendar.push(
-          <Day
+          <DayBox
             key={`day-${day}`}
             style={{ fontWeight: `bold` }}
             onClick={() => onClickDay(day)}
           >
-            <span>{writerList(sdate)&&writerList(sdate).map((nick) => <div>{nick}</div>}</span>
-          </Day>
+            <Day>{day}</Day>
+            <NickBox>
+              {writer
+                ?.filter(
+                  (e) =>
+                    e.sdate ===
+                    `${year}-${formatNumber(month + 1)}-${formatNumber(day)}`
+                )
+                ?.map((e) => e.nick)
+                ?.map((e) => (
+                  <Nick>{e}</Nick>
+                ))}
+            </NickBox>
+          </DayBox>
         );
       }
     }
@@ -126,13 +163,13 @@ const Calendar = ({ meetingNo }) => {
     if ((daysInMonth + firstDayOfWeek) % 7 !== 0) {
       for (let i = 0; i < 7 - ((daysInMonth + firstDayOfWeek) % 7); i++) {
         calendar.push(
-          <Day
+          <DayBox
             key={`next-${i + 1}`}
             onClick={(e) => onClickDay(i + 1, `+`)}
             style={{ color: `#707070` }}
           >
-            <span>{i + 1}</span>
-          </Day>
+            <Day>{i + 1}</Day>
+          </DayBox>
         );
       }
     }

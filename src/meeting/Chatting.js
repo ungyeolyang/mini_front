@@ -163,24 +163,24 @@ const Chatting = () => {
     }
   };
 
-  useEffect(() => {
-    const getChat = async () => {
-      try {
-        const rsp = await MeetingAxiosApi.chatList(1);
-        if (rsp.data) {
-          setChat(rsp.data);
-        } else {
-          console.log("값을 못가지고옴");
-        }
-      } catch (e) {
-        console.log("에러");
-      }
-    };
+  // useEffect(() => {
+  //   const getChat = async () => {
+  //     try {
+  //       const rsp = await MeetingAxiosApi.chatList(1);
+  //       if (rsp.data) {
+  //         setChat(rsp.data);
+  //       } else {
+  //         console.log("값을 못가지고옴");
+  //       }
+  //     } catch (e) {
+  //       console.log("에러");
+  //     }
+  //   };
 
-    const interval = setInterval(getChat, 1000);
+  //   const interval = setInterval(getChat, 1000);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <ChatOutBox>
