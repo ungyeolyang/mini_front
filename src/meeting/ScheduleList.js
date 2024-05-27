@@ -1,45 +1,31 @@
-import React, { useContext } from "react";
-import styled from "styled-components";
-import { UserContext } from "../context/UserStore";
+import React, { useState } from "react";
+import ScheduleLine from "./ScheduleLine";
 
-const Line = styled.div`
-  display: flex;
-  border-bottom: 1px solid gray;
-  cursor: pointer;
-`;
-const Box = styled.div`
-  padding: 2% 0;
-  text-align: center;
-  font-weight: bold;
-  width: ${(props) => {
-    switch (props.type) {
-      case "title":
-        return "50%";
-      case "author":
-        return "20%";
-      case "date":
-        return "20%";
-      case "view":
-        return "10%";
-      default:
-        return "auto";
-    }
-  }};
-`;
-
-const ScheduleList = ({ scheduleList, onClickDetail }) => {
-  const context = useContext(UserContext);
-  const { formatDate } = context;
+const ScheduleList = ({
+  scheduleList,
+  onClickDetail,
+  searchCategory,
+  text,
+}) => {
+  const [nick, setNick] = useState("");
   return (
     <>
       {scheduleList &&
-        scheduleList.map((schedule) => (
-          <Line key={schedule.sno} onClick={() => onClickDetail(schedule)}>
-            <Box type="title">{schedule.title}</Box>
-            <Box type="author">{schedule.nick}</Box>
-            <Box type="date">{formatDate(schedule.sdate)}</Box>
-          </Line>
-        ))}
+        scheduleList
+          .filter(
+            (schedule) =>
+              schedule[searchCategory] &&
+              (schedule[searchCategory] || nick).includes(text)
+          )
+          .map((schedule) => (
+            <ScheduleLine
+              key={schedule.sno}
+              onClickDetail={() => onClickDetail(schedule)}
+              schedule={schedule}
+              nick={nick}
+              setNick={setNick}
+            ></ScheduleLine>
+          ))}
     </>
   );
 };

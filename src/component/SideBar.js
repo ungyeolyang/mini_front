@@ -194,9 +194,7 @@ const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {
             friend.map((user) => (
               <Accept key={user.sendId}>
                 <Div>
-                  <Profile size={`5rem`}>
-                    <img src={user?.sendProfile} alt="프로필" />
-                  </Profile>
+                  <Profile size={`5rem`} user={user}></Profile>
                   <Cdiv>
                     <div>
                       <span style={{ fontWeight: `bold` }}>

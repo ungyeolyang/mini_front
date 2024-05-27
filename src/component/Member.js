@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Profile from "./Profile";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import LoginAxiosApi from "../api/LoginAxiosApi";
 
 const People = styled.div`
   width: 20%;
@@ -15,18 +16,30 @@ const People = styled.div`
   }
 `;
 
-const Member = ({ size, user }) => {
+const Member = ({ size, id }) => {
+  const [user, setUser] = useState();
+
+  const getMember = async () => {
+    try {
+      const rsp = await LoginAxiosApi.memberGetOne(id);
+      console.log(rsp.data[0].profile);
+      setUser(rsp.data[0]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
-    console.log(user.id);
+    getMember();
   }, []);
 
   return (
     <People>
       <Profile size={size}>
-        <img src={user.profile} alt="프로필" />
+        <img src={user?.profile} alt="프로필" />
       </Profile>
-      <span>{user.nick}</span>
-      <span>{`(${user.id})`}</span>
+      <span>{user?.nick}</span>
+      <span>{`(${id})`}</span>
     </People>
   );
 };

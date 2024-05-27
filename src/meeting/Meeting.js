@@ -9,6 +9,8 @@ import MeetingAxiosApi from "../api/MeetingAxiosApi";
 import ScheduleDetail from "./ScheduleDetail";
 import { UserContext } from "../context/UserStore";
 import ScheduleBox from "./ScheduleBox";
+import { useParams } from "react-router-dom";
+import ScheduleSend from "./ScheduleSend";
 
 const Container = styled.div`
   display: flex;
@@ -33,27 +35,72 @@ const MemberBox = styled.div`
   position: absolute;
   top: 0;
 `;
+const Head = styled.div`
+  position: relative;
+  width: 90%;
+  height: 2.4rem;
+  margin-top: 4rem;
+  border-bottom: 2px solid #94b9f3;
+  padding-left: 1rem;
+  span {
+    padding: 1rem;
+    font-size: 1rem;
+    border: 2px solid #e5f3ff;
+    border-bottom: none;
+    cursor: pointer;
+    &:hover {
+      border-color: #94b9f3;
+    }
+  }
+`;
+
+const Button = styled.button`
+  position: absolute;
+  right: 1rem;
+  bottom: 0.5rem;
+  outline: none;
+
+  align-items: center;
+  cursor: pointer;
+  margin-right: 10px;
+  background-color: #e9edc9;
+  border: 0;
+  padding: 0.5rem 2rem;
+  border-radius: 0.5rem;
+  &:hover {
+    background-color: #ccd5ae;
+    color: #fff;
+  }
+`;
 
 const Meeting = () => {
+  const { no } = useParams();
   const context = useContext(UserContext);
   const { formatDetailDate, formatDate } = context;
-
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [member, setMember] = useState([]);
+  const [member, setMember] = useState();
   const [user, setUser] = useState();
   const [schedule, setSchedule] = useState([]);
   const [isDetail, setIsDetail] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
+  const [isSend, setIsSend] = useState(false);
+  const [sendOpen, setSendOpen] = useState(false);
+
+  const [searchCategory, setSearchCategory] = useState("title");
+  const [text, setText] = useState("");
 
   const closeModal = () => {
     setModalOpen(false);
   };
-  const meetingNo = 1;
 
-  const memberList = async (meetingNo) => {
+  const closeSend = () => {
+    setSendOpen(false);
+    setIsSend(false);
+  };
+  const memberList = async () => {
     try {
-      const rsp = await MeetingAxiosApi.memberList(meetingNo);
+      const rsp = await MeetingAxiosApi.memberList(13);
       if (rsp.data) {
         setMember(rsp.data);
       } else {
@@ -65,10 +112,10 @@ const Meeting = () => {
     }
   };
 
-  const scheduleList = async (meetingNo) => {
+  const scheduleList = async () => {
     try {
-      const rsp = await MeetingAxiosApi.scheduleList(meetingNo);
-      // console.log(rsp.data);
+      const rsp = await MeetingAxiosApi.scheduleList(no);
+      console.log(rsp.data);
       if (rsp.data) {
         setSchedule(rsp.data);
       } else {
@@ -76,7 +123,7 @@ const Meeting = () => {
         setSchedule([]);
       }
     } catch (e) {
-      console.log("오류발생");
+      console.log(e);
     }
   };
 
@@ -94,9 +141,10 @@ const Meeting = () => {
   };
 
   useEffect(() => {
-    memberList(meetingNo);
-    scheduleList(meetingNo);
-  }, []);
+    console.log(no);
+    memberList();
+    scheduleList();
+  }, [sendOpen]);
 
   return (
     <>
@@ -106,15 +154,46 @@ const Meeting = () => {
             <MemberBox>
               {member &&
                 member.map((user) => (
-                  <Member key={user.id} size={`3rem`} user={user}></Member>
+                  <Member key={user.id} size={`3rem`} id={user.id}></Member>
                 ))}
             </MemberBox>
-            <span onClick={() => setIsDetail(true)}>공지</span>
-            <span onClick={() => setIsDetail(false)}>캘린더</span>
+            <Head>
+              <span
+                onClick={() => setIsDetail(true)}
+                style={{
+                  color: isDetail ? `#94b9f3` : `#e5f3ff`,
+                  borderColor: isDetail ? `#94b9f3` : `#e5f3ff`,
+                }}
+              >
+                공지
+              </span>
+              <span
+                onClick={() => setIsDetail(false)}
+                style={{
+                  color: !isDetail ? `#94b9f3` : `#e5f3ff`,
+                  borderColor: !isDetail ? `#94b9f3` : `#e5f3ff`,
+                }}
+              >
+                캘린더
+              </span>
+              <Button onClick={() => setSendOpen(true)}>글쓰기</Button>
+            </Head>
             {!isDetail ? (
-              <Calendar meetingNo={meetingNo} />
+              <Calendar
+                meetingNo={no}
+                setIsDetail={setIsDetail}
+                setText={setText}
+                setSearchCategory={setSearchCategory}
+              />
             ) : (
-              <ScheduleBox schedule={schedule} onClickDetail={onclickDetail} />
+              <ScheduleBox
+                schedule={schedule}
+                onClickDetail={onclickDetail}
+                searchCategory={searchCategory}
+                setSearchCategory={setSearchCategory}
+                text={text}
+                setText={setText}
+              />
             )}
           </FullBox>
           <Chatting />
@@ -130,6 +209,13 @@ const Meeting = () => {
         formatDetailDate={formatDetailDate}
         formatDate={formatDate}
       ></ScheduleDetail>
+      <ScheduleSend
+        open={sendOpen}
+        close={closeSend}
+        isSend={isSend}
+        setIsSend={setIsSend}
+        no={no}
+      ></ScheduleSend>
     </>
   );
 };

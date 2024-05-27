@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import MeetingAxiosApi from "../api/MeetingAxiosApi";
+import Nick from "./Nick";
 
 const Week = styled.div`
   width: 14%;
@@ -31,14 +32,6 @@ const NickBox = styled.div`
   padding-left: 0.7rem;
   padding-top: 0.5rem;
   gap: 0.3rem;
-`;
-
-const Nick = styled.div`
-  padding-left: 0.3rem;
-  padding-right: 1rem;
-  overflow: hidden;
-  font-size: 0.8rem;
-  background-color: aliceblue;
 `;
 
 const Box = styled.div`
@@ -72,7 +65,7 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const Calendar = ({ meetingNo }) => {
+const Calendar = ({ meetingNo, setIsDetail, setText, setSearchCategory }) => {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
@@ -86,7 +79,7 @@ const Calendar = ({ meetingNo }) => {
     try {
       const rsp = await MeetingAxiosApi.writerList(meetingNo, year, month + 1);
       if (rsp.data) {
-        // console.log(rsp.data);
+        console.log(rsp.data);
         setWriter(rsp.data);
       } else {
         console.log(`글쓴이가 없습니다.`);
@@ -112,6 +105,9 @@ const Calendar = ({ meetingNo }) => {
         break;
     }
 
+    setIsDetail(true);
+    setSearchCategory("sdate");
+    setText(`${year}-${formatNumber(month + 1)}-${formatNumber(e)}`);
     console.log(`${year}-${formatNumber(month + 1)}-${formatNumber(e)}`);
   };
 
@@ -150,9 +146,9 @@ const Calendar = ({ meetingNo }) => {
                     e.sdate ===
                     `${year}-${formatNumber(month + 1)}-${formatNumber(day)}`
                 )
-                ?.map((e) => e.nick)
-                ?.map((e) => (
-                  <Nick>{e}</Nick>
+                ?.map((e) => e.id)
+                ?.map((id) => (
+                  <Nick id={id} />
                 ))}
             </NickBox>
           </DayBox>

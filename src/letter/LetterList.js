@@ -51,7 +51,13 @@ const Box = styled.div`
   }};
 `;
 
-const LetterList = ({ mailList, category, onClickDetail }) => {
+const LetterList = ({
+  mailList,
+  category,
+  onClickDetail,
+  searchCategory,
+  text,
+}) => {
   const id = localStorage.getItem("id");
   const [mailNoList, setMailNoList] = useState([]);
 
@@ -80,31 +86,39 @@ const LetterList = ({ mailList, category, onClickDetail }) => {
   return (
     <>
       {mailList &&
-        mailList.map((mail) => (
-          <Line key={mail.no} onClick={() => onClickDetail(mail)}>
-            <Box type="check">
-              <input
-                type="checkbox"
-                value={mail.no}
-                onClick={(e) => e.stopPropagation()}
-                onChange={(e) => onChangeCheck(e, mail)}
-              />
-            </Box>
-            <Box type="view">
-              {mail.view === "TRUE" ? (
-                <IoIosMailOpen style={{ color: "black" }} />
-              ) : (
-                <IoIosMail style={{ color: "gray" }} />
-              )}
-            </Box>
-            <Box type="author">
-              {category === "send" && id === mail.receiver && `나에게 쓴 편지`}
-              {category === "send" ? mail.receiverNick : mail.senderNick}
-            </Box>
-            <Box type="title">{mail.title}</Box>
-            <Box type="date">{formatDate(mail.date)}</Box>
-          </Line>
-        ))}
+        mailList
+          .filter(
+            (mail) =>
+              mail[searchCategory] && mail[searchCategory].includes(text)
+          )
+          .map((mail) => (
+            <Line key={mail.no} onClick={() => onClickDetail(mail)}>
+              <Box type="check">
+                <input
+                  type="checkbox"
+                  value={mail.no}
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={(e) => onChangeCheck(e, mail)}
+                />
+              </Box>
+              <Box type="view">
+                {mail.view === "TRUE" ? (
+                  <IoIosMailOpen style={{ color: "black" }} />
+                ) : (
+                  <IoIosMail style={{ color: "gray" }} />
+                )}
+              </Box>
+              <Box type="author">
+                {category === "send"
+                  ? id === mail.receiver
+                    ? `나에게 쓴 편지`
+                    : mail.receiverNick
+                  : mail.senderNick}
+              </Box>
+              <Box type="title">{mail.title}</Box>
+              <Box type="date">{formatDate(mail.date)}</Box>
+            </Line>
+          ))}
     </>
   );
 };

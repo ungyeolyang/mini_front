@@ -29,6 +29,19 @@ const MeetingAxiosApi = {
     };
     return await axios.post(DOMAIN + LOGO + "/recruit", meeting);
   },
+  //모임생성자 가입창에 추가
+  master: async (id, detail) => {
+    const master = {
+      id: id,
+      detail: detail,
+    };
+    return await axios.post(DOMAIN + LOGO + "/master", master);
+  },
+  //가입한 모임 list
+  myMeetingList: async (myId) => {
+    return await axios.get(DOMAIN + LOGO + `/mymeetinglist?myId=${myId}`);
+  },
+
   //모임 list
   meetingList: async () => {
     return await axios.get(DOMAIN + LOGO + `/meetinglist`);
@@ -55,6 +68,7 @@ const MeetingAxiosApi = {
   chatList: async (meetingNo) => {
     return await axios.get(DOMAIN + LOGO + `/chatlist?meetingNo=${meetingNo}`);
   },
+
   //그 일정에 글쓴사람 불러오기
   writerList: async (mno, year, month) => {
     const writer = {
@@ -63,6 +77,16 @@ const MeetingAxiosApi = {
       month: month,
     };
     return await axios.post(DOMAIN + LOGO + `/writerlist`, writer);
+  },
+  send: async (no, title, text, id, duration) => {
+    const schedule = {
+      mno: no,
+      title: title,
+      contents: text,
+      id: id,
+      sdate: duration,
+    };
+    return await axios.post(DOMAIN + LOGO + `/sendschedule`, schedule);
   },
 };
 

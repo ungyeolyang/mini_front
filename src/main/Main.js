@@ -30,6 +30,7 @@ const Main = () => {
   const [modalContent, setModalContent] = useState("");
   const [isDetail, setIsDetail] = useState(false);
   const [moim, setMoim] = useState();
+  const [address, setAddress] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false);
   const [header, setHeader] = useState("");
@@ -51,6 +52,7 @@ const Main = () => {
   //모집창 닫기
   const closeRecruit = () => {
     setRecruitOpen(false);
+    setAddress("");
   };
   //모임창 클릭
   const onClickMoim = (props) => {
@@ -102,6 +104,8 @@ const Main = () => {
         setModalOpen={setModalOpen}
         setModalContent={setModalContent}
         setHeader={setHeader}
+        address={address}
+        setAddress={setAddress}
       ></Recruit>
       <Modal
         open={modalOpen}

@@ -46,10 +46,16 @@ const Box = styled.div`
 `;
 const Body = styled.div`
   background-color: #e5f3ff;
-  min-height: 20rem;
+  min-height: 17rem;
 `;
 
-const Letters = ({ mailList, category, onClickDetail }) => {
+const Letters = ({
+  mailList,
+  category,
+  onClickDetail,
+  searchCategory,
+  text,
+}) => {
   return (
     <Container>
       <Head>
@@ -66,6 +72,8 @@ const Letters = ({ mailList, category, onClickDetail }) => {
           mailList={mailList}
           category={category}
           onClickDetail={onClickDetail}
+          searchCategory={searchCategory}
+          text={text}
         />
       </Body>
     </Container>

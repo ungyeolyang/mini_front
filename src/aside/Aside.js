@@ -6,6 +6,8 @@ import { useContext, useEffect, useState } from "react";
 import LoginAxiosApi from "../api/LoginAxiosApi";
 import { UserContext } from "../context/UserStore";
 import SideBar from "../component/SideBar";
+import MeetingAxiosApi from "../api/MeetingAxiosApi";
+import MyMeeting from "./MyMeeting";
 
 const Container = styled.div`
   display: flex;
@@ -102,10 +104,22 @@ const Div = styled.div`
   background-color: ${(props) => props.color || `transparent`};
 `;
 
+const Head = styled.div`
+  background-color: #b8d0fa;
+  padding: 0.7rem;
+  border-radius: 1rem 1rem 0 0;
+`;
+
 const Aside = () => {
-  const [member, setMember] = useState(null);
+  const [member, setMember] = useState();
+  const [myMeeting, setMyMeeting] = useState();
 
   const navigate = useNavigate();
+
+  const onClickDetail = (props) => {
+    console.log(props);
+    navigate(`/meeting/${props.no}`);
+  };
 
   const context = useContext(UserContext);
   const {
@@ -136,6 +150,20 @@ const Aside = () => {
     localStorage.clear();
   };
 
+  const myMeetingList = async () => {
+    try {
+      const rsp = await MeetingAxiosApi.myMeetingList(id);
+      if (rsp.data) {
+        console.log(rsp.data);
+        setMyMeeting(rsp.data);
+      } else {
+        console.log("가입한 모임이없습니다.");
+      }
+    } catch (e) {
+      console.log("내모임 에러.");
+    }
+  };
+
   useEffect(() => {
     const getMember = async () => {
       try {
@@ -148,6 +176,7 @@ const Aside = () => {
       }
     };
     getMember();
+    myMeetingList();
   }, [id, nick, imgUrl]);
 
   return (
@@ -165,6 +194,16 @@ const Aside = () => {
           <Button onClick={onClickLogOut}>
             로그아웃<span>[→</span>
           </Button>
+          <header>
+            <Head>내모임</Head>
+            {myMeeting &&
+              myMeeting.map((meeting) => (
+                <MyMeeting
+                  meeting={meeting}
+                  onclickDetail={onClickDetail}
+                ></MyMeeting>
+              ))}
+          </header>
           <footer>
             <Link to="/board">게시판</Link>ㅣ<Link to="/letter">편지함</Link>
           </footer>

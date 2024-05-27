@@ -187,7 +187,15 @@ const Text = styled.textarea`
 `;
 
 const Recruit = (props) => {
-  const { open, close, setModalOpen, setModalContent, setHeader } = props;
+  const {
+    open,
+    close,
+    setModalOpen,
+    setModalContent,
+    setHeader,
+    address,
+    setAddress,
+  } = props;
   const context = useContext(UserContext);
   const { rpad } = context;
   const id = localStorage.getItem("id");
@@ -200,11 +208,9 @@ const Recruit = (props) => {
   const [duration1, setDuration1] = useState("");
   const [duration2, setDuration2] = useState("");
   const [isLocation, setIsLocation] = useState("오프라인");
-  const [location, setLocation] = useState("");
   const [detail, setDetail] = useState("");
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [address, setAddress] = useState("");
 
   // 팝업창 열기
   const openPostCode = () => {
@@ -269,6 +275,19 @@ const Recruit = (props) => {
     }
   };
 
+  const master = async () => {
+    try {
+      const rsp = await MeetingAxiosApi.master(id, detail);
+      if (rsp.data) {
+        console.log("등록성공");
+      } else {
+        console.log("등록실패");
+      }
+    } catch (e) {
+      console.log("오류");
+    }
+  };
+
   const onClickRecruit = async () => {
     try {
       const rsp = await MeetingAxiosApi.recruit(
@@ -286,6 +305,7 @@ const Recruit = (props) => {
         setModalOpen(true);
         setModalContent("모임 등록성공");
         setHeader("모임 등록");
+        await master();
         close();
       } else {
         setModalOpen(true);

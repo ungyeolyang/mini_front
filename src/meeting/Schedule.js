@@ -22,9 +22,9 @@ const Box = styled.div`
       case "author":
         return "20%";
       case "date":
-        return "20%";
+        return "15%";
       case "view":
-        return "10%";
+        return "15%";
       default:
         return "auto";
     }
@@ -36,16 +36,28 @@ const Body = styled.div`
   overflow: hidden;
 `;
 
-const Schedule = ({ schedule, onClickDetail, onClickSchedule }) => {
+const Schedule = ({
+  schedule,
+  onClickDetail,
+  onClickSchedule,
+  searchCategory,
+  text,
+}) => {
   return (
     <Container>
       <Head onClick={onClickSchedule}>
         <Box type="title">제목</Box>
         <Box type="author">작성자</Box>
         <Box type="date">일정</Box>
+        <Box type="date">등록일</Box>
       </Head>
       <Body>
-        <ScheduleList scheduleList={schedule} onClickDetail={onClickDetail} />
+        <ScheduleList
+          scheduleList={schedule}
+          onClickDetail={onClickDetail}
+          searchCategory={searchCategory}
+          text={text}
+        />
       </Body>
     </Container>
   );

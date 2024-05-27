@@ -27,7 +27,7 @@ function App() {
               <Route index element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/main" element={<Main />} />
-              <Route path="/meeting" element={<Meeting />} />
+              <Route path="/meeting/:no" element={<Meeting />} />
               <Route path="/mypage" element={<MyPage />} />
               <Route path="/board" element={<Board />} />
               <Route path="/boarddetail" element={<BoardDetail />} />

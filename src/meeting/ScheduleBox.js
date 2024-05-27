@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Paging from "../component/Paging";
-import { FaMagnifyingGlass } from "react-icons/fa6";
+
 import Schedule from "./Schedule";
 import { useState } from "react";
 
@@ -9,12 +9,47 @@ const StyledScheduleBox = styled.div`
   width: 100%;
   flex-direction: column;
   footer {
+    display: flex;
+    align-items: center;
+    gap: 17rem;
     position: relative;
     width: 100%;
   }
 `;
+const Div = styled.div`
+  display: flex;
 
-const ScheduleBox = ({ category, onClickDetail, schedule }) => {
+  input,
+  button {
+    height: 2rem;
+    border: none;
+    background-color: transparent;
+    &:focus {
+      outline: none;
+    }
+  }
+  button {
+    cursor: pointer;
+    &:hover {
+      color: #94b9f3;
+    }
+  }
+`;
+
+const InputBox = styled.div`
+  border: 1px solid gray;
+  padding: 0 0.5rem;
+`;
+
+const ScheduleBox = ({
+  category,
+  onClickDetail,
+  schedule,
+  searchCategory,
+  setSearchCategory,
+  text,
+  setText,
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const pageSize = 5;
@@ -33,6 +68,8 @@ const ScheduleBox = ({ category, onClickDetail, schedule }) => {
         schedule={paginatedData}
         category={category}
         onClickDetail={onClickDetail}
+        searchCategory={searchCategory}
+        text={text}
       ></Schedule>
       <footer>
         <Paging
@@ -41,23 +78,23 @@ const ScheduleBox = ({ category, onClickDetail, schedule }) => {
           totalItemsCount={schedule?.length}
           onPageChange={handlePageChange}
         />
-        <div>
+        <Div>
           <select
             defaultValue="title"
-            // onChange={(e) => setserchCategory(e.target.value)}
+            onChange={(e) => setSearchCategory(e.target.value)}
           >
-            <option value="제목">제목</option>
-            <option value="작성자">작성자</option>
+            <option value="title">제목</option>
+            <option value="id">작성자</option>
+            <option value="sdate">일정</option>
           </select>
-          <input
-            type="text"
-            placeholder="검색어를 입력해 주세요"
-            // onChange={handleSerinputChange}
-          />
-          <button>
-            <FaMagnifyingGlass />
-          </button>
-        </div>
+          <InputBox>
+            <input
+              type="text"
+              placeholder="검색어를 입력해 주세요"
+              onChange={(e) => setText(e.target.value)}
+            />
+          </InputBox>
+        </Div>
       </footer>
     </StyledScheduleBox>
   );

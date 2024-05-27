@@ -41,10 +41,6 @@ const Letter = () => {
     setIsSend(false);
   };
 
-  const onSend = (props) => {
-    setIsSend(props);
-  };
-
   //보낸 편지함 클릭
   const onClickSend = () => {
     setIsDetail(false);
@@ -141,7 +137,6 @@ const Letter = () => {
         open={letterOpen}
         close={closeLetter}
         category="쪽지쓰기"
-        onSend={onSend}
         isSend={isSend}
         setIsSend={setIsSend}
       ></Send>
