@@ -10,6 +10,8 @@ import Modal from "../component/Modal";
 import MeetingAxiosApi from "../api/MeetingAxiosApi";
 import Moim from "../meeting/Moim";
 import MeetingDetail from "./MeetingDetail";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import MainAxiosApi from "../api/MainAxiosApi";
 
 const Box = styled.div`
   display: flex;
@@ -23,6 +25,40 @@ const Container = styled.div`
 const MoimBox = styled.div`
   background-color: black;
 `;
+const SerBox = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const CategorySelect = styled.select`
+  padding: 10px;
+  border-radius: 4px;
+  margin-right: 10px;
+  width: 120px;
+  height: 40px;
+`;
+const Cateinput = styled.input`
+  width: 240px;
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  margin-right: 10px;
+  padding-left: 10px;
+`;
+const InputButton = styled.button`
+  padding: 0;
+  background-color: white;
+  border: 0;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const Inputicon = styled.div`
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const Main = () => {
   const [meeting, setMeeting] = useState();
@@ -30,6 +66,8 @@ const Main = () => {
   const [modalContent, setModalContent] = useState("");
   const [isDetail, setIsDetail] = useState(false);
   const [moim, setMoim] = useState();
+  const [serchCategory, setserchCategory] = useState("제목");
+  const [serinput, setserinput] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false);
   const [header, setHeader] = useState("");
@@ -76,7 +114,19 @@ const Main = () => {
   useEffect(() => {
     meetingList();
   }, [recruitOpen]);
-
+  const handleSerinputChange = (e) => {
+    setserinput(e.target.value);
+  };
+  const handleSubmit = async () => {
+    try {
+      const rsp = await MainAxiosApi.mainsersel(serchCategory, serinput);
+      const sortedData = rsp.data.sort((a, b) => b.board_no - a.board_no);
+      setMeeting(sortedData); // 검색 결과를 상태에 저장
+      setCurrentPage(1); // 검색 결과를 첫 페이지로 설정
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <Right>
       <Container>
@@ -103,6 +153,26 @@ const Main = () => {
         setModalContent={setModalContent}
         setHeader={setHeader}
       ></Recruit>
+      <SerBox>
+        <CategorySelect
+          defaultValue="title"
+          value={serchCategory}
+          onChange={(e) => setserchCategory(e.target.value)}
+        >
+          <option value="제목">제목</option>
+          <option value="작성자">작성자</option>
+        </CategorySelect>
+        <Cateinput
+          type="text"
+          placeholder="검색어를 입력해 주세요"
+          onChange={handleSerinputChange}
+        />
+        <InputButton onClick={handleSubmit}>
+          <Inputicon>
+            <FaMagnifyingGlass />
+          </Inputicon>
+        </InputButton>
+      </SerBox>
       <Modal
         open={modalOpen}
         close={() => setModalOpen(false)}

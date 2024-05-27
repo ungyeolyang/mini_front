@@ -5,6 +5,7 @@ import Modal from "../component/Modal";
 import UserDetail from "../component/UserDetail";
 import { UserContext } from "../context/UserStore";
 import LetterAxiosApi from "../api/LetterAxiosApi";
+import KakaoMap from "../KakaoMap";
 
 const ModalStyle = styled.div`
   .modal {
@@ -28,7 +29,7 @@ const ModalStyle = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 700px;
+    min-width: 1000px;
     min-height: 900px;
     margin: 0 auto;
     border-radius: 0.6rem;
@@ -113,7 +114,7 @@ const User = styled.span`
 `;
 
 const Body = styled.div`
-  width: 80%;
+  width: 800px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -187,6 +188,7 @@ const MeetingDetail = (props) => {
                   <Div>{moim?.personnel}</Div>
                   <Div>{moim?.detail}</Div>
                   <Div>{moim?.location || "온라인"}</Div>
+                  <KakaoMap moim={moim} />
                   <Div type="receive">
                     <Bold>작성자</Bold>
                     <User onClick={onClickUser} user={moim?.id}>
