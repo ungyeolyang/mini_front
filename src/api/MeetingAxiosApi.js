@@ -4,6 +4,15 @@ const DOMAIN = "http://localhost:8111";
 const LOGO = "/dooin";
 
 const MeetingAxiosApi = {
+  //신청하기
+  application: async (no, id, text) => {
+    const meeting = {
+      no: no,
+      id: id,
+      detail: text,
+    };
+    return await axios.post(DOMAIN + LOGO + "/application", meeting);
+  },
   //모집하기
   recruit: async (
     id,

@@ -134,7 +134,7 @@ const Main = () => {
         <Link to="/meeting">모임</Link>
         <MoimBox>
           {meeting &&
-            paginatedData.map((e) => (
+            paginatedData?.map((e) => (
               <Moim meeting={e} onClickMoim={onClickMoim} />
             ))}
         </MoimBox>

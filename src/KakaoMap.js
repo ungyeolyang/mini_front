@@ -79,31 +79,31 @@ const KakaoMap = ({ moim }) => {
   const [markers, setMarkers] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState(null);
 
-  useEffect(() => {
-    const container = mapRef.current;
-    const options = {
-      center: new window.kakao.maps.LatLng(37.5665, 126.978), // 서울의 기본 좌표
-      level: 3,
-    };
+  // useEffect(() => {
+  //   const container = mapRef.current;
+  //   const options = {
+  //     center: new window.kakao.maps.LatLng(37.5665, 126.978), // 서울의 기본 좌표
+  //     level: 3,
+  //   };
 
-    const kakaoMap = new window.kakao.maps.Map(container, options);
-    setMap(kakaoMap);
+  //   const kakaoMap = new window.kakao.maps.Map(container, options);
+  //   setMap(kakaoMap);
 
-    if (moim?.location) {
-      const geocoder = new window.kakao.maps.services.Geocoder();
-      geocoder.addressSearch(moim.location, (result, status) => {
-        if (status === window.kakao.maps.services.Status.OK) {
-          const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-          const marker = new window.kakao.maps.Marker({
-            map: kakaoMap,
-            position: coords,
-          });
-          setMarkers([marker]);
-          kakaoMap.setCenter(coords);
-        }
-      });
-    }
-  }, [moim]);
+  //   if (moim?.location) {
+  //     const geocoder = new window.kakao.maps.services.Geocoder();
+  //     geocoder.addressSearch(moim.location, (result, status) => {
+  //       if (status === window.kakao.maps.services.Status.OK) {
+  //         const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+  //         const marker = new window.kakao.maps.Marker({
+  //           map: kakaoMap,
+  //           position: coords,
+  //         });
+  //         setMarkers([marker]);
+  //         kakaoMap.setCenter(coords);
+  //       }
+  //     });
+  //   }
+  // }, [moim]);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);

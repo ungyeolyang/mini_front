@@ -199,11 +199,11 @@ const UserDetail = (props) => {
     try {
       const rsp = await FriendAxiosApi.addFriend(
         id,
-        nick,
-        imgUrl,
-        user.id,
-        user.nick,
-        user.profile
+        // nick,
+        // imgUrl,
+        user.id
+        // user.nick,
+        // user.profile
       );
       if (rsp.data) {
         console.log("친구신청 성공");
@@ -280,9 +280,7 @@ const UserDetail = (props) => {
               </header>
               <main>
                 <Body>
-                  <Profile size={`9rem`}>
-                    <img src={user?.profile} alt="프로필사진" />
-                  </Profile>
+                  <Profile size={`9rem`} src={user?.profile}></Profile>
                   <Info>
                     <Div>
                       <span>{user?.nick}</span>

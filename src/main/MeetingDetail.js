@@ -6,6 +6,7 @@ import UserDetail from "../component/UserDetail";
 import { UserContext } from "../context/UserStore";
 import LetterAxiosApi from "../api/LetterAxiosApi";
 import KakaoMap from "../KakaoMap";
+import Application from "./Application";
 
 const ModalStyle = styled.div`
   .modal {
@@ -133,7 +134,9 @@ const MeetingDetail = (props) => {
   const { nick, imgUrl, formatDate, formatDetailDate } = context;
 
   const [userOpen, setUserOpen] = useState(false);
+  const [applyOpen, setApplyOpen] = useState(false);
   const [userNick, setUserNick] = useState("");
+  const [isSend, setIsSend] = useState(false);
 
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -151,6 +154,11 @@ const MeetingDetail = (props) => {
     setUserOpen(false);
   };
 
+  const closeApply = () => {
+    setApplyOpen(false);
+    setIsSend(false);
+  };
+
   useEffect(() => {
     const getNick = async () => {
       try {
@@ -162,7 +170,7 @@ const MeetingDetail = (props) => {
       } catch (e) {}
     };
     getNick();
-  }, []);
+  }, [moim]);
 
   return (
     <>
@@ -188,6 +196,15 @@ const MeetingDetail = (props) => {
                   <Div>{moim?.personnel}</Div>
                   <Div>{moim?.detail}</Div>
                   <Div>{moim?.location || "온라인"}</Div>
+                  {moim?.id !== id && (
+                    <Btn
+                      onClick={() => {
+                        setApplyOpen(true);
+                      }}
+                    >
+                      신청하기
+                    </Btn>
+                  )}
                   <KakaoMap moim={moim} />
                   <Div type="receive">
                     <Bold>작성자</Bold>
@@ -211,6 +228,13 @@ const MeetingDetail = (props) => {
         nick={nick}
         imgUrl={imgUrl}
       ></UserDetail>
+      <Application
+        no={moim?.no}
+        open={applyOpen}
+        close={closeApply}
+        isSend={isSend}
+        setIsSend={setIsSend}
+      ></Application>
     </>
   );
 };
