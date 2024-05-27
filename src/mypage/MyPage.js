@@ -297,8 +297,11 @@ const MyPage = () => {
             <InContainer>
               <Head>
                 <Cdiv style={{ paddingTop: `3rem`, gap: `1rem` }}>
-                  <Profile size="9rem" onClick={onClickInputFile}>
-                    <img src={previewUrl} alt="프로필" />
+                  <Profile
+                    size="9rem"
+                    onClick={onClickInputFile}
+                    src={previewUrl}
+                  >
                     <input
                       type="file"
                       onChange={onChangFile}

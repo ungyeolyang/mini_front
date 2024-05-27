@@ -21,7 +21,8 @@ const StyledProfile = styled.div`
 const Profile = (props) => {
   return (
     <StyledProfile size={props.size} onClick={props.onClick}>
-      <img src={props.user?.sendProfile} alt="프로필" />
+      <img src={props.src} alt="프로필" />
+      {props.children}
     </StyledProfile>
   );
 };
