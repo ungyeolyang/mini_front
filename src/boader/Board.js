@@ -11,26 +11,28 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
+
 const TopContainer = styled.div`
+  width: 100%;
+  max-width: 1200px;
   padding: 0 30px;
-  width: 1200px;
-  position: relative;
-  top: 0;
-  margin-bottom: 40px;
-  z-index: 999;
+  margin-bottom: 20px;
   display: flex;
+  justify-content: space-between;
 `;
 
 const Title = styled.h3`
   color: #333;
+  font-size: 29px;
 `;
-// 선택 버튼
-const CategoryButton1 = styled.button`
+
+const CategoryButton = styled.button`
   padding: 10px;
   width: 150px;
   height: 40px;
-  margin-right: 50px;
+  margin-right: 10px;
   background-color: #e9edc9;
   border: 0;
   &:hover {
@@ -40,106 +42,72 @@ const CategoryButton1 = styled.button`
 `;
 
 const SerchContainer = styled.div`
-  padding: 0 30px;
-  position: relative;
-  margin: 0;
-  width: 1150px;
-  margin-bottom: 30px;
-`;
-// 여기서 부터 파란색 메인
-const BoardBox = styled.div`
-  position: relative;
-  text-align: center;
   width: 100%;
-  height: 432px;
-  margin: 0 35px;
-  padding: 0;
-  border: 0;
-  background-color: #b8d0fa;
-`;
-const BoardTitleBox = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 72px;
-  margin: 0;
-  padding: 0;
-  border-bottom: 0;
-  border-right: 0;
-  border-left: 0;
-  background-color: #94b9f3;
+  max-width: 1200px;
   display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+`;
+// 여기서부터 파란색 메인
+const BoardBox = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  background-color: #b8d0fa;
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+`;
+
+const BoardTitleBox = styled.div`
+  display: flex;
+  background-color: #94b9f3;
+  padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
+
 const BoardTitle = styled.div`
-  width: 100px;
-  height: 72px;
-  border: 0;
+  flex: 1;
   font-weight: bold;
-  font-size: 15px;
-  line-height: 72px;
+  font-size: 18px;
+  text-align: center;
 `;
+
 const BoardLi = styled.div`
-  position: absolute;
-  width: 1200px;
-  height: 360px;
-  border: 0;
-  margin: 0;
-  padding: 0;
-  bottom: 0;
+  padding: 10px;
 `;
 // 끝
 
 const Fobox = styled.div`
-  position: relative;
-  width: 1200px;
-  height: 50px;
+  width: 100%;
+  max-width: 1200px;
   display: flex;
-`;
-const Pageme = styled.div`
-  position: relative;
-  width: 600px;
-  height: 30px;
-  display: flex;
-`;
-// 페이지 버튼
-const Pagebu = styled.button`
-  width: 20px;
-  height: 20px;
-  background-color: white;
-  border: 0;
-  margin: 10px;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-const SerBox = styled.div`
-  width: 360px;
-  height: 40px;
-  border: 0;
-  margin: 10px;
-  position: absolute;
-  right: 1px;
-  display: flex;
-`;
-// 드롭다운
-const CategorySelect = styled.select`
-  // 카테고리 선택 드롭다운에 대한 스타일 정의
-  padding: 10px;
-  margin-right: 10px;
-  border-radius: 4px;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
-  width: 120px; // 드롭다운 너비 조정
-  height: 35px;
 `;
-// 검색창
+
+const SerBox = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const CategorySelect = styled.select`
+  padding: 10px;
+  border-radius: 4px;
+  margin-right: 10px;
+  width: 120px;
+  height: 40px;
+`;
+
 const Cateinput = styled.input`
   width: 240px;
-  height: 35px;
+  height: 40px;
   border-radius: 4px;
-  border-color: #ced4da;
+  border: 1px solid #ced4da;
+  margin-right: 10px;
+  padding-left: 10px;
 `;
+
 const InputButton = styled.button`
-  margin: 0;
   padding: 0;
   background-color: white;
   border: 0;
@@ -147,11 +115,27 @@ const InputButton = styled.button`
     cursor: pointer;
   }
 `;
+
 const Inputicon = styled.div`
-  background-repeat: no-repeat;
   width: 30px;
   height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
+
+const WriteButton = styled.button`
+  padding: 10px;
+  width: 150px;
+  height: 40px;
+  background-color: #e9edc9;
+  border: 0;
+  &:hover {
+    background-color: #ccd5ae;
+    cursor: pointer;
+  }
+`;
+
 const Board = () => {
   const [boardList, setBoardList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("자유게시판");
@@ -217,10 +201,12 @@ const Board = () => {
       console.log(e);
     }
   };
+
   const handleDetailClick = (board_no) => {
     console.log(board_no);
     navigate(`/BoardDetail/${board_no}`);
   };
+
   const handleView = async (board_no) => {
     console.log(board_no);
     try {
@@ -229,6 +215,7 @@ const Board = () => {
       console.log(e);
     }
   };
+
   const handleClick = () => {
     navigate("/boinser");
   };
@@ -240,48 +227,19 @@ const Board = () => {
           <Title>게시판</Title>
         </TopContainer>
         <SerchContainer>
-          <CategoryButton1 onClick={() => handleCategoryChange("자유게시판")}>
-            자유게시판
-          </CategoryButton1>
-          <CategoryButton1
-            onClick={() => handleCategoryChange("모임 후기 게시판")}
-          >
-            모임 후기 게시판
-          </CategoryButton1>
-          <CategoryButton1 onClick={() => handleCategoryChange(id)}>
-            내가 쓴 글
-          </CategoryButton1>
-          <CategoryButton1
-            style={{ position: "absolute", right: "1px" }}
-            onClick={handleClick}
-          >
-            글 쓰기
-          </CategoryButton1>
-        </SerchContainer>
-        <BoardBox>
-          <BoardTitleBox>
-            <BoardTitle style={{ margin: "0 33%" }}>제목</BoardTitle>
-            <BoardTitle>작성자</BoardTitle>
-            <BoardTitle>작성일</BoardTitle>
-            <BoardTitle>조회수</BoardTitle>
-          </BoardTitleBox>
-          <BoardLi>
-            <BoardList
-              boardList={paginatedData}
-              handleDetailClick={handleDetailClick}
-              handleView={handleView}
-            />
-          </BoardLi>
-        </BoardBox>
-        <Fobox>
-          <Pageme>
-            <Paging
-              page={currentPage}
-              itemsCountPerPage={pageSize}
-              totalItemsCount={boardList.length}
-              onPageChange={handlePageChange}
-            />
-          </Pageme>
+          <div>
+            <CategoryButton onClick={() => handleCategoryChange("자유게시판")}>
+              자유게시판
+            </CategoryButton>
+            <CategoryButton
+              onClick={() => handleCategoryChange("모임 후기 게시판")}
+            >
+              모임 후기 게시판
+            </CategoryButton>
+            <CategoryButton onClick={() => handleCategoryChange(id)}>
+              내가 쓴 글
+            </CategoryButton>
+          </div>
           <SerBox>
             <CategorySelect
               defaultValue="title"
@@ -302,6 +260,30 @@ const Board = () => {
               </Inputicon>
             </InputButton>
           </SerBox>
+        </SerchContainer>
+        <BoardBox>
+          <BoardTitleBox>
+            <BoardTitle style={{ flex: 2 }}>제목</BoardTitle>
+            <BoardTitle style={{ flex: 1 }}>작성자</BoardTitle>
+            <BoardTitle style={{ flex: 1 }}>작성일</BoardTitle>
+            <BoardTitle style={{ flex: 1 }}>조회수</BoardTitle>
+          </BoardTitleBox>
+          <BoardLi>
+            <BoardList
+              boardList={paginatedData}
+              handleDetailClick={handleDetailClick}
+              handleView={handleView}
+            />
+          </BoardLi>
+        </BoardBox>
+        <Fobox>
+          <Paging
+            page={currentPage}
+            itemsCountPerPage={pageSize}
+            totalItemsCount={boardList.length}
+            onPageChange={handlePageChange}
+          />
+          <WriteButton onClick={handleClick}>글 쓰기</WriteButton>
         </Fobox>
       </MainContainer>
     </Right>

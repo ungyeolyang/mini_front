@@ -3,8 +3,8 @@ import styled from "styled-components";
 import useAddress from "./hooks/useLocation";
 
 const MapContainer = styled.div`
-  width: 100%;
-  height: 90vh;
+  width: 50vh;
+  height: 50vh;
 `;
 
 const AppContainer = styled.div`
@@ -72,25 +72,38 @@ const InfoWindowContent = styled.div`
   font-size: 16px;
 `;
 
-const KakaoMap = () => {
-  const mapRef = useRef(null); // 지도를 담을 영역의 DOM 레퍼런스
-  const [searchQuery, setSearchQuery] = useState("");
-  const [map, setMap] = useState(null); // 지도 객체
-  const [markers, setMarkers] = useState([]); // 마커 배열
-  const [selectedPlace, setSelectedPlace] = useState(null); // 선택된 장소
-  const { addr, location } = useAddress(); // 커스텀 훅 사용
+const KakaoMap = ({ moim }) => {
+  const mapRef = useRef(null);
+  const [searchQuery, setSearchQuery] = useState(moim?.location);
+  const [map, setMap] = useState(null);
+  const [markers, setMarkers] = useState([]);
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
   useEffect(() => {
-    console.log("현재 위치에 대한 주소 : ", addr);
-    const container = mapRef.current; // 지도를 담을 영역의 DOM 레퍼런스
+    const container = mapRef.current;
     const options = {
-      center: new window.kakao.maps.LatLng(location.lat, location.long),
+      center: new window.kakao.maps.LatLng(37.5665, 126.978), // 서울의 기본 좌표
       level: 3,
     };
 
     const kakaoMap = new window.kakao.maps.Map(container, options);
     setMap(kakaoMap);
-  }, [location.lat, location.long]);
+
+    if (moim?.location) {
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.addressSearch(moim.location, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
+          const marker = new window.kakao.maps.Marker({
+            map: kakaoMap,
+            position: coords,
+          });
+          setMarkers([marker]);
+          kakaoMap.setCenter(coords);
+        }
+      });
+    }
+  }, [moim]);
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
@@ -98,9 +111,9 @@ const KakaoMap = () => {
 
   const handleSearchButtonClick = () => {
     if (map && searchQuery) {
-      const places = new window.kakao.maps.services.Places(); // 장소 검색 객체 생성
+      const places = new window.kakao.maps.services.Places();
 
-      markers.forEach((marker) => marker.setMap(null)); //  마커 지우기
+      markers.forEach((marker) => marker.setMap(null));
 
       places.keywordSearch(searchQuery, (data, status) => {
         if (status === window.kakao.maps.services.Status.OK) {
@@ -110,7 +123,6 @@ const KakaoMap = () => {
             });
 
             placeMarker.setMap(map);
-            // Kakao Map에서 마커에 대한 이벤트 처리를 하는 표준 함수
             window.kakao.maps.event.addListener(placeMarker, "click", () => {
               setSelectedPlace(place);
             });
@@ -130,7 +142,6 @@ const KakaoMap = () => {
         <InputWrapper>
           <Input
             type="text"
-            placeholder="검색할 장소를 입력하세요"
             value={searchQuery}
             onChange={handleSearchInputChange}
             onKeyPress={(e) => {

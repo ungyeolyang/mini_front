@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import AxiosApi from "../api/BoardAxiosApi";
-import Update from "./Update";
 import Modal from "../component/Modal";
 import CommentList from "./CommentList";
 import Paging from "../component/Paging";
@@ -36,7 +35,7 @@ const Title = styled.h3`
 
 const ColorBox = styled.div`
   width: 98%;
-  height: 270px;
+  height: 350px;
   background-color: #94b9f3;
   align-items: center;
   text-align: center;
@@ -49,15 +48,17 @@ const MainDetail = styled.div`
   margin-top: 15px;
   background-color: white;
   box-shadow: 10px 10px 20px #94b9f3;
+  overflow: hidden;
 `;
 
-const DetailHearder = styled.div`
+const DetailHeader = styled.div`
   width: 100%;
   font-weight: bold;
   height: 40px;
   padding-top: 15px;
   font-size: 18px;
 `;
+
 const DetailCenter = styled.div`
   width: 93%;
   height: 60px;
@@ -65,7 +66,8 @@ const DetailCenter = styled.div`
   margin: 15px 40px;
   display: flex;
 `;
-const Board_View = styled.p`
+
+const BoardView = styled.p`
   font-weight: bold;
   color: black;
   font-size: 15px;
@@ -89,35 +91,47 @@ const UserId = styled.p`
   font-size: 15px;
   margin-right: 30%;
 `;
+
 const DetailContent = styled.p`
   font-size: 15px;
 `;
+
 const BoardImage = styled.img`
-  width: 350px;
-  height: 350px;
+  width: 400px;
+  height: 400px;
+  margin: 20px 0;
 `;
+
 const ButtonBox = styled.div`
   width: 100%;
   height: 60px;
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
 `;
+
 const BrButton = styled.button`
   width: 130px;
   height: 40px;
   padding: 10px;
   background-color: #e9edc9;
   border: 0;
+  margin-right: 58px;
   &:hover {
     background-color: #ccd5ae;
     cursor: pointer;
   }
 `;
+
 const CommentBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   align-items: center;
+  margin-bottom: 20px;
 `;
+
 const CommTit = styled.h4`
   color: #333;
   font-size: 29px;
@@ -128,10 +142,13 @@ const CommTit = styled.h4`
   border-right: 0;
   text-align: left;
 `;
+
 const CommentdeBox = styled.div`
   border: 0;
   width: 100%;
+  max-width: 95%;
 `;
+
 const CommentTextarea = styled.textarea`
   width: 90%;
   height: 100px;
@@ -139,27 +156,12 @@ const CommentTextarea = styled.textarea`
   background-color: #e9ecef;
   border-radius: 5px;
   font-size: 14px;
+  margin-bottom: 10px;
 `;
-const Fooder = styled.div`
-  width: 100%;
-  height: 700px;
-`;
-const Profil = styled.div`
-  width: 7rem;
-  height: 7rem;
-  border-radius: 50%;
-  background-color: silver;
-  display: flex;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
 
-  img {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    object-fit: cover;
-  }
+const Footer = styled.div`
+  width: 100%;
+  height: 100px;
 `;
 
 const BoardDetail = () => {
@@ -295,47 +297,24 @@ const BoardDetail = () => {
           </TopContainer>
           <ColorBox>
             <MainDetail>
-              <DetailHearder>{board[0].board_title}</DetailHearder>
+              <DetailHeader>{board[0].board_title}</DetailHeader>
               <DetailCenter>
                 <UserId>작성자: {board[0].user_id}</UserId>
                 <BoardDate>작성일: {board[0].board_date}</BoardDate>
-                <Board_View>조회수: {board[0].board_view}</Board_View>
+                <BoardView>조회수: {board[0].board_view}</BoardView>
               </DetailCenter>
               {board[0].imageurl && (
                 <BoardImage src={board[0].imageurl} alt="Board image" />
               )}
               <DetailContent>{board[0].board_de}</DetailContent>
               <ButtonBox>
-                <BrButton
-                  style={{ position: "absolute", left: "1px", margin: "5px" }}
-                  onClick={handleBack}
-                >
-                  돌아가기
-                </BrButton>
+                <BrButton onClick={handleBack}>돌아가기</BrButton>
 
                 {user_id === board[0].user_id && (
-                  <BrButton
-                    style={{
-                      position: "absolute",
-                      right: "1px",
-                      margin: "5px",
-                    }}
-                    onClick={deleteBoard}
-                  >
-                    삭제하기
-                  </BrButton>
-                )}
-                {user_id === board[0].user_id && (
-                  <BrButton
-                    style={{
-                      position: "absolute",
-                      right: "150px",
-                      margin: "5px",
-                    }}
-                    onClick={onClickUpdate}
-                  >
-                    수정하기
-                  </BrButton>
+                  <>
+                    <BrButton onClick={deleteBoard}>삭제하기</BrButton>
+                    <BrButton onClick={onClickUpdate}>수정하기</BrButton>
+                  </>
                 )}
               </ButtonBox>
               <CommentBox>
@@ -345,7 +324,12 @@ const BoardDetail = () => {
                   value={inputComment}
                   onChange={handleCommentChange}
                 />
-                <BrButton onClick={handleCommentSubmit}>댓글 쓰기</BrButton>
+                <BrButton
+                  style={{ alignSelf: "flex-end" }}
+                  onClick={handleCommentSubmit}
+                >
+                  댓글 쓰기
+                </BrButton>
 
                 <Paging
                   page={currentPage}
@@ -358,6 +342,7 @@ const BoardDetail = () => {
                 </CommentdeBox>
               </CommentBox>
             </MainDetail>
+            <Footer />
           </ColorBox>
         </MainContainer>
       </Right>
