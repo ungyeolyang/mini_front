@@ -35,6 +35,7 @@ const CategoryButton = styled.button`
   margin-right: 10px;
   background-color: #e9edc9;
   border: 0;
+  color: ${(props) => (props.active ? "#076AFF" : "black")};
   &:hover {
     background-color: #ccd5ae;
     cursor: pointer;
@@ -48,7 +49,7 @@ const SerchContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 20px;
 `;
-// 여기서부터 파란색 메인
+
 const BoardBox = styled.div`
   width: 100%;
   max-width: 1200px;
@@ -74,7 +75,6 @@ const BoardTitle = styled.div`
 const BoardLi = styled.div`
   padding: 10px;
 `;
-// 끝
 
 const Fobox = styled.div`
   width: 100%;
@@ -228,15 +228,22 @@ const Board = () => {
         </TopContainer>
         <SerchContainer>
           <div>
-            <CategoryButton onClick={() => handleCategoryChange("자유게시판")}>
+            <CategoryButton
+              onClick={() => handleCategoryChange("자유게시판")}
+              active={selectedCategory === "자유게시판"}
+            >
               자유게시판
             </CategoryButton>
             <CategoryButton
               onClick={() => handleCategoryChange("모임 후기 게시판")}
+              active={selectedCategory === "모임 후기 게시판"}
             >
               모임 후기 게시판
             </CategoryButton>
-            <CategoryButton onClick={() => handleCategoryChange(id)}>
+            <CategoryButton
+              onClick={() => handleCategoryChange(id)}
+              active={selectedCategory === id}
+            >
               내가 쓴 글
             </CategoryButton>
           </div>
@@ -263,7 +270,7 @@ const Board = () => {
         </SerchContainer>
         <BoardBox>
           <BoardTitleBox>
-            <BoardTitle style={{ flex: 2 }}>제목</BoardTitle>
+            <BoardTitle style={{ flex: 9 }}>제목</BoardTitle>
             <BoardTitle style={{ flex: 1 }}>작성자</BoardTitle>
             <BoardTitle style={{ flex: 1 }}>작성일</BoardTitle>
             <BoardTitle style={{ flex: 1 }}>조회수</BoardTitle>
