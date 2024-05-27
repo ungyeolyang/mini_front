@@ -107,7 +107,6 @@ const ButtonBox = styled.div`
   height: 60px;
   position: relative;
   display: flex;
-  justify-content: space-between;
   padding: 0 10px;
 `;
 
@@ -312,8 +311,18 @@ const BoardDetail = () => {
 
                 {user_id === board[0].user_id && (
                   <>
-                    <BrButton onClick={deleteBoard}>삭제하기</BrButton>
-                    <BrButton onClick={onClickUpdate}>수정하기</BrButton>
+                    <BrButton
+                      onClick={deleteBoard}
+                      style={{ position: "absolute", right: "1px" }}
+                    >
+                      삭제하기
+                    </BrButton>
+                    <BrButton
+                      onClick={onClickUpdate}
+                      style={{ position: "absolute", right: "140px" }}
+                    >
+                      수정하기
+                    </BrButton>
                   </>
                 )}
               </ButtonBox>

@@ -10,6 +10,10 @@ const BoardLi = styled.li`
   &:hover {
     cursor: pointer;
   }
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
 `;
 const OdContain = styled.div`
   align-items: right;
@@ -30,12 +34,15 @@ const BoardTitle = styled.h3`
 const Board_View = styled.p`
   color: #444;
   font-size: 13px;
+  text-align: center;
 `;
 
 const BoardDate = styled.p`
   color: #777;
   font-size: 13px;
   margin-right: 59px;
+  margin-bottom: 10px;
+  text-align: center;
 `;
 
 const UserId = styled.p`
@@ -43,6 +50,8 @@ const UserId = styled.p`
   font-style: italic;
   font-size: 13px;
   margin-right: 50px;
+  margin-bottom: 10px;
+  text-align: center;
 `;
 
 const BoardListItem = ({ board, handleDetailClick, handleView }) => {
