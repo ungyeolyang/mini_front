@@ -55,6 +55,7 @@ const Main = () => {
   //모임창 클릭
   const onClickMoim = (props) => {
     setIsDetail(true);
+    console.log(props);
     setMoim(props);
   };
 

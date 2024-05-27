@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import Modal from "../component/Modal";
 import Btn from "../component/Btn";
 import InputBar from "../component/InputBar";
 import PopupDom from "../component/PopupDom";
@@ -280,7 +279,7 @@ const Recruit = (props) => {
         category,
         duration1,
         duration2,
-        location,
+        address,
         detail
       );
       if (rsp.data) {

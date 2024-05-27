@@ -155,6 +155,7 @@ const MeetingDetail = (props) => {
       try {
         const rsp = await LetterAxiosApi.getNick(moim?.id);
         if (rsp.data) {
+          // console.log(rsp.data);
           setUserNick(rsp.data);
         }
       } catch (e) {}
@@ -181,12 +182,11 @@ const MeetingDetail = (props) => {
                     {moim?.duration2 && ` ~ ${formatDate(moim?.duration2)}`}
                   </span>
                   {id === moim?.id && <Btn>삭제</Btn>}
-                  <Div>{moim.category}</Div>
-                  <Div>{moim.title}</Div>
-                  <Div>{moim.personnel}</Div>
-                  <Div>{moim.detail}</Div>
-
-                  <Div>{moim.location || "온라인"}</Div>
+                  <Div>{moim?.category}</Div>
+                  <Div>{moim?.title}</Div>
+                  <Div>{moim?.personnel}</Div>
+                  <Div>{moim?.detail}</Div>
+                  <Div>{moim?.location || "온라인"}</Div>
                   <Div type="receive">
                     <Bold>작성자</Bold>
                     <User onClick={onClickUser} user={moim?.id}>
