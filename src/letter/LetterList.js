@@ -26,8 +26,6 @@ const Box = styled.div`
         return "center";
       case "view":
         return "center";
-      case "check":
-        return "center";
       default:
         return "auto";
     }
@@ -42,9 +40,7 @@ const Box = styled.div`
       case "date":
         return "20%";
       case "view":
-        return "7%";
-      case "check":
-        return "5%";
+        return "10%";
       default:
         return "auto";
     }
@@ -70,18 +66,14 @@ const LetterList = ({
     return `${year}-${month}-${day}`;
   };
 
-  const onChangeCheck = (e, mail) => {
-    const checkbox = e.currentTarget;
-    if (checkbox.checked) {
-      setMailNoList((prev) => [...prev, mail.no]);
-    } else {
-      setMailNoList((prev) => prev.filter((no) => no !== mail.no));
-    }
-  };
-
-  useEffect(() => {
-    // console.log(mailNoList);
-  }, [mailNoList]);
+  // const onChangeCheck = (e, mail) => {
+  //   const checkbox = e.currentTarget;
+  //   if (checkbox.checked) {
+  //     setMailNoList((prev) => [...prev, mail.no]);
+  //   } else {
+  //     setMailNoList((prev) => prev.filter((no) => no !== mail.no));
+  //   }
+  // };
 
   return (
     <>
@@ -93,14 +85,6 @@ const LetterList = ({
           )
           .map((mail) => (
             <Line key={mail.no} onClick={() => onClickDetail(mail)}>
-              <Box type="check">
-                <input
-                  type="checkbox"
-                  value={mail.no}
-                  onClick={(e) => e.stopPropagation()}
-                  onChange={(e) => onChangeCheck(e, mail)}
-                />
-              </Box>
               <Box type="view">
                 {mail.view === "TRUE" ? (
                   <IoIosMailOpen style={{ color: "black" }} />
@@ -111,8 +95,10 @@ const LetterList = ({
               <Box type="author">
                 {category === "send"
                   ? id === mail.receiver
-                    ? `나에게 쓴 편지`
+                    ? `내게 쓴 편지`
                     : mail.receiverNick
+                  : id === mail.receiver
+                  ? `내게 쓴 편지`
                   : mail.senderNick}
               </Box>
               <Box type="title">{mail.title}</Box>

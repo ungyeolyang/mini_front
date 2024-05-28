@@ -27,6 +27,10 @@ const LetterAxiosApi = {
     return await axios.post(DOMAIN + LOGO + `/send`, letter);
   },
 
+  delLetter: async (sno) => {
+    return await axios.get(DOMAIN + LOGO + `/delletter?sno=${sno}`);
+  },
+
   //편지리스트
   letterList: async (id, category) => {
     const letter = {
@@ -36,7 +40,7 @@ const LetterAxiosApi = {
     return await axios.post(DOMAIN + LOGO + `/letterList`, letter);
   },
 
-  //편지리스트
+  //편지수신
   setView: async (no) => {
     return await axios.get(DOMAIN + LOGO + `/setview?no=${no}`);
   },

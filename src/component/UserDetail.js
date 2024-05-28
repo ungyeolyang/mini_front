@@ -145,7 +145,7 @@ const Info = styled.div`
 `;
 
 const UserDetail = (props) => {
-  const { open, close, userId, nick, imgUrl } = props;
+  const { open, close, userId } = props;
   const id = localStorage.getItem("id");
   const [refresh, setRefresh] = useState(false);
   const [user, setUser] = useState("");

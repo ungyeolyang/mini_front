@@ -5,6 +5,9 @@ import Btn from "../component/Btn";
 import UserDetail from "../component/UserDetail";
 import { UserContext } from "../context/UserStore";
 import Send from "./Send";
+import LetterAxiosApi from "../api/LetterAxiosApi";
+import Modal from "../component/Modal";
+import { useNavigate } from "react-router-dom";
 
 const StyledLetterDetail = styled.div`
   display: flex;
@@ -80,13 +83,21 @@ const Body = styled.div`
   background-color: #b8d0fa;
 `;
 
-const LetterDetail = ({ user, onClickBack, setLetterOpen, inputId }) => {
-  const context = useContext(UserContext);
-  const { nick, imgUrl } = context;
-
+const LetterDetail = ({
+  user,
+  onClickBack,
+  setLetterOpen,
+  setResend,
+  setReceive,
+  setReceiveNick,
+  setIsDetail,
+}) => {
+  const id = localStorage.getItem("id");
   const [isUp, setIsUp] = useState(true);
   const [info, setInfo] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
+  const [modalContent, setModalContent] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -106,6 +117,10 @@ const LetterDetail = ({ user, onClickBack, setLetterOpen, inputId }) => {
 
     return `${year}-${month}-${day} ${ampm} ${hour}:${minute}`;
   };
+  const closeModal = () => {
+    setModalOpen(false);
+    setIsDetail(false);
+  };
 
   const onClickArrow = () => {
     setIsUp(!isUp);
@@ -121,12 +136,30 @@ const LetterDetail = ({ user, onClickBack, setLetterOpen, inputId }) => {
   };
 
   const onClickResend = () => {
-    console.log(`${user.senderNick}(${user.sender})`);
     setLetterOpen(true);
+    id === user.sender
+      ? setResend(`나에게 쓰기`)
+      : setResend(`${user.senderNick}(${user.sender})`);
+    setReceive(user.sender);
+    setReceiveNick(user.senderNick);
   };
 
-  const onClickDelete = () => {
+  const onClickDelete = async () => {
     console.log(user.no);
+    try {
+      const rsp = await LetterAxiosApi.delLetter(user.no);
+      if (rsp.data) {
+        console.log("삭제성공");
+        setModalOpen(true);
+        setModalContent("메일을 삭제했습니다.");
+      } else {
+        console.log("삭제실패");
+        setModalOpen(true);
+        setModalContent("메일을 삭제하지 못했습니다.");
+      }
+    } catch (e) {
+      console.log("삭제 오류");
+    }
   };
 
   return (
@@ -160,20 +193,18 @@ const LetterDetail = ({ user, onClickBack, setLetterOpen, inputId }) => {
           </>
         ) : (
           <Div type="my">
-            <Bold>나에게 쓴 편지</Bold>
+            <Bold>내게 쓴 편지</Bold>
           </Div>
         )}
 
         <Div type="date">{formatDate(user.date)}</Div>
       </Body>
       <Div type="contents">{user.contents}</Div>
-      <UserDetail
-        open={userOpen}
-        close={closeUser}
-        userId={info}
-        nick={nick}
-        imgUrl={imgUrl}
-      ></UserDetail>
+      <UserDetail open={userOpen} close={closeUser} userId={info}></UserDetail>
+
+      <Modal open={modalOpen} close={closeModal} header="삭제" btn="확인">
+        {modalContent}
+      </Modal>
     </StyledLetterDetail>
   );
 };

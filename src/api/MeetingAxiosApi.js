@@ -68,11 +68,12 @@ const MeetingAxiosApi = {
     };
     return await axios.post(DOMAIN + LOGO + "/master", master);
   },
-  //모임 신청자 list
 
+  //모임 신청자 list
   acceptList: async (id) => {
     return await axios.get(DOMAIN + LOGO + `/acceptlist?id=${id}`);
   },
+
   //가입한 모임 list
   myMeetingList: async (myId) => {
     return await axios.get(DOMAIN + LOGO + `/mymeetinglist?myId=${myId}`);
@@ -87,23 +88,27 @@ const MeetingAxiosApi = {
   memberList: async (no) => {
     return await axios.get(DOMAIN + LOGO + `/memberlist?meetingNo=${no}`);
   },
+  //모임정보
+  meetingInfo: async (no) => {
+    return await axios.get(DOMAIN + LOGO + `/meetinginfo?no=${no}`);
+  },
 
   //공지 list
   scheduleList: async (no) => {
     return await axios.get(DOMAIN + LOGO + `/schedulelist?meetingNo=${no}`);
   },
   //채팅 저장
-  chat: async (id, nick, contents) => {
+  chat: async (meetingNo, id, contents) => {
     const chat = {
+      meetingNo: meetingNo,
       id: id,
-      nick: nick,
       contents: contents,
     };
     return await axios.post(DOMAIN + LOGO + "/chat", chat);
   },
   //그 모임의 채팅 불러오기
-  chatList: async (meetingNo) => {
-    return await axios.get(DOMAIN + LOGO + `/chatlist?meetingNo=${meetingNo}`);
+  chatList: async (no) => {
+    return await axios.get(DOMAIN + LOGO + `/chatlist?no=${no}`);
   },
 
   //그 일정에 글쓴사람 불러오기
@@ -115,7 +120,7 @@ const MeetingAxiosApi = {
     };
     return await axios.post(DOMAIN + LOGO + `/writerlist`, writer);
   },
-
+  // 공지 쓰기
   send: async (no, title, text, id, duration) => {
     const schedule = {
       mno: no,

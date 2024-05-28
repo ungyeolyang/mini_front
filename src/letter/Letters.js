@@ -36,9 +36,7 @@ const Box = styled.div`
       case "date":
         return "20%";
       case "view":
-        return "7%";
-      case "check":
-        return "5%";
+        return "10%";
       default:
         return "auto";
     }
@@ -59,9 +57,6 @@ const Letters = ({
   return (
     <Container>
       <Head>
-        <Box type="check">
-          <input type="checkbox" />
-        </Box>
         <Box type="view">읽음</Box>
         <Box type="author">{category === "send" ? `수신자` : `작성자`}</Box>
         <Box type="title">제목</Box>

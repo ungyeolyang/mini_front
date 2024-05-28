@@ -87,6 +87,7 @@ const Meeting = () => {
   const [isSend, setIsSend] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  const [info, setInfo] = useState();
 
   const [searchCategory, setSearchCategory] = useState("title");
   const [text, setText] = useState("");
@@ -99,6 +100,21 @@ const Meeting = () => {
     setSendOpen(false);
     setIsSend(false);
   };
+
+  const meetingInfo = async () => {
+    try {
+      const rsp = await MeetingAxiosApi.meetingInfo(no);
+      if (rsp.data) {
+        console.log("정보", rsp.data);
+        setInfo(rsp.data[0]);
+      } else {
+        console.log("모임정보를 못불러옴");
+      }
+    } catch (e) {
+      console.log("오류발생");
+    }
+  };
+
   const memberList = async () => {
     try {
       const rsp = await MeetingAxiosApi.memberList(no);
@@ -145,6 +161,7 @@ const Meeting = () => {
   useEffect(() => {
     memberList();
     scheduleList();
+    meetingInfo();
   }, [isSend, isDetail, isDelete]);
 
   return (
@@ -198,7 +215,7 @@ const Meeting = () => {
               />
             )}
           </FullBox>
-          <Chatting no={no} />
+          <Chatting no={no} info={info} />
         </Container>
       </Right>
       <Modal open={modalOpen} close={closeModal} header="오류">

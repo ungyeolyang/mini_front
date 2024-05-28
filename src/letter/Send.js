@@ -99,6 +99,7 @@ const Textarea = styled.textarea`
 const Div = styled.div`
   /* position: absolute; */
   align-items: center;
+  position: relative;
   display: flex;
   width: 25rem;
   flex-direction: ${({ type }) => (type === "id" ? `column` : "row")};
@@ -148,14 +149,25 @@ const Body = styled.div`
 `;
 
 const Send = (props) => {
-  const { open, close, category, setIsSend, isSend, user } = props;
+  const {
+    open,
+    close,
+    category,
+    setIsSend,
+    isSend,
+    user,
+    resend,
+    setReceive,
+    receive,
+    setReceiveNick,
+    receiveNick,
+  } = props;
+
   const id = localStorage.getItem("id");
   const inputId = useRef();
   const context = useContext(UserContext);
   const { nick } = context;
 
-  const [receive, setReceive] = useState("");
-  const [receiveNick, setReceiveNick] = useState("");
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [searchUser, setSearchUser] = useState(null);
@@ -253,11 +265,14 @@ const Send = (props) => {
     conId();
   }, [receive, isId]);
 
-  useEffect(() => {
-    setReceive(user?.id);
-    setReceiveNick(user?.nick);
-    setIsId(true);
-  }, [user]);
+  // useEffect(() => {
+  //   const refresh = () => {
+  //     setReceive(user?.id);
+  //     setReceiveNick(user?.nick);
+  //     setIsId(true);
+  //   };
+  //   refresh();
+  // }, [user]);
 
   // 송신버튼 누르기
   const onClickSend = async () => {
@@ -315,6 +330,7 @@ const Send = (props) => {
                             <Input
                               placeholder="받는사람"
                               onChange={onChangeReceive}
+                              value={resend ? resend : undefined}
                               ref={inputId}
                             />
                             <Error>{idContents}</Error>

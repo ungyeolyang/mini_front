@@ -28,6 +28,9 @@ const Letter = () => {
   const [category, setCategory] = useState("receive");
   const [currentPage, setCurrentPage] = useState(1);
   const [user, setUser] = useState(null);
+  const [resend, setResend] = useState("");
+  const [receive, setReceive] = useState("");
+  const [receiveNick, setReceiveNick] = useState("");
 
   const [isSend, setIsSend] = useState(false);
   const [isDetail, setIsDetail] = useState(false);
@@ -39,6 +42,7 @@ const Letter = () => {
   const closeLetter = () => {
     setLetterOpen(false);
     setIsSend(false);
+    setResend("");
   };
 
   //보낸 편지함 클릭
@@ -88,6 +92,13 @@ const Letter = () => {
     setIsDetail(false);
   };
 
+  const onSetReceive = (props) => {
+    setReceive(props);
+  };
+  const onSetReceiveNick = (props) => {
+    setReceiveNick(props);
+  };
+
   useEffect(() => {
     const getLetter = async () => {
       try {
@@ -133,6 +144,10 @@ const Letter = () => {
               user={user}
               onClickBack={onClickBack}
               setLetterOpen={setLetterOpen}
+              setResend={setResend}
+              setReceive={setReceive}
+              setReceiveNick={setReceiveNick}
+              setIsDetail={setIsDetail}
             />
           </>
         )}
@@ -143,6 +158,11 @@ const Letter = () => {
         category="쪽지쓰기"
         isSend={isSend}
         setIsSend={setIsSend}
+        resend={resend}
+        receive={receive}
+        setReceive={onSetReceive}
+        receiveNick={receiveNick}
+        setReceiveNick={onSetReceiveNick}
       ></Send>
     </Right>
   );
