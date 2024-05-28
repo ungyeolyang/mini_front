@@ -14,27 +14,55 @@ const BoardLi = styled.li`
     border-bottom: none;
     margin-bottom: 0;
   }
+
+  @media (max-width: 720px) {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 5px 0;
+  }
 `;
 const OdContain = styled.div`
   align-items: right;
   display: flex;
+
+  @media (max-width: 720px) {
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+  }
 `;
 const TiContain = styled.div`
   align-items: center;
   margin: 0px 36% 10px 0px;
   text-align: center;
+
+  @media (max-width: 720px) {
+    margin: 0;
+    width: 70%;
+  }
 `;
 
 const BoardTitle = styled.h3`
   width: 500px;
   color: black;
   margin: 0px 0px 10px 0px;
+
+  @media (max-width: 720px) {
+    width: 100%;
+    font-size: 18px;
+  }
 `;
 
 const Board_View = styled.p`
   color: #444;
   font-size: 13px;
   text-align: center;
+
+  @media (max-width: 720px) {
+    text-align: left;
+    margin: 0 10px;
+  }
 `;
 
 const BoardDate = styled.p`
@@ -43,6 +71,12 @@ const BoardDate = styled.p`
   margin-right: 59px;
   margin-bottom: 10px;
   text-align: center;
+
+  @media (max-width: 720px) {
+    text-align: left;
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
 `;
 
 const UserId = styled.p`
@@ -52,6 +86,12 @@ const UserId = styled.p`
   margin-right: 50px;
   margin-bottom: 10px;
   text-align: center;
+
+  @media (max-width: 720px) {
+    text-align: left;
+    margin-right: 10px;
+    margin-bottom: 0;
+  }
 `;
 
 const BoardListItem = ({ board, handleDetailClick, handleView }) => {

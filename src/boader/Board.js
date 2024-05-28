@@ -1,17 +1,19 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AxiosApi from "../api/BoardAxiosApi";
 import BoardList from "./BoardList";
 import Paging from "../component/Paging";
 import Right from "../component/Right";
-import { FaMagnifyingGlass } from "react-icons/fa6";
+import { FaMagnifyingGlass, FaBars } from "react-icons/fa6";
 
+// Styled components
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
+  overflow-y: auto;
 `;
 
 const TopContainer = styled.div`
@@ -30,7 +32,7 @@ const Title = styled.h3`
 
 const CategoryButton = styled.button`
   padding: 10px;
-  width: 150px;
+  width: 240px;
   height: 40px;
   margin-right: 10px;
   background-color: #e9edc9;
@@ -39,6 +41,19 @@ const CategoryButton = styled.button`
   &:hover {
     background-color: #ccd5ae;
     cursor: pointer;
+  }
+
+  @media (max-width: 720px) {
+    padding: 0;
+    margin-right: 0;
+    flex: 1;
+    &:not(:last-child) {
+      margin-right: -1px; /* Remove margin between buttons */
+    }
+    ${(props) =>
+      props.active
+        ? `border-top: 1px solid #118716; border-left: 1px solid #118716; border-right: 1px solid #118716;`
+        : `border-bottom: 1px solid #118716;`}
   }
 `;
 
@@ -63,6 +78,10 @@ const BoardTitleBox = styled.div`
   background-color: #94b9f3;
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 720px) {
+    display: none;
+  }
 `;
 
 const BoardTitle = styled.div`
@@ -73,21 +92,30 @@ const BoardTitle = styled.div`
 `;
 
 const BoardLi = styled.div`
-  padding: 10px;
+  padding: 0px;
+
+  @media (max-width: 720px) {
+    width: calc(100% - 20px);
+    margin: 0 auto 15px auto;
+  }
 `;
 
 const Fobox = styled.div`
   width: 100%;
   max-width: 1200px;
   display: flex;
-  justify-content: space-between;
+
   align-items: center;
   margin-bottom: 20px;
 `;
 
 const SerBox = styled.div`
   display: flex;
-  align-items: center;
+  margin-left: 10%;
+
+  @media (max-width: 720px) {
+    width: 100%;
+  }
 `;
 
 const CategorySelect = styled.select`
@@ -134,8 +162,56 @@ const WriteButton = styled.button`
     background-color: #ccd5ae;
     cursor: pointer;
   }
+
+  @media (max-width: 720px) {
+    align-self: flex-end;
+    margin-bottom: 15px;
+  }
 `;
 
+const HamburgerMenu = styled.div`
+  display: none;
+  @media (max-width: 720px) {
+    display: block;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+  }
+`;
+
+const MenuContent = styled.div`
+  display: none;
+  @media (max-width: 720px) {
+    display: ${({ isOpen }) => (isOpen ? "block" : "none")};
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+`;
+
+const RightContainer = styled.div`
+  display: ${({ isOpen }) => (isOpen ? "block" : "none")};
+  background-color: #fff;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  z-index: 1000;
+  box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.1);
+
+  @media (min-width: 721px) {
+    display: none;
+  }
+`;
+
+// Board Component
 const Board = () => {
   const [boardList, setBoardList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("자유게시판");
@@ -144,8 +220,11 @@ const Board = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [serchCategory, setserchCategory] = useState("제목");
   const [serinput, setserinput] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   const pageSize = 6;
   const navigate = useNavigate();
+
+  const inputFile = useRef(null);
 
   // 게시판에 글 띄우기
   useEffect(() => {
@@ -220,8 +299,20 @@ const Board = () => {
     navigate("/boinser");
   };
 
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
     <Right>
+      <HamburgerMenu onClick={toggleMenu}>
+        <FaBars size={20} />
+      </HamburgerMenu>
+      <MenuContent isOpen={menuOpen} onClick={toggleMenu}>
+        <RightContainer isOpen={menuOpen}>
+          <Right />
+        </RightContainer>
+      </MenuContent>
       <MainContainer>
         <TopContainer>
           <Title>게시판</Title>
@@ -247,6 +338,32 @@ const Board = () => {
               내가 쓴 글
             </CategoryButton>
           </div>
+        </SerchContainer>
+        <BoardBox>
+          <BoardTitleBox>
+            <BoardTitle style={{ flex: 9 }}>제목</BoardTitle>
+            <BoardTitle style={{ flex: 1 }}>작성자</BoardTitle>
+            <BoardTitle style={{ flex: 1 }}>작성일</BoardTitle>
+            <BoardTitle style={{ flex: 1 }}>조회수</BoardTitle>
+          </BoardTitleBox>
+          <BoardLi>
+            <BoardList
+              boardList={paginatedData}
+              handleDetailClick={handleDetailClick}
+              handleView={handleView}
+            />
+          </BoardLi>
+        </BoardBox>
+        <Fobox>
+          <WriteButton onClick={handleClick}>글 쓰기</WriteButton>
+          <SerBox>
+            <Paging
+              page={currentPage}
+              itemsCountPerPage={pageSize}
+              totalItemsCount={boardList.length}
+              onPageChange={handlePageChange}
+            />
+          </SerBox>
           <SerBox>
             <CategorySelect
               defaultValue="title"
@@ -267,30 +384,6 @@ const Board = () => {
               </Inputicon>
             </InputButton>
           </SerBox>
-        </SerchContainer>
-        <BoardBox>
-          <BoardTitleBox>
-            <BoardTitle style={{ flex: 9 }}>제목</BoardTitle>
-            <BoardTitle style={{ flex: 1 }}>작성자</BoardTitle>
-            <BoardTitle style={{ flex: 1 }}>작성일</BoardTitle>
-            <BoardTitle style={{ flex: 1 }}>조회수</BoardTitle>
-          </BoardTitleBox>
-          <BoardLi>
-            <BoardList
-              boardList={paginatedData}
-              handleDetailClick={handleDetailClick}
-              handleView={handleView}
-            />
-          </BoardLi>
-        </BoardBox>
-        <Fobox>
-          <Paging
-            page={currentPage}
-            itemsCountPerPage={pageSize}
-            totalItemsCount={boardList.length}
-            onPageChange={handlePageChange}
-          />
-          <WriteButton onClick={handleClick}>글 쓰기</WriteButton>
         </Fobox>
       </MainContainer>
     </Right>
