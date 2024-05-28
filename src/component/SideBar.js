@@ -90,6 +90,7 @@ const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {
     try {
       const rsp = await FriendAxiosApi.sendList(id);
       if (rsp.data) {
+        console.log("신청목록", rsp.data);
         setSender(rsp.data);
       } else {
         console.log(`리스트가 없음`);

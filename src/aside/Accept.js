@@ -16,6 +16,7 @@ const slideUp = keyframes`
 `;
 const StyledAccept = styled.div`
   display: flex;
+  width: 20rem;
   opacity: 0;
   flex-direction: column;
   margin-bottom: 1rem;
@@ -29,17 +30,27 @@ const Head = styled.div`
 const Body = styled.div`
   background-color: #e5f3ff;
   display: flex;
-  justify-content: center;
   align-items: center;
   padding: 1rem;
   gap: 1rem;
   border-radius: 0 0 1rem 1rem;
 `;
 const Cdiv = styled.div`
-  background-color: #e5f3ff;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+`;
+const Div = styled.div`
+  display: flex;
+  gap: 0.5rem;
+`;
+
+const Detail = styled.div`
+  display: flex;
+  border: 2px solid #b8d0fa;
+  padding: 1rem;
+  position: absolute;
+  top: 0;
 `;
 
 const Accept = ({ user, onClickOk, onClickNo }) => {
@@ -48,7 +59,7 @@ const Accept = ({ user, onClickOk, onClickNo }) => {
   useEffect(() => {
     const getMember = async () => {
       try {
-        const rsp = await LoginAxiosApi.memberGetOne(user);
+        const rsp = await LoginAxiosApi.memberGetOne(user.id);
         setMember(rsp.data[0]);
       } catch (e) {
         console.log(e);
@@ -58,19 +69,21 @@ const Accept = ({ user, onClickOk, onClickNo }) => {
   }, [user]);
 
   return (
-    <StyledAccept key={user}>
-      <Head>친구신청</Head>
+    <StyledAccept>
+      <Head>모임신청</Head>
       <Body>
         <Profile size={`5rem`} src={member?.profile}></Profile>
         <Cdiv>
           <div>
             <span style={{ fontWeight: `bold` }}>{member?.nick}</span>
-            <span> ({user})</span>
+            <span> ({user.id})</span>
           </div>
-          <div>
+          <div>{user.detail}</div>
+          <Detail>{user.detail}</Detail>
+          <Div>
             <Btn onClick={() => onClickOk(user)}>수락</Btn>
             <Btn onClick={() => onClickNo(user)}>거절</Btn>
-          </div>
+          </Div>
         </Cdiv>
       </Body>
     </StyledAccept>

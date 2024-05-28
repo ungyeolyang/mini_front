@@ -46,6 +46,11 @@ const MeetingAxiosApi = {
     };
     return await axios.post(DOMAIN + LOGO + "/master", master);
   },
+  //모임 신청자 list
+
+  acceptList: async (id) => {
+    return await axios.get(DOMAIN + LOGO + `/acceptlist?id=${id}`);
+  },
   //가입한 모임 list
   myMeetingList: async (myId) => {
     return await axios.get(DOMAIN + LOGO + `/mymeetinglist?myId=${myId}`);

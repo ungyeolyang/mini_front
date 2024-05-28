@@ -8,9 +8,15 @@ import { UserContext } from "../context/UserStore";
 import SideBar from "../component/SideBar";
 import MeetingAxiosApi from "../api/MeetingAxiosApi";
 import MyMeeting from "./MyMeeting";
+import Accept from "./Accept";
 
 const Container = styled.div`
   display: flex;
+
+  @media (max-width: 720px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const Logo = styled.div`
@@ -51,6 +57,12 @@ const Side = styled.div`
   background-color: #fefae0;
   width: ${({ isLogin }) => (isLogin ? `20vw` : `40vw`)};
   justify-content: ${({ isLogin }) => !isLogin && `center`};
+
+  @media (max-width: 720px) {
+    display: flex;
+    height: 8rem;
+    width: 100vw;
+  }
 `;
 
 const Body = styled.div`
@@ -111,10 +123,13 @@ const Head = styled.div`
 `;
 
 const Aside = () => {
+  const id = localStorage.getItem("id");
+  const navigate = useNavigate();
+
   const [member, setMember] = useState();
   const [myMeeting, setMyMeeting] = useState();
-
-  const navigate = useNavigate();
+  const [accept, setAccept] = useState();
+  const [refresh, setRefresh] = useState(false);
 
   const onClickDetail = (props) => {
     console.log(props);
@@ -135,8 +150,6 @@ const Aside = () => {
     setOnDisplay,
   } = context;
 
-  const id = localStorage.getItem("id");
-
   const onClickLogo = () => {
     navigate(isLogin ? "/main" : "/");
   };
@@ -148,6 +161,30 @@ const Aside = () => {
   const onClickLogOut = () => {
     navigate("/");
     localStorage.clear();
+  };
+  //친구 수락버튼 클릭
+  const onClickOk = async (user) => {
+    try {
+      // const rsp = await FriendAxiosApi.friendOk(id, user);
+      // if (rsp.data) {
+      //   console.log("수락성공");
+      //   setRefresh(!refresh);
+      // } else {
+      //   console.log("수락실패");
+      // }
+    } catch (e) {}
+  };
+  //친구 거절버튼 클릭
+  const onClickNo = async (user) => {
+    try {
+      // const rsp = await FriendAxiosApi.delFriend(id, user);
+      // if (rsp.data) {
+      //   console.log("거절성공");
+      //   setRefresh(!refresh);
+      // } else {
+      //   console.log("거절실패");
+      // }
+    } catch (e) {}
   };
 
   const myMeetingList = async () => {
@@ -164,19 +201,36 @@ const Aside = () => {
     }
   };
 
-  useEffect(() => {
-    const getMember = async () => {
-      try {
-        const rsp = await LoginAxiosApi.memberGetOne(id);
-        setMember(rsp.data[0]);
-        setNick(rsp.data[0]?.nick);
-        setImgUrl(rsp.data[0]?.profile);
-      } catch (e) {
-        console.log(e);
+  //친구 신청받은 목록
+  const acceptList = async () => {
+    try {
+      const rsp = await MeetingAxiosApi.acceptList(id);
+      if (rsp.data) {
+        console.log(rsp.data);
+        setAccept(rsp.data);
+      } else {
+        console.log(`리스트가 없음`);
       }
-    };
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const getMember = async () => {
+    try {
+      const rsp = await LoginAxiosApi.memberGetOne(id);
+      setMember(rsp.data[0]);
+      setNick(rsp.data[0]?.nick);
+      setImgUrl(rsp.data[0]?.profile);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
     getMember();
     myMeetingList();
+    acceptList();
   }, [id, nick, imgUrl]);
 
   return (
@@ -205,6 +259,14 @@ const Aside = () => {
               ))}
           </header>
           <footer>
+            {accept &&
+              accept.map((user) => (
+                <Accept
+                  user={user}
+                  onClickOk={onClickOk}
+                  onClickNo={onClickNo}
+                ></Accept>
+              ))}
             <Link to="/board">게시판</Link>ㅣ<Link to="/letter">편지함</Link>
           </footer>
         </Body>
