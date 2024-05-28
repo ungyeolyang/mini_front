@@ -93,7 +93,7 @@ const Moim = ({ meeting, onClickMoim }) => {
           <FaLocationDot style={{ color: `gray` }} />
           {meeting.location === "온라인"
             ? meeting.location
-            : meeting.location.split(" ")[1]}
+            : meeting.location?.split(" ")[1]}
         </div>
         <div>
           <FaClock style={{ color: `gray` }} />

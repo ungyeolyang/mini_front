@@ -187,8 +187,25 @@ const Board = () => {
   const [serchCategory, setserchCategory] = useState("제목");
   const [serinput, setserinput] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-  const pageSize = 6;
+  const [pageSize, setPageSize] = useState(6);
+
   const navigate = useNavigate();
+  useEffect(() => {
+    const updatePageSize = () => {
+      if (window.innerWidth <= 720) {
+        setPageSize(10);
+      } else {
+        setPageSize(6);
+      }
+    };
+
+    updatePageSize(); // 초기 페이지 크기 설정
+
+    window.addEventListener("resize", updatePageSize); // 리사이즈 이벤트 리스너 추가
+    return () => {
+      window.removeEventListener("resize", updatePageSize); // 리사이즈 이벤트 리스너 제거
+    };
+  }, []);
 
   const inputFile = useRef(null);
 
