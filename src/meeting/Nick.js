@@ -7,7 +7,8 @@ const StyledNick = styled.div`
   padding-right: 1rem;
   overflow: hidden;
   font-size: 0.8rem;
-  background-color: aliceblue;
+  background-color: #e9edc9;
+  border-radius: 5px 0 0 5px;
 `;
 
 const Nick = ({ id }) => {

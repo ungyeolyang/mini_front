@@ -23,7 +23,6 @@ const StyledFriend = styled.div`
 `;
 
 const Cdiv = styled.div`
-  background-color: #e5f3ff;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -38,7 +37,7 @@ const Div = styled.div`
   margin-bottom: 1rem;
 `;
 
-const Friend = ({ user }) => {
+const Friend = ({ user, onClickDetail }) => {
   const [member, setMember] = useState();
 
   useEffect(() => {
@@ -56,7 +55,11 @@ const Friend = ({ user }) => {
   return (
     <StyledFriend>
       <Div>
-        <Profile size={`5rem`} src={member?.profile}></Profile>
+        <Profile
+          size={`5rem`}
+          src={member?.profile}
+          onClick={() => onClickDetail(user)}
+        ></Profile>
         <Cdiv>
           <div>
             <span style={{ fontWeight: `bold` }}>{member?.nick}</span>

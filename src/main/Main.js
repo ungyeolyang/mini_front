@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import Right from "../component/Right";
 import Paging from "../component/Paging";
 import Btn from "../component/Btn";

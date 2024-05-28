@@ -19,7 +19,7 @@ const ChatOutBox = styled.div`
 const ChatInBox = styled.div`
   width: 95%;
   height: 96%;
-  background-color: white;
+  background-color: #e5f3ff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -29,30 +29,36 @@ const Chat = styled.div`
   padding-top: 1rem;
   width: 100%;
   height: 83%;
-  background-color: green;
   overflow: auto;
 `;
 
-const Title = styled.h1`
+const Title = styled.div`
+  width: 100%;
+  padding: 1rem 0;
   text-align: center;
-  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  background-color: #b8d0fa;
 `;
 
 const InputBox = styled.div`
   width: 90%;
   display: flex;
-  background-color: gray;
+  background-color: transparent;
   position: absolute;
   bottom: 1.5rem;
   padding: 0.3rem;
+  border: 3px solid silver;
+  border-radius: 1rem;
 `;
 
 const Input = styled.input`
   width: 84%;
-  padding-left: 0.5rem;
+  padding-left: 1rem;
   outline: none;
   background-color: inherit;
   border: none;
+  font-weight: bold;
 `;
 
 const Chatting = ({ info }) => {

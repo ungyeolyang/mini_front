@@ -310,8 +310,7 @@ const SignUp = () => {
           <H onClick={() => {}}>회원가입</H>
           <Div>
             <Placeholder>*프로필</Placeholder>
-            <Profile onClick={onClickInputFile} size={"9rem"}>
-              <img src={previewUrl} alt="프로필사진" />
+            <Profile onClick={onClickInputFile} size={"9rem"} src={previewUrl}>
               <input
                 type="file"
                 onChange={onChangFile}

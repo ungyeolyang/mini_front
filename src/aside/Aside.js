@@ -109,6 +109,7 @@ const Body = styled.div`
     color: #707070;
     position: absolute;
     bottom: 3rem;
+    font-size: 14px;
 
     a {
       margin: 0.7rem;
@@ -376,7 +377,7 @@ const Aside = () => {
     acceptList();
     acceptList1();
     myMeetingList1();
-  }, [id, nick, imgUrl]);
+  }, [id, nick, imgUrl, refresh, isOpen]);
 
   return (
     <Container>

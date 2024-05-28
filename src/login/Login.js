@@ -69,6 +69,7 @@ const Login = () => {
   const [findOpen, setFindOpen] = useState(false);
 
   const [category, setCategory] = useState(null);
+  const [content, setContent] = useState("");
 
   const onSelect = (category) => {
     setCategory(category);
@@ -84,6 +85,7 @@ const Login = () => {
   const closeFind = () => {
     setFindOpen(false);
     setIsFind(false);
+    setContent("");
   };
 
   //아이디 입력
@@ -118,6 +120,7 @@ const Login = () => {
     setFindOpen(true);
     setCategory(e.target.textContent);
   };
+
   const onKeyDownEnter = (e) => {
     if (e.key === "Enter") {
       onClickLogin();
@@ -176,6 +179,8 @@ const Login = () => {
         onSelect={onSelect}
         isFind={isFind}
         onFind={onFind}
+        content={content}
+        setContent={setContent}
       ></FindIdPw>
     </>
   );

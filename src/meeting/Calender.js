@@ -11,6 +11,7 @@ const Week = styled.div`
 `;
 
 const DayBox = styled.div`
+  background-color: #e5f3ff;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -19,6 +20,9 @@ const DayBox = styled.div`
   position: relative;
   border: 1px solid silver;
   cursor: pointer;
+  &:hover {
+    background-color: #b8d0fa;
+  }
 `;
 
 const Day = styled.div`

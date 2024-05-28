@@ -64,16 +64,24 @@ const StyledSideBar = styled.div`
   }
 `;
 
-const Head = styled.div`
+const Head = styled.span`
   background-color: #b8d0fa;
   padding: 0.7rem;
   border-radius: 1rem 1rem 0 0;
+`;
+const Line = styled.div`
+  display: flex;
+  border-bottom: 3px solid #b8d0fa;
+  width: 95%;
+  padding-left: 1rem;
 `;
 
 const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {
   const [sender, setSender] = useState([]);
   const [friend, setFriend] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
+  const [detail, setDetail] = useState("");
 
   const onClickOut = () => {
     setOnDisplay(false);
@@ -138,6 +146,11 @@ const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {
       }
     } catch (e) {}
   };
+  const onClickDetail = (props) => {
+    // console.log(props);
+    setDetail(props);
+    setUserOpen(true);
+  };
 
   useEffect(() => {
     sendList();
@@ -152,9 +165,17 @@ const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {
         onClick={onClickSide}
       >
         <header>
-          <Head>내친구</Head>
+          <Line>
+            <Head>내친구</Head>
+          </Line>
           {friend &&
-            friend.map((user) => <Friend key={user} user={user}></Friend>)}
+            friend.map((user) => (
+              <Friend
+                key={user}
+                user={user}
+                onClickDetail={onClickDetail}
+              ></Friend>
+            ))}
         </header>
         <footer>
           {sender &&
@@ -168,7 +189,11 @@ const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {
             ))}
         </footer>
       </StyledSideBar>
-      ;
+      <UserDetail
+        open={userOpen}
+        close={() => setUserOpen(false)}
+        userId={detail}
+      ></UserDetail>
     </Container>
   );
 };

@@ -11,7 +11,7 @@ const StyledScheduleBox = styled.div`
   footer {
     display: flex;
     align-items: center;
-    gap: 17rem;
+    gap: 30%;
     position: relative;
     width: 100%;
   }

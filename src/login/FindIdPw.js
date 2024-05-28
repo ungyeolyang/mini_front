@@ -121,12 +121,20 @@ const Error = styled.span`
 `;
 
 const FindIdPw = (props) => {
-  const { open, close, category, onSelect, onFind, isFind } = props;
+  const {
+    open,
+    close,
+    category,
+    onSelect,
+    onFind,
+    isFind,
+    content,
+    setContent,
+  } = props;
 
   const [inputId, setInputId] = useState("");
   const [inputEmail, setInputEmail] = useState("");
   const [hasId, setHasId] = useState(false);
-  const [content, setContent] = useState("");
 
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
@@ -146,7 +154,7 @@ const FindIdPw = (props) => {
     try {
       const rsp = await LoginAxiosApi.memberCertEmail(inputEmail, category);
       console.log(rsp.data);
-      if (!hasId) {
+      if (!hasId && category === "비밀번호 찾기") {
         setModalOpen(true);
         setModalContent("아이디와 이메일을 재 확인 해 주세요.");
       } else if (rsp.data) {
@@ -167,23 +175,33 @@ const FindIdPw = (props) => {
   };
   //아이디 확인
   const onChangeId = async (e) => {
-    setInputId(e.target.value);
+    const id = e.target.value;
+    setInputId(id);
 
     try {
-      const rsp = await LoginAxiosApi.memberCertId(inputId);
+      const rsp = await LoginAxiosApi.memberConId(id);
       console.log(rsp.data);
-      if (!inputId || inputId.length <= 3) {
-        setContent("");
-        setHasId(false);
-      } else if (!rsp.data && inputId.length >= 3) {
-        setContent("아이디를 재 확인 해 주세요.");
-        setHasId(false);
-      } else {
-        setContent("");
-        setHasId(true);
+      if (category === "비밀번호 찾기") {
+        if (!id || id.length <= 3) {
+          setContent("");
+          setHasId(false);
+        } else if (!rsp.data && id.length >= 3) {
+          setContent("아이디를 재 확인 해 주세요.");
+          setHasId(false);
+        } else {
+          console.log(rsp.data);
+          setContent("");
+          setHasId(true);
+        }
       }
     } catch (e) {
       console.log(e);
+    }
+  };
+
+  const onKeyDownEnter = (e) => {
+    if (e.key === "Enter") {
+      onClickCert();
     }
   };
 
@@ -219,6 +237,7 @@ const FindIdPw = (props) => {
                             placeholder="아이디를 입력해주세요."
                             ref={id}
                             onChange={onChangeId}
+                            onKeyDown={onKeyDownEnter}
                           />
                           <Error>{content}</Error>
                         </div>
@@ -227,6 +246,7 @@ const FindIdPw = (props) => {
                         <Input
                           placeholder="이메일을 입력해주세요."
                           onChange={onChangeEmail}
+                          onKeyDown={onKeyDownEnter}
                         />
                         <Button onClick={onClickCert}>확인</Button>
                       </div>
