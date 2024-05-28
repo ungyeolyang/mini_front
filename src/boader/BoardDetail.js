@@ -49,6 +49,9 @@ const MainDetail = styled.div`
   background-color: white;
   box-shadow: 10px 10px 20px #94b9f3;
   overflow: hidden;
+  @media (max-width: 720px) {
+    margin: 0 17px;
+  }
 `;
 
 const DetailHeader = styled.div`
@@ -65,6 +68,9 @@ const DetailCenter = styled.div`
   background-color: #ced4da;
   margin: 15px 40px;
   display: flex;
+  @media (max-width: 720px) {
+    margin: 15px 27px;
+  }
 `;
 
 const BoardView = styled.p`
@@ -81,6 +87,9 @@ const BoardDate = styled.p`
   color: black;
   font-size: 15px;
   margin-right: 30%;
+  @media (max-width: 720px) {
+    margin-right: 20%;
+  }
 `;
 
 const UserId = styled.p`
@@ -90,6 +99,9 @@ const UserId = styled.p`
   color: black;
   font-size: 15px;
   margin-right: 30%;
+  @media (max-width: 720px) {
+    margin-right: 14%;
+  }
 `;
 
 const DetailContent = styled.p`
@@ -120,6 +132,9 @@ const BrButton = styled.button`
   &:hover {
     background-color: #ccd5ae;
     cursor: pointer;
+  }
+  @media (max-width: 720px) {
+    margin-right: 33px;
   }
 `;
 

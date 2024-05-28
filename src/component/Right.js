@@ -21,6 +21,17 @@ const StyledRight = styled.div`
   height: 100vh;
   animation: ${({ isLogin }) => rightShow(isLogin)} 0.4s forwards;
   width: ${({ isLogin }) => (isLogin ? "80vw" : "60vw")};
+  @media (max-width: 720px) {
+    display: flex;
+    position: relative;
+    background-color: ${({ backgroundColor }) => backgroundColor || `inherit`};
+    ${({ isLogin }) => !isLogin && `flex-direction: column;`};
+    justify-content: ${({ center }) => center !== "center" && `center`};
+    align-items: center;
+    height: 100vh;
+    animation: none;
+    width: ${({ isLogin }) => (isLogin ? "100vw" : "60vw")};
+  }
 `;
 
 // Right 컴포넌트 정의

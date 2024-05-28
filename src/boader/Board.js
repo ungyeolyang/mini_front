@@ -12,7 +12,7 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
+  width: 100vw;
   overflow-y: auto;
 `;
 
@@ -32,7 +32,7 @@ const Title = styled.h3`
 
 const CategoryButton = styled.button`
   padding: 10px;
-  width: 240px;
+  width: 237px;
   height: 40px;
   margin-right: 10px;
   background-color: #e9edc9;
@@ -44,6 +44,7 @@ const CategoryButton = styled.button`
   }
 
   @media (max-width: 720px) {
+    margin-left: 1px;
     padding: 0;
     margin-right: 0;
     flex: 1;
@@ -111,10 +112,11 @@ const Fobox = styled.div`
 
 const SerBox = styled.div`
   display: flex;
-  margin-left: 10%;
+  margin-left: 20%;
 
   @media (max-width: 720px) {
     width: 100%;
+    margin-left: 9%;
   }
 `;
 
@@ -124,6 +126,9 @@ const CategorySelect = styled.select`
   margin-right: 10px;
   width: 120px;
   height: 40px;
+  @media (max-width: 720px) {
+    margin-left: 100px;
+  }
 `;
 
 const Cateinput = styled.input`
@@ -133,6 +138,9 @@ const Cateinput = styled.input`
   border: 1px solid #ced4da;
   margin-right: 10px;
   padding-left: 10px;
+  @media (max-width: 720px) {
+    width: 340px;
+  }
 `;
 
 const InputButton = styled.button`
@@ -166,48 +174,6 @@ const WriteButton = styled.button`
   @media (max-width: 720px) {
     align-self: flex-end;
     margin-bottom: 15px;
-  }
-`;
-
-const HamburgerMenu = styled.div`
-  display: none;
-  @media (max-width: 720px) {
-    display: block;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 1000;
-  }
-`;
-
-const MenuContent = styled.div`
-  display: none;
-  @media (max-width: 720px) {
-    display: ${({ isOpen }) => (isOpen ? "block" : "none")};
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-  }
-`;
-
-const RightContainer = styled.div`
-  display: ${({ isOpen }) => (isOpen ? "block" : "none")};
-  background-color: #fff;
-  padding: 20px;
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 300px;
-  height: 100%;
-  z-index: 1000;
-  box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.1);
-
-  @media (min-width: 721px) {
-    display: none;
   }
 `;
 
@@ -305,14 +271,6 @@ const Board = () => {
 
   return (
     <Right>
-      <HamburgerMenu onClick={toggleMenu}>
-        <FaBars size={20} />
-      </HamburgerMenu>
-      <MenuContent isOpen={menuOpen} onClick={toggleMenu}>
-        <RightContainer isOpen={menuOpen}>
-          <Right />
-        </RightContainer>
-      </MenuContent>
       <MainContainer>
         <TopContainer>
           <Title>게시판</Title>
@@ -364,27 +322,27 @@ const Board = () => {
               onPageChange={handlePageChange}
             />
           </SerBox>
-          <SerBox>
-            <CategorySelect
-              defaultValue="title"
-              value={serchCategory}
-              onChange={(e) => setserchCategory(e.target.value)}
-            >
-              <option value="제목">제목</option>
-              <option value="작성자">작성자</option>
-            </CategorySelect>
-            <Cateinput
-              type="text"
-              placeholder="검색어를 입력해 주세요"
-              onChange={handleSerinputChange}
-            />
-            <InputButton onClick={handleSubmit}>
-              <Inputicon>
-                <FaMagnifyingGlass />
-              </Inputicon>
-            </InputButton>
-          </SerBox>
         </Fobox>
+        <SerBox style={{ margin: "0", marginBottom: "50px" }}>
+          <CategorySelect
+            defaultValue="title"
+            value={serchCategory}
+            onChange={(e) => setserchCategory(e.target.value)}
+          >
+            <option value="제목">제목</option>
+            <option value="작성자">작성자</option>
+          </CategorySelect>
+          <Cateinput
+            type="text"
+            placeholder="검색어를 입력해 주세요"
+            onChange={handleSerinputChange}
+          />
+          <InputButton onClick={handleSubmit}>
+            <Inputicon>
+              <FaMagnifyingGlass />
+            </Inputicon>
+          </InputButton>
+        </SerBox>
       </MainContainer>
     </Right>
   );

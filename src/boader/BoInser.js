@@ -15,6 +15,10 @@ const InserMainContainer = styled.div`
   padding: 20px;
   background-color: #fff7d6;
   margin-left: 10px;
+  @media (max-width: 720px) {
+    width: 77vw;
+    margin: 0;
+  }
 `;
 
 const ContentContainer = styled.div`
@@ -161,6 +165,9 @@ const MainContainer = styled.div`
   width: 50%;
   overflow-y: auto;
   height: 100%;
+  @media (max-width: 720px) {
+    display: none;
+  }
 `;
 const BoInser = () => {
   const [Board_title, setBoard_title] = useState("");
