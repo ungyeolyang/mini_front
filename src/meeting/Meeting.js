@@ -100,7 +100,7 @@ const Meeting = () => {
   };
   const memberList = async () => {
     try {
-      const rsp = await MeetingAxiosApi.memberList(13);
+      const rsp = await MeetingAxiosApi.memberList(no);
       if (rsp.data) {
         setMember(rsp.data);
       } else {

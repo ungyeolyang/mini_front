@@ -13,6 +13,23 @@ const MeetingAxiosApi = {
     };
     return await axios.post(DOMAIN + LOGO + "/application", meeting);
   },
+  //모임 수락되면 true
+  acceptOk: async (no, id) => {
+    const member = {
+      no: no,
+      id: id,
+    };
+    return await axios.post(DOMAIN + LOGO + `/acceptok`, member);
+  },
+
+  //모임 거절되면 true
+  delMember: async (no, id) => {
+    const member = {
+      no: no,
+      id: id,
+    };
+    return await axios.post(DOMAIN + LOGO + `/delmember`, member);
+  },
   //모집하기
   recruit: async (
     id,
@@ -65,6 +82,7 @@ const MeetingAxiosApi = {
   memberList: async (no) => {
     return await axios.get(DOMAIN + LOGO + `/memberlist?meetingNo=${no}`);
   },
+
   //공지 list
   scheduleList: async (no) => {
     return await axios.get(DOMAIN + LOGO + `/schedulelist?meetingNo=${no}`);
