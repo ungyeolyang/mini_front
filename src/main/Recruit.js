@@ -222,10 +222,6 @@ const Recruit = (props) => {
     setIsPopupOpen(false);
   };
 
-  const resetAddress = () => {
-    setAddress("");
-  };
-
   const onChangeTitle = (e) => {
     setTitle(e.target.value);
   };

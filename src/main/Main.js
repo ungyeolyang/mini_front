@@ -107,6 +107,7 @@ const Main = () => {
   const [serchCategory, setserchCategory] = useState("제목");
   const [serinput, setserinput] = useState("");
   const [accept, setAccept] = useState([]);
+  const [address, setAddress] = useState("");
 
   const [modalOpen, setModalOpen] = useState(false);
   const [header, setHeader] = useState("");
@@ -230,6 +231,8 @@ const Main = () => {
         setModalOpen={setModalOpen}
         setModalContent={setModalContent}
         setHeader={setHeader}
+        address={address}
+        setAddress={setAddress}
       ></Recruit>
       <Modal
         open={modalOpen}

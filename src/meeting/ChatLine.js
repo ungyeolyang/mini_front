@@ -69,11 +69,15 @@ const ChatLine = ({ user, id }) => {
     };
     getMember();
   }, []);
+
+  useEffect(() => {
+    console.log("아이디", member.id);
+  }, []);
   return (
     <Line display={id === user.id}>
-      <Profile display={id === user.id} src={member.Profile} />
+      <Profile size={"4rem"} display={id === member.id} src={member.profile} />
       <Box>
-        <Nick display={id === user.id}>{member.Nick}</Nick>
+        <Nick display={id === member.id}>{member.nick}</Nick>
         <Contents>{user.contents}</Contents>
       </Box>
       <Time>{formatDate(user.date)}</Time>
