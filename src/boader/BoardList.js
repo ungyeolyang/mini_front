@@ -5,6 +5,7 @@ import BoardListItem from "./BoardListItem";
 const BoardUl = styled.ul`
   list-style-type: none;
   padding: 0;
+  margin: 0;
 `;
 
 const BoardList = ({ boardList, handleDetailClick, handleView }) => {
