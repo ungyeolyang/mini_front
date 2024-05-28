@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import Btn from "../component/Btn";
 import UserDetail from "../component/UserDetail";
 import { UserContext } from "../context/UserStore";
+import Send from "./Send";
 
 const StyledLetterDetail = styled.div`
   display: flex;
@@ -79,7 +80,7 @@ const Body = styled.div`
   background-color: #b8d0fa;
 `;
 
-const LetterDetail = ({ user, onClickBack }) => {
+const LetterDetail = ({ user, onClickBack, setLetterOpen, inputId }) => {
   const context = useContext(UserContext);
   const { nick, imgUrl } = context;
 
@@ -119,12 +120,21 @@ const LetterDetail = ({ user, onClickBack }) => {
     setUserOpen(false);
   };
 
+  const onClickResend = () => {
+    console.log(`${user.senderNick}(${user.sender})`);
+    setLetterOpen(true);
+  };
+
+  const onClickDelete = () => {
+    console.log(user.no);
+  };
+
   return (
     <StyledLetterDetail>
       <Div type="head">
         <StyledLeft onClick={onClickBack} />
-        <Btn>답장</Btn>
-        <Btn>삭제</Btn>
+        <Btn onClick={onClickResend}>답장</Btn>
+        <Btn onClick={onClickDelete}>삭제</Btn>
       </Div>
       <Body>
         <Div type="title">

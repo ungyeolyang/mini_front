@@ -149,8 +149,8 @@ const Body = styled.div`
 
 const Send = (props) => {
   const { open, close, category, setIsSend, isSend, user } = props;
-  const inputId = useRef();
   const id = localStorage.getItem("id");
+  const inputId = useRef();
   const context = useContext(UserContext);
   const { nick } = context;
 

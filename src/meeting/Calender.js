@@ -65,7 +65,13 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const Calendar = ({ meetingNo, setIsDetail, setText, setSearchCategory }) => {
+const Calendar = ({
+  meetingNo,
+  setIsDetail,
+  setText,
+  setSearchCategory,
+  isSend,
+}) => {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
@@ -91,7 +97,7 @@ const Calendar = ({ meetingNo, setIsDetail, setText, setSearchCategory }) => {
 
   useEffect(() => {
     writerList();
-  }, [year, month]);
+  }, [year, month, isSend]);
 
   const onClickDay = (e, type) => {
     switch (type) {

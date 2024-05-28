@@ -86,6 +86,7 @@ const Meeting = () => {
   const [detailOpen, setDetailOpen] = useState(false);
   const [isSend, setIsSend] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
+  const [isDelete, setIsDelete] = useState(false);
 
   const [searchCategory, setSearchCategory] = useState("title");
   const [text, setText] = useState("");
@@ -134,6 +135,7 @@ const Meeting = () => {
 
   const onClickBack = () => {
     setDetailOpen(false);
+    setIsDelete(false);
   };
 
   const onClickSchedule = () => {
@@ -141,10 +143,9 @@ const Meeting = () => {
   };
 
   useEffect(() => {
-    console.log(no);
     memberList();
     scheduleList();
-  }, [sendOpen]);
+  }, [isSend, isDetail, isDelete]);
 
   return (
     <>
@@ -184,6 +185,7 @@ const Meeting = () => {
                 setIsDetail={setIsDetail}
                 setText={setText}
                 setSearchCategory={setSearchCategory}
+                isSend={isSend}
               />
             ) : (
               <ScheduleBox
@@ -196,7 +198,7 @@ const Meeting = () => {
               />
             )}
           </FullBox>
-          <Chatting />
+          <Chatting no={no} />
         </Container>
       </Right>
       <Modal open={modalOpen} close={closeModal} header="오류">
@@ -208,6 +210,8 @@ const Meeting = () => {
         user={user}
         formatDetailDate={formatDetailDate}
         formatDate={formatDate}
+        isDelete={isDelete}
+        setIsDelete={setIsDelete}
       ></ScheduleDetail>
       <ScheduleSend
         open={sendOpen}

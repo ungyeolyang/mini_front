@@ -1,9 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Btn from "../component/Btn";
 import Modal from "../component/Modal";
 import UserDetail from "../component/UserDetail";
 import { UserContext } from "../context/UserStore";
+import LoginAxiosApi from "../api/LoginAxiosApi";
+import MeetingAxiosApi from "../api/MeetingAxiosApi";
 
 const ModalStyle = styled.div`
   .modal {
@@ -117,7 +119,7 @@ const Div = styled.div`
   font-size: ${({ type }) => {
     switch (type) {
       case "title":
-        return `1.5rem`;
+        return `2rem`;
       case "date":
         return `0.9rem`;
       default:
@@ -148,18 +150,29 @@ const Body = styled.div`
   flex-direction: column;
   background-color: #b8d0fa;
 `;
+const Del = styled.div`
+  text-align: center;
+  font-size: 1.5rem;
+`;
 
 const ScheduleDetail = (props) => {
-  const { open, close, user, formatDate, formatDetailDate } = props;
+  const {
+    open,
+    close,
+    user,
+    formatDate,
+    formatDetailDate,
+    setIsDelete,
+    isDelete,
+  } = props;
   const id = localStorage.getItem("id");
-
   const context = useContext(UserContext);
-  const { nick, imgUrl } = context;
+  const { rpad } = context;
 
   const [userOpen, setUserOpen] = useState(false);
-
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [nick, setNick] = useState("");
 
   // 알림창 닫기
   const closeModal = () => {
@@ -173,7 +186,33 @@ const ScheduleDetail = (props) => {
   const closeUser = () => {
     setUserOpen(false);
   };
+  const onClickDelete = async (sno) => {
+    console.log(sno);
+    try {
+      const rsp = await MeetingAxiosApi.delSchedule(sno);
+      if (rsp.data) {
+        console.log("삭제성공");
+      } else {
+        console.log("삭제실패");
+      }
+    } catch (e) {
+      console.log("삭제 오류");
+    }
+    setIsDelete(true);
+  };
 
+  useEffect(() => {
+    const getMember = async () => {
+      try {
+        const rsp = await LoginAxiosApi.memberGetOne(id);
+        console.log(rsp.data);
+        setNick(rsp.data[0].nick);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getMember();
+  }, []);
   return (
     <>
       <ModalStyle>
@@ -185,23 +224,34 @@ const ScheduleDetail = (props) => {
                 <button onClick={close}>&times;</button>
               </header>
               <main>
-                <Body>
-                  <Div type="title">
-                    <Bold>{user.title}</Bold>
-                    <Div>
-                      <span>일정 : {formatDate(user.sdate)}</span>
-                      {id === user.id && <Btn>삭제</Btn>}
-                    </Div>
-                  </Div>
-                  <Div type="receive">
-                    <Bold>작성자</Bold>
-                    <User onClick={onClickUser} user={user.id}>
-                      {user.nick}({user.id})
-                    </User>
-                  </Div>
-                  <Div type="date">{formatDetailDate(user.bdate)}</Div>
-                </Body>
-                <Div type="contents">{user.contents}</Div>
+                {!isDelete ? (
+                  <>
+                    <Body>
+                      <Div type="title">
+                        <Bold>{user.title}</Bold>
+                        <Div>
+                          <span>일정 : {formatDate(user.sdate)}</span>
+                          {id === user.id && (
+                            <Btn onClick={() => onClickDelete(user.sno)}>
+                              삭제
+                            </Btn>
+                          )}
+                        </Div>
+                      </Div>
+                      <Div type="receive">
+                        <Bold>작성자</Bold>
+                        <User onClick={onClickUser} user={user.id}>
+                          <Bold>{nick}</Bold>(
+                          {rpad(user.id.substr(0, 3), user.id.length, "*")})
+                        </User>
+                      </Div>
+                      <Div type="date">{formatDetailDate(user.bdate)}</Div>
+                    </Body>
+                    <Div type="contents">{user.contents}</Div>
+                  </>
+                ) : (
+                  <Del>삭제가 완료되었습니다.</Del>
+                )}
               </main>
             </section>
           )}
@@ -214,8 +264,6 @@ const ScheduleDetail = (props) => {
         open={userOpen}
         close={closeUser}
         userId={user?.id}
-        nick={nick}
-        imgUrl={imgUrl}
       ></UserDetail>
     </>
   );

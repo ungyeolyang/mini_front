@@ -4,7 +4,7 @@ import Right from "../component/Right";
 import Send from "./Send";
 import LetterAxiosApi from "../api/LetterAxiosApi";
 import { TbMailOpened, TbSend } from "react-icons/tb";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LetterBox from "./LetterBox";
 import LetterDetail from "./LetterDetail";
 
@@ -129,7 +129,11 @@ const Letter = () => {
           />
         ) : (
           <>
-            <LetterDetail user={user} onClickBack={onClickBack} />
+            <LetterDetail
+              user={user}
+              onClickBack={onClickBack}
+              setLetterOpen={setLetterOpen}
+            />
           </>
         )}
       </Container>

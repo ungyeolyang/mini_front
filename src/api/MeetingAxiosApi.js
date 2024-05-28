@@ -55,6 +55,11 @@ const MeetingAxiosApi = {
     };
     return await axios.post(DOMAIN + LOGO + "/recruit", meeting);
   },
+  //모임 신청 여부 확인, 했으면 true
+  conAccept: async (id) => {
+    return await axios.get(DOMAIN + LOGO + `/conaccept?id=${id}`);
+  },
+
   //모임생성자 가입창에 추가
   master: async (id, detail) => {
     const master = {
@@ -110,6 +115,7 @@ const MeetingAxiosApi = {
     };
     return await axios.post(DOMAIN + LOGO + `/writerlist`, writer);
   },
+
   send: async (no, title, text, id, duration) => {
     const schedule = {
       mno: no,
@@ -119,6 +125,9 @@ const MeetingAxiosApi = {
       sdate: duration,
     };
     return await axios.post(DOMAIN + LOGO + `/sendschedule`, schedule);
+  },
+  delSchedule: async (no) => {
+    return await axios.get(DOMAIN + LOGO + `/delschedule?sno=${no}`);
   },
 };
 

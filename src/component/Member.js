@@ -35,9 +35,7 @@ const Member = ({ size, id }) => {
 
   return (
     <People>
-      <Profile size={size}>
-        <img src={user?.profile} alt="프로필" />
-      </Profile>
+      <Profile size={size} src={user?.profile}></Profile>
       <span>{user?.nick}</span>
       <span>{`(${id})`}</span>
     </People>

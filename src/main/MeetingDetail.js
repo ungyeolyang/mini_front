@@ -7,6 +7,7 @@ import { UserContext } from "../context/UserStore";
 import LetterAxiosApi from "../api/LetterAxiosApi";
 import KakaoMap from "../KakaoMap";
 import Application from "./Application";
+import MeetingAxiosApi from "../api/MeetingAxiosApi";
 
 const ModalStyle = styled.div`
   .modal {
@@ -127,12 +128,13 @@ const Body = styled.div`
 `;
 
 const MeetingDetail = (props) => {
-  const { open, close, moim } = props;
+  const { open, close, moim, accept } = props;
   const id = localStorage.getItem("id");
 
   const context = useContext(UserContext);
-  const { nick, imgUrl, formatDate, formatDetailDate } = context;
+  const { nick, imgUrl, formatDate } = context;
 
+  const [size, setSize] = useState(0);
   const [userOpen, setUserOpen] = useState(false);
   const [applyOpen, setApplyOpen] = useState(false);
   const [userNick, setUserNick] = useState("");
@@ -159,6 +161,21 @@ const MeetingDetail = (props) => {
     setIsSend(false);
   };
 
+  const memberList = async () => {
+    try {
+      const rsp = await MeetingAxiosApi.memberList(moim.no);
+      if (rsp.data) {
+        console.log("인원수", rsp.data.length);
+        setSize(rsp.data.length);
+      } else {
+        console.log("멤버를 못불러옴");
+        setSize(0);
+      }
+    } catch (e) {
+      console.log("오류발생");
+    }
+  };
+
   useEffect(() => {
     const getNick = async () => {
       try {
@@ -170,6 +187,7 @@ const MeetingDetail = (props) => {
       } catch (e) {}
     };
     getNick();
+    memberList();
   }, [moim]);
 
   return (
@@ -193,10 +211,12 @@ const MeetingDetail = (props) => {
                   {id === moim?.id && <Btn>삭제</Btn>}
                   <Div>{moim?.category}</Div>
                   <Div>{moim?.title}</Div>
-                  <Div>{moim?.personnel}</Div>
+                  <Div>
+                    {size} / {moim?.personnel}
+                  </Div>
                   <Div>{moim?.detail}</Div>
                   <Div>{moim?.location || "온라인"}</Div>
-                  {moim?.id !== id && (
+                  {moim?.id !== id && !accept?.includes(moim.no) && (
                     <Btn
                       onClick={() => {
                         setApplyOpen(true);

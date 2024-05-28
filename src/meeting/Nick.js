@@ -24,7 +24,7 @@ const Nick = ({ id }) => {
       }
     };
     getMember();
-  }, [nick]);
+  }, []);
 
   return <StyledNick>{nick}</StyledNick>;
 };

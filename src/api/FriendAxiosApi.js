@@ -12,18 +12,6 @@ const FriendAxiosApi = {
     };
     return await axios.post(DOMAIN + LOGO + "/addfriend", friend);
   },
-  // //친구 신청
-  // addFriend: async (id, nick, imgUrl, userId, userNick, userProfile) => {
-  //   const friend = {
-  //     sendId: id,
-  //     sendNick: nick,
-  //     sendProfile: imgUrl,
-  //     receiveId: userId,
-  //     receiveNick: userNick,
-  //     receiveProfile: userProfile,
-  //   };
-  //   return await axios.post(DOMAIN + LOGO + "/addfriend", friend);
-  // },
 
   //친구 신청 여부 확인, 했으면 true
   conSend: async (id, userId) => {

@@ -31,11 +31,11 @@ const Conta = styled.div`
 `;
 const MoimBox = styled.div`
   position: relative;
-  background-color: white;
-  width: calc(100% - 20px);
+  width: 60rem;
   margin-bottom: 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
 `;
@@ -98,6 +98,7 @@ const Aa = styled.div`
 `;
 
 const Main = () => {
+  const id = localStorage.getItem("id");
   const [meeting, setMeeting] = useState();
   const [recruitOpen, setRecruitOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
@@ -105,6 +106,7 @@ const Main = () => {
   const [moim, setMoim] = useState();
   const [serchCategory, setserchCategory] = useState("제목");
   const [serinput, setserinput] = useState("");
+  const [accept, setAccept] = useState([]);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [header, setHeader] = useState("");
@@ -134,6 +136,18 @@ const Main = () => {
     setMoim(props);
   };
 
+  //신청여부 확인
+  const conAccept = async () => {
+    try {
+      const rsp = await MeetingAxiosApi.conAccept(id);
+      if (rsp.data) {
+        setAccept(rsp.data);
+      } else {
+        setAccept([]);
+      }
+    } catch (e) {}
+  };
+
   const meetingList = async () => {
     try {
       const rsp = await MeetingAxiosApi.meetingList();
@@ -150,7 +164,9 @@ const Main = () => {
 
   useEffect(() => {
     meetingList();
+    conAccept();
   }, [recruitOpen]);
+
   const handleSerinputChange = (e) => {
     setserinput(e.target.value);
   };
@@ -227,6 +243,7 @@ const Main = () => {
         open={isDetail}
         close={() => setIsDetail(false)}
         moim={moim}
+        accept={accept}
       ></MeetingDetail>
     </Right>
   );

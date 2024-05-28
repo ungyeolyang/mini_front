@@ -107,7 +107,7 @@ const Input = styled.input`
   border: none;
 `;
 
-const Chatting = () => {
+const Chatting = (no) => {
   const input = useRef(null);
   const id = localStorage.getItem("id");
   const context = useContext(UserContext);
@@ -131,15 +131,15 @@ const Chatting = () => {
     } catch (e) {}
   };
 
-  // const getChat = async () => {
-  //   try {
-  //     const rsp = await MeetingAxiosApi.chatList(1);
-  //     setChat(rsp.data);
-  //     if (rsp.data) {
-  //     } else {
-  //     }
-  //   } catch (e) {}
-  // };
+  const getChat = async () => {
+    try {
+      const rsp = await MeetingAxiosApi.chatList(no);
+      setChat(rsp.data);
+      if (rsp.data) {
+      } else {
+      }
+    } catch (e) {}
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -166,7 +166,7 @@ const Chatting = () => {
   // useEffect(() => {
   //   const getChat = async () => {
   //     try {
-  //       const rsp = await MeetingAxiosApi.chatList(1);
+  //       const rsp = await MeetingAxiosApi.chatList(no);
   //       if (rsp.data) {
   //         setChat(rsp.data);
   //       } else {
@@ -192,7 +192,7 @@ const Chatting = () => {
               <Line display={id === e.id}>
                 <Profil display={id === e.id} />
                 <Box>
-                  <Nick display={id === e.id}>{e.nick}</Nick>{" "}
+                  <Nick display={id === e.id}>{e.nick}</Nick>
                   <Contents>{e.contents}</Contents>
                 </Box>
                 <Time>{formatDate(e.date)}</Time>
