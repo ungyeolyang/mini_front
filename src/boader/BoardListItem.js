@@ -16,9 +16,9 @@ const BoardLi = styled.li`
   }
 
   @media (max-width: 720px) {
-    flex-direction: column;
     align-items: flex-start;
     margin: 5px 0;
+    position: relative;
   }
 `;
 const OdContain = styled.div`
@@ -29,7 +29,8 @@ const OdContain = styled.div`
     align-items: center;
     flex-direction: row;
     justify-content: flex-end;
-    width: 100%;
+    position: absolute;
+    right: 1px;
   }
 `;
 const TiContain = styled.div`
@@ -60,8 +61,10 @@ const Board_View = styled.p`
   text-align: center;
 
   @media (max-width: 720px) {
-    text-align: left;
+    color: #777;
     margin: 0 10px;
+    margin-top: 13px;
+    width: 18px;
   }
 `;
 
@@ -76,6 +79,7 @@ const BoardDate = styled.p`
     text-align: left;
     margin-right: 10px;
     margin-bottom: 0;
+    width: 70px;
   }
 `;
 
@@ -91,6 +95,7 @@ const UserId = styled.p`
     text-align: left;
     margin-right: 10px;
     margin-bottom: 0;
+    width: 40px;
   }
 `;
 

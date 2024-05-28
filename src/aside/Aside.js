@@ -9,6 +9,8 @@ import SideBar from "../component/SideBar";
 import MeetingAxiosApi from "../api/MeetingAxiosApi";
 import MyMeeting from "./MyMeeting";
 import Accept from "./Accept";
+import { FaBell, FaBellSlash } from "react-icons/fa";
+import { MdPeople } from "react-icons/md";
 
 const Container = styled.div`
   display: flex;
@@ -29,6 +31,16 @@ const Logo = styled.div`
     width: 5rem;
     object-fit: cover;
   }`}
+  @media (max-width: 720px) {
+    padding: 0;
+    margin-left: 5%;
+    ${({ isLogin }) =>
+      isLogin &&
+      `img {
+        width: 4rem;
+        object-fit: cover;
+  }`}
+  }
 `;
 
 const Profil = styled.div`
@@ -47,6 +59,26 @@ const Profil = styled.div`
     position: absolute;
     object-fit: cover;
   }
+  @media (max-width: 720px) {
+    position: absolute;
+    right: 100px;
+    border-radius: 0;
+    width: 100px;
+    height: 2rem;
+    background-color: transparent;
+    img {
+      display: none;
+    }
+    &::after {
+      content: "마이페이지";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      color: black;
+    }
+  }
 `;
 
 const Side = styled.div`
@@ -62,6 +94,9 @@ const Side = styled.div`
     display: flex;
     height: 5rem;
     width: 100vw;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: none;
   }
 `;
 
@@ -83,16 +118,46 @@ const Body = styled.div`
       color: #94b9f3;
     }
   }
+
+  @media (max-width: 720px) {
+    display: ${({ isLogin }) => (isLogin ? "flex" : "none")};
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    footer {
+      position: static;
+      bottom: auto;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-left: 60px;
+      span.separator {
+        display: none;
+      }
+    }
+    a {
+      color: black;
+      font-weight: bold;
+      font-size: 20px;
+    }
+  }
 `;
 
 const Nick = styled.span`
   padding-top: 1rem;
   font-size: large;
   font-weight: bold;
+  @media (max-width: 720px) {
+    display: none;
+  }
 `;
 
 const Id = styled.span`
   color: gray;
+  @media (max-width: 720px) {
+    display: none;
+  }
 `;
 const Button = styled.button`
   display: flex;
@@ -108,6 +173,12 @@ const Button = styled.button`
   &:hover {
     color: black;
   }
+  @media (max-width: 720px) {
+    border: 0;
+    position: absolute;
+    right: 1px;
+    margin: 0;
+  }
 `;
 
 const Div = styled.div`
@@ -121,6 +192,41 @@ const Head = styled.div`
   background-color: #b8d0fa;
   padding: 0.7rem;
   border-radius: 1rem 1rem 0 0;
+  @media (max-width: 720px) {
+    display: none;
+  }
+`;
+const Icon = styled.button`
+  width: 1rem;
+  height: 1rem;
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  position: absolute;
+  right: 200px;
+  :hover {
+    cursor: pointer;
+  }
+  @media (min-width: 721px) {
+    display: none; /* 전체 화면이 721px 이상일 때 숨김 */
+  }
+`;
+const Mdicon = styled.button`
+  width: 1rem;
+  height: 1rem;
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  position: absolute;
+  right: 200px;
+  :hover {
+    cursor: pointer;
+  }
+  @media (min-width: 721px) {
+    display: none; /* 전체 화면이 721px 이상일 때 숨김 */
+  }
 `;
 
 const Aside = () => {
@@ -131,12 +237,47 @@ const Aside = () => {
   const [myMeeting, setMyMeeting] = useState();
   const [accept, setAccept] = useState();
   const [refresh, setRefresh] = useState(false);
+  const [isOpen1, setIsOpen1] = useState(false); // 메뉴 열림/닫힘 상태
+  const [isOpen2, setIsOpen2] = useState(false);
+  const [hasNotifications, setHasNotifications] = useState(false); // 알림 여부
 
   const onClickDetail = (props) => {
     console.log(props);
     navigate(`/meeting/${props.no}`);
   };
-
+  const toggleMenu = () => {
+    setIsOpen1(!isOpen1);
+  };
+  const toggleMenu1 = () => {
+    setIsOpen2(!isOpen2);
+  };
+  const acceptList1 = async () => {
+    try {
+      const rsp = await MeetingAxiosApi.acceptList1(id);
+      if (rsp.data) {
+        console.log(rsp.data);
+        setAccept(rsp.data);
+        setHasNotifications(rsp.data.length > 0); // 알림 여부 설정
+      } else {
+        console.log(`리스트가 없음`);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const myMeetingList1 = async () => {
+    try {
+      const rsp = await MeetingAxiosApi.myMeetingList1(id);
+      if (rsp.data) {
+        console.log(rsp.data);
+        setMyMeeting(rsp.data);
+      } else {
+        console.log(`리스트가 없음`);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const context = useContext(UserContext);
   const {
     nick,
@@ -233,6 +374,8 @@ const Aside = () => {
     getMember();
     myMeetingList();
     acceptList();
+    acceptList1();
+    myMeetingList1();
   }, [id, nick, imgUrl]);
 
   return (
@@ -242,6 +385,36 @@ const Aside = () => {
           <img src={isLogin ? LogoImg : LogoStImg} alt="로고" />
         </Logo>
         <Body isLogin={isLogin}>
+          <Icon onClick={toggleMenu}>
+            {hasNotifications ? <FaBell /> : <FaBellSlash />}
+          </Icon>
+          {isOpen1 && (
+            <div
+              style={{
+                position: "absolute",
+                top: "2.5rem",
+                right: "1rem",
+                background: "#fff",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                borderRadius: "8px",
+                padding: "1rem",
+                zIndex: 1000,
+              }}
+            >
+              {accept && accept.length > 0 ? (
+                accept.map((user) => (
+                  <Accept
+                    key={user.id}
+                    user={user}
+                    onClickOk={onClickOk}
+                    onClickNo={onClickNo}
+                  />
+                ))
+              ) : (
+                <div>알림이 없습니다</div>
+              )}
+            </div>
+          )}
           <Profil onClick={onClickProfil} isLogin={isLogin}>
             <img src={member ? member?.profile : imgUrl} alt="User" />
           </Profil>
@@ -269,7 +442,9 @@ const Aside = () => {
               ></Accept>
             ))}
           <footer>
-            <Link to="/board">게시판</Link>ㅣ<Link to="/letter">편지함</Link>
+            <Link to="/board">게시판</Link>
+            <span className="separator">ㅣ</span>
+            <Link to="/letter">편지함</Link>
           </footer>
         </Body>
       </Side>
