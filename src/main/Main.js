@@ -21,9 +21,23 @@ const Box = styled.div`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+`;
+const Conta = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
 `;
 const MoimBox = styled.div`
-  background-color: black;
+  position: relative;
+  background-color: white;
+  width: calc(100% - 20px);
+  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+  gap: 20px;
+  padding: 20px;
 `;
 const SerBox = styled.div`
   display: flex;
@@ -59,6 +73,29 @@ const Inputicon = styled.div`
   align-items: center;
   justify-content: center;
 `;
+const AbsoluteBtn = styled.button`
+  position: absolute;
+  right: 37px;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-right: 10px;
+  background-color: #e9edc9;
+  border: 0;
+  padding: 0.5rem 2rem;
+  border-radius: 0.5rem;
+
+  &:hover {
+    background-color: #ccd5ae;
+    color: #fff;
+  }
+`;
+const Aa = styled.div`
+  position: relative;
+  display: flex;
+`;
 
 const Main = () => {
   const [meeting, setMeeting] = useState();
@@ -68,7 +105,7 @@ const Main = () => {
   const [moim, setMoim] = useState();
   const [serchCategory, setserchCategory] = useState("제목");
   const [serinput, setserinput] = useState("");
-  const [address, setAddress] = useState("");
+
   const [modalOpen, setModalOpen] = useState(false);
   const [header, setHeader] = useState("");
 
@@ -89,7 +126,6 @@ const Main = () => {
   //모집창 닫기
   const closeRecruit = () => {
     setRecruitOpen(false);
-    setAddress("");
   };
   //모임창 클릭
   const onClickMoim = (props) => {
@@ -131,21 +167,46 @@ const Main = () => {
   return (
     <Right>
       <Container>
-        <Link to="/meeting">모임</Link>
+        <Aa>
+          <SerBox>
+            <CategorySelect
+              defaultValue="title"
+              value={serchCategory}
+              onChange={(e) => setserchCategory(e.target.value)}
+            >
+              <option value="제목">제목</option>
+              <option value="작성자">작성자</option>
+            </CategorySelect>
+            <Cateinput
+              type="text"
+              placeholder="검색어를 입력해 주세요"
+              onChange={handleSerinputChange}
+            />
+            <InputButton onClick={handleSubmit}>
+              <Inputicon>
+                <FaMagnifyingGlass />
+              </Inputicon>
+            </InputButton>
+          </SerBox>
+        </Aa>
+
         <MoimBox>
           {meeting &&
-            paginatedData?.map((e) => (
+            paginatedData.map((e) => (
               <Moim meeting={e} onClickMoim={onClickMoim} />
             ))}
         </MoimBox>
-        <Paging
-          page={currentPage}
-          itemsCountPerPage={pageSize}
-          totalItemsCount={meeting?.length}
-          onPageChange={handlePageChange}
-        />
+        <Conta>
+          <Paging
+            page={currentPage}
+            itemsCountPerPage={pageSize}
+            totalItemsCount={meeting?.length}
+            onPageChange={handlePageChange}
+            styled={{ marginleft: "100px" }}
+          />
+          <AbsoluteBtn onClick={onClickRecruit}>모집하기</AbsoluteBtn>
+        </Conta>
       </Container>
-      <Btn onClick={onClickRecruit}>모집하기</Btn>
       <Recruit
         open={recruitOpen}
         close={closeRecruit}
@@ -153,29 +214,7 @@ const Main = () => {
         setModalOpen={setModalOpen}
         setModalContent={setModalContent}
         setHeader={setHeader}
-        address={address}
-        setAddress={setAddress}
       ></Recruit>
-      <SerBox>
-        <CategorySelect
-          defaultValue="title"
-          value={serchCategory}
-          onChange={(e) => setserchCategory(e.target.value)}
-        >
-          <option value="제목">제목</option>
-          <option value="작성자">작성자</option>
-        </CategorySelect>
-        <Cateinput
-          type="text"
-          placeholder="검색어를 입력해 주세요"
-          onChange={handleSerinputChange}
-        />
-        <InputButton onClick={handleSubmit}>
-          <Inputicon>
-            <FaMagnifyingGlass />
-          </Inputicon>
-        </InputButton>
-      </SerBox>
       <Modal
         open={modalOpen}
         close={() => setModalOpen(false)}

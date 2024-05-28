@@ -60,7 +60,7 @@ const Side = styled.div`
 
   @media (max-width: 720px) {
     display: flex;
-    height: 8rem;
+    height: 5rem;
     width: 100vw;
   }
 `;
@@ -84,6 +84,7 @@ const Body = styled.div`
     }
   }
 `;
+
 const Nick = styled.span`
   padding-top: 1rem;
   font-size: large;
@@ -162,28 +163,29 @@ const Aside = () => {
     navigate("/");
     localStorage.clear();
   };
-  //친구 수락버튼 클릭
+
+  //모임 수락버튼 클릭
   const onClickOk = async (user) => {
     try {
-      // const rsp = await FriendAxiosApi.friendOk(id, user);
-      // if (rsp.data) {
-      //   console.log("수락성공");
-      //   setRefresh(!refresh);
-      // } else {
-      //   console.log("수락실패");
-      // }
+      const rsp = await MeetingAxiosApi.acceptOk(user.no, user.id);
+      if (rsp.data) {
+        console.log("수락성공");
+        setRefresh(!refresh);
+      } else {
+        console.log("수락실패");
+      }
     } catch (e) {}
   };
-  //친구 거절버튼 클릭
+  //모임 거절버튼 클릭
   const onClickNo = async (user) => {
     try {
-      // const rsp = await FriendAxiosApi.delFriend(id, user);
-      // if (rsp.data) {
-      //   console.log("거절성공");
-      //   setRefresh(!refresh);
-      // } else {
-      //   console.log("거절실패");
-      // }
+      const rsp = await MeetingAxiosApi.delMember(user.no, user.id);
+      if (rsp.data) {
+        console.log("거절성공");
+        setRefresh(!refresh);
+      } else {
+        console.log("거절실패");
+      }
     } catch (e) {}
   };
 
@@ -258,15 +260,15 @@ const Aside = () => {
                 ></MyMeeting>
               ))}
           </header>
+          {accept &&
+            accept.map((user) => (
+              <Accept
+                user={user}
+                onClickOk={onClickOk}
+                onClickNo={onClickNo}
+              ></Accept>
+            ))}
           <footer>
-            {accept &&
-              accept.map((user) => (
-                <Accept
-                  user={user}
-                  onClickOk={onClickOk}
-                  onClickNo={onClickNo}
-                ></Accept>
-              ))}
             <Link to="/board">게시판</Link>ㅣ<Link to="/letter">편지함</Link>
           </footer>
         </Body>

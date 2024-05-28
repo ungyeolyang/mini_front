@@ -46,15 +46,18 @@ const Div = styled.div`
 `;
 
 const Detail = styled.div`
-  display: flex;
+  display: ${({ on }) => (on ? `flex` : `none`)};
+  background-color: #e5f3ff;
   border: 2px solid #b8d0fa;
   padding: 1rem;
   position: absolute;
-  top: 0;
+  top: 6.5rem;
+  right: 5rem;
 `;
 
 const Accept = ({ user, onClickOk, onClickNo }) => {
   const [member, setMember] = useState();
+  const [on, setOn] = useState(false);
 
   useEffect(() => {
     const getMember = async () => {
@@ -78,8 +81,13 @@ const Accept = ({ user, onClickOk, onClickNo }) => {
             <span style={{ fontWeight: `bold` }}>{member?.nick}</span>
             <span> ({user.id})</span>
           </div>
-          <div>{user.detail}</div>
-          <Detail>{user.detail}</Detail>
+          <span
+            onMouseEnter={() => setOn(true)}
+            onMouseLeave={() => setOn(false)}
+          >
+            {user.detail}
+          </span>
+          <Detail on={on}>{user.detail}</Detail>
           <Div>
             <Btn onClick={() => onClickOk(user)}>수락</Btn>
             <Btn onClick={() => onClickNo(user)}>거절</Btn>

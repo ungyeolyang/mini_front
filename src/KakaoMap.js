@@ -138,7 +138,7 @@ const KakaoMap = ({ moim }) => {
   return (
     <AppContainer>
       <MapContainer ref={mapRef}></MapContainer>
-      <SearchContainer>
+      {/* <SearchContainer>
         <InputWrapper>
           <Input
             type="text"
@@ -152,7 +152,7 @@ const KakaoMap = ({ moim }) => {
           />
         </InputWrapper>
         <Button onClick={handleSearchButtonClick}>확인</Button>
-      </SearchContainer>
+      </SearchContainer> */}
       {selectedPlace && (
         <InfoWindowContainer>
           <InfoWindowContent>
