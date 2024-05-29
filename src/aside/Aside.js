@@ -51,7 +51,8 @@ const Profil = styled.div`
   width: 7rem;
   height: 7rem;
   border-radius: 50%;
-  background-color: silver;
+  background-color: white;
+  box-shadow: 2px 2px 1px gray;
   display: flex;
   position: relative;
   overflow: hidden;
@@ -519,6 +520,7 @@ const Aside = () => {
                   user={user}
                   onClickOk={onClickOk}
                   onClickNo={onClickNo}
+                  onClickUser={onClickUser}
                 ></Accept>
               ))}
           </header>

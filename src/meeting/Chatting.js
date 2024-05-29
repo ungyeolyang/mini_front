@@ -101,24 +101,24 @@ const Chatting = ({ info, isSmall }) => {
     }
   };
 
-  useEffect(() => {
-    const getChat = async () => {
-      try {
-        const rsp = await MeetingAxiosApi.chatList(info?.no);
-        if (rsp.data) {
-          setChat(rsp.data);
-        } else {
-          console.log("값을 못가지고옴");
-        }
-      } catch (e) {
-        console.log("에러");
-      }
-    };
+  // useEffect(() => {
+  //   const getChat = async () => {
+  //     try {
+  //       const rsp = await MeetingAxiosApi.chatList(info?.no);
+  //       if (rsp.data) {
+  //         setChat(rsp.data);
+  //       } else {
+  //         console.log("값을 못가지고옴");
+  //       }
+  //     } catch (e) {
+  //       console.log("에러");
+  //     }
+  //   };
 
-    const interval = setInterval(getChat, 100000);
+  //   const interval = setInterval(getChat, 100000);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <ChatOutBox isSmall={isSmall}>

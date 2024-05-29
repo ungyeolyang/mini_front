@@ -77,39 +77,21 @@ const Cdiv = styled.div`
 `;
 
 const Moim = ({ meeting, onClickMoim, currentPage }) => {
-  const [nick, setNick] = useState(""); // 초기 상태 설정
+  const [nick, setNick] = useState("");
   const [size, setSize] = useState(0);
   const context = useContext(UserContext);
   const { rpad } = context;
-
-  const memberList = async () => {
-    try {
-      const rsp = await MeetingAxiosApi.memberList(meeting.no);
-      if (rsp.data) {
-        setSize(rsp.data.length);
-      } else {
-        console.log("멤버를 못불러옴");
-        setSize(0);
-      }
-    } catch (e) {
-      console.log("오류발생");
-    }
-  };
 
   const getMember = async () => {
     try {
       const rsp = await LoginAxiosApi.memberGetOne(meeting.id);
       if (rsp.data) {
-        setNick(rsp.data[0]?.nick); // 상태 업데이트
+        setNick(rsp.data[0]?.nick);
       }
     } catch (e) {
       console.log(e);
     }
   };
-
-  useEffect(() => {
-    memberList();
-  }, [currentPage, meeting.id, meeting.no]); // 의존성 배열 수정
 
   return (
     <StyledMoim onClick={() => onClickMoim(meeting)}>

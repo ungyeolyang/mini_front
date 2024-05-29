@@ -236,9 +236,9 @@ const MyPage = () => {
   // 수정버튼 클릭
   const onClickEdit = async () => {
     if (member) {
-      const changePw = inputPw || member[0].pw;
-      const changeNick = inputNick || member[0].nick;
-      const changeIntro = inputIntro || member[0].introduction;
+      const changePw = inputPw || member[0]?.pw;
+      const changeNick = inputNick || member[0]?.nick;
+      const changeIntro = inputIntro || member[0]?.introduction;
 
       if (isConPw && !isPw) {
         setModalOpen(true);
@@ -251,9 +251,9 @@ const MyPage = () => {
         const rsp = await MyAxiosApi.memberEdit(
           id,
           changePw,
-          member[0].birth,
+          member[0]?.birth,
           changeNick,
-          member[0].email,
+          member[0]?.email,
           inputGender,
           changeIntro
         );
@@ -323,7 +323,7 @@ const MyPage = () => {
                   <Btn onClick={onClickBasic}>기본 프로필</Btn>
                 </Cdiv>
                 <Cdiv>
-                  <SayHi>'{member?.nick}'님 안녕하세요!</SayHi>
+                  <SayHi>'{member.nick}'님 안녕하세요!</SayHi>
                   <div>
                     <Btn onClick={onClickProfileEdit}>프로필 사진 변경</Btn>
                   </div>
@@ -334,7 +334,7 @@ const MyPage = () => {
                   <span>현재 </span>비밀번호
                 </Pw>
                 <InputBar
-                  placeholder={`*`.repeat(member?.pw.length)}
+                  placeholder={`*`.repeat(member.pw?.length)}
                   onChange={onChangeCurPw}
                 />
                 <Error>{curPwMessage}</Error>
@@ -350,15 +350,15 @@ const MyPage = () => {
               </Div>
               <Div>
                 <div>닉네임</div>
-                <InputBar placeholder={member?.nick} onChange={onChangeNick} />
+                <InputBar placeholder={member.nick} onChange={onChangeNick} />
               </Div>
               <Div>
                 <div>생년월일</div>
-                <InputBar placeholder={member?.birth} disabled={true} />
+                <InputBar placeholder={member.birth} disabled={true} />
               </Div>
               <Div>
                 <div>이메일</div>
-                <InputBar placeholder={member?.email} disabled={true} />
+                <InputBar placeholder={member.email} disabled={true} />
               </Div>
               <Div type="gender">
                 <div>성별</div>

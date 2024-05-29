@@ -185,7 +185,7 @@ const Meeting = () => {
   };
   const detail = () => {
     switch (isDetail) {
-      case 1:
+      case 2:
         return (
           <Calendar
             meetingNo={no}
@@ -196,7 +196,7 @@ const Meeting = () => {
             isSmall={isSmall}
           />
         );
-      case 2:
+      case 1:
         return (
           <ScheduleBox
             schedule={schedule}
@@ -207,8 +207,19 @@ const Meeting = () => {
             setText={setText}
           />
         );
-      default:
+      case 3:
         return <Chatting no={no} info={info} isSmall={isSmall} />;
+      default:
+        return (
+          <ScheduleBox
+            schedule={schedule}
+            onClickDetail={onclickDetail}
+            searchCategory={searchCategory}
+            setSearchCategory={setSearchCategory}
+            text={text}
+            setText={setText}
+          />
+        );
     }
   };
 

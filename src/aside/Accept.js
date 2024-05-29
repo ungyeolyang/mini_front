@@ -103,14 +103,20 @@ const Accept = ({ user, onClickOk, onClickNo, num, onClickUser }) => {
             <span style={{ fontWeight: `bold` }}>{member?.nick}</span>
             <span> ({user.id})</span>
           </div>
-          <Span onMouseEnter={() => setOn(true)} on={on}>
+          <Span
+            onMouseEnter={() => user.detail.length > 12 && setOn(true)}
+            on={on}
+          >
             {user.detail.length > 12
               ? rpad(user.detail.substr(0, 9), 12, ".")
               : user.detail}
           </Span>
-          <Detail on={on} onMouseLeave={() => setOn(false)}>
-            {user.detail}
-          </Detail>
+          {user.detail.length > 12 && (
+            <Detail on={on} onMouseLeave={() => setOn(false)}>
+              {user.detail}
+            </Detail>
+          )}
+
           <Div>
             <Btn onClick={() => onClickOk(user)}>수락</Btn>
             <Btn onClick={() => onClickNo(user)}>거절</Btn>

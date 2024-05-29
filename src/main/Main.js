@@ -116,6 +116,7 @@ const Main = () => {
   const [serinput, setserinput] = useState("");
   const [accept, setAccept] = useState([]);
   const [address, setAddress] = useState("");
+  const [size, setSize] = useState();
 
   const [modalOpen, setModalOpen] = useState(false);
   const [header, setHeader] = useState("");
@@ -189,6 +190,25 @@ const Main = () => {
       console.log(e);
     }
   };
+
+  const memberList = async () => {
+    try {
+      const rsp = await MeetingAxiosApi.memberList(meeting?.no);
+      if (rsp.data) {
+        setSize(rsp.data.length);
+      } else {
+        console.log("멤버를 못불러옴");
+        setSize(0);
+      }
+    } catch (e) {
+      console.log("오류발생");
+    }
+  };
+
+  useEffect(() => {
+    memberList();
+  }, [currentPage, meeting?.id, meeting?.no]);
+
   return (
     <Right>
       <Container>
@@ -217,13 +237,15 @@ const Main = () => {
 
         <MoimBox>
           {meeting &&
-            paginatedData.map((e) => (
-              <Moim
-                meeting={e}
-                onClickMoim={onClickMoim}
-                currentPage={currentPage}
-              />
-            ))}
+            paginatedData
+              .filter((e) => e.personnel !== size)
+              .map((e) => (
+                <Moim
+                  meeting={e}
+                  onClickMoim={onClickMoim}
+                  currentPage={currentPage}
+                />
+              ))}
         </MoimBox>
         <Conta>
           <Paging

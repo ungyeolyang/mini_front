@@ -39,8 +39,11 @@ const ScheduleLine = ({ schedule, onClickDetail, nick, setNick }) => {
         console.log(e);
       }
     };
-    getMember();
-  }, [nick]);
+    if (schedule?.id) {
+      getMember();
+    }
+  }, [schedule?.id]);
+
   return (
     <Line key={schedule?.sno} onClick={() => onClickDetail(schedule)}>
       <Box type="title">{schedule?.title}</Box>

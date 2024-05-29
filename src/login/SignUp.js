@@ -98,12 +98,13 @@ const SignUp = () => {
   const context = useContext(UserContext);
   const basic =
     "https://firebasestorage.googleapis.com/v0/b/test-project-37d9c.appspot.com/o/basic.png?alt=media&token=5ea5abcb-4a3a-445b-a9b0-3cae92a9eccd";
-  const { nick, setNick, isLogin, setIsLogin, imgUrl, setImgUrl } = context;
+  const { setNick, isLogin, setIsLogin, setImgUrl } = context;
   const navigate = useNavigate();
   const inputFile = useRef(null);
   //입력정보
   const [inputId, setInputId] = useState("");
   const [inputPw, setInputPw] = useState("");
+  const [inputNick, setInputNick] = useState("");
   const [InputBirth, setInputBirth] = useState("");
   const [inputEmail, setInputEmail] = useState("");
   const [inputGender, setInputGender] = useState("비공개");
@@ -236,14 +237,14 @@ const SignUp = () => {
 
   //닉네임 작성여부
   const onChangeNick = (e) => {
-    const nickCurrent = e.target.value;
-    setNick(nickCurrent);
-    if (!nickCurrent) {
+    if (!e.target.value) {
       setIsNick(false);
       setNickMessage("필수 정보입니다.");
+      setInputNick("");
     } else {
       setIsNick(true);
       setNickMessage("");
+      setInputNick(e.target.value);
     }
   };
 
@@ -282,11 +283,19 @@ const SignUp = () => {
       } else {
         setImgUrl(basic);
       }
-
+      console.log(
+        inputId,
+        inputPw,
+        inputNick,
+        InputBirth,
+        inputEmail,
+        inputGender,
+        basic
+      );
       const rsp = await LoginAxiosApi.memberSignUp(
         inputId,
         inputPw,
-        nick,
+        inputNick,
         InputBirth,
         inputEmail,
         inputGender,
@@ -295,6 +304,7 @@ const SignUp = () => {
 
       if (rsp.data) {
         localStorage.setItem("id", inputId);
+        setNick(inputNick);
         setIsLogin(true);
         setModalOpen(true);
         setHead("가입성공");

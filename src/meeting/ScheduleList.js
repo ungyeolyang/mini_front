@@ -8,6 +8,7 @@ const ScheduleList = ({
   text,
 }) => {
   const [nick, setNick] = useState("");
+
   return (
     <>
       {scheduleList &&
