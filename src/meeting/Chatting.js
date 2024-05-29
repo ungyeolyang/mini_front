@@ -7,12 +7,12 @@ import { LuSend } from "react-icons/lu";
 import ChatLine from "./ChatLine";
 
 const ChatOutBox = styled.div`
-  width: 30vw;
-  height: 80vh;
-  display: ${({ isSmall }) => (isSmall ? "none" : "flex")};
+  width: ${({ isSmall }) => (isSmall ? "75vw" : "30vw")};
+  height: ${({ isSmall }) => (isSmall ? "50vh" : "80vh")};
+  display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
+  position: ${({ isSmall }) => (isSmall ? "absolute" : "relative")};
 `;
 
 const ChatInBox = styled.div`
@@ -28,8 +28,9 @@ const ChatInBox = styled.div`
 const Chat = styled.div`
   padding-top: 1rem;
   width: 100%;
-  height: 83%;
+  height: ${({ isSmall }) => (isSmall ? "66%" : "83%")};
   overflow: auto;
+  scrollbar-width: none;
 `;
 
 const Title = styled.div`
@@ -123,7 +124,7 @@ const Chatting = ({ info, isSmall }) => {
     <ChatOutBox isSmall={isSmall}>
       <ChatInBox>
         <Title>{info?.name}</Title>
-        <Chat>
+        <Chat isSmall={isSmall}>
           {chat && chat.map((user) => <ChatLine id={id} user={user} />)}
         </Chat>
         <InputBox>

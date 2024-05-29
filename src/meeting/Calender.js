@@ -16,7 +16,7 @@ const DayBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 14%;
-  height: 5vw;
+  height: ${({ isSmall }) => (isSmall ? "8.5vw" : `5vw`)};
   position: relative;
   border: 1px solid silver;
   cursor: pointer;
@@ -77,6 +77,7 @@ const Calendar = ({
   setText,
   setSearchCategory,
   isSend,
+  isSmall,
 }) => {
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
@@ -138,6 +139,7 @@ const Calendar = ({
             key={`last-${i + 1}`}
             onClick={() => onClickDay(preDay, `-`)}
             style={{ color: `#707070` }}
+            isSmall={isSmall}
           >
             <Day>{preDay}</Day>
           </DayBox>
@@ -149,6 +151,7 @@ const Calendar = ({
             key={`day-${day}`}
             style={{ fontWeight: `bold` }}
             onClick={() => onClickDay(day)}
+            isSmall={isSmall}
           >
             <Day>{day}</Day>
             <NickBox>
@@ -175,6 +178,7 @@ const Calendar = ({
             key={`next-${i + 1}`}
             onClick={(e) => onClickDay(i + 1, `+`)}
             style={{ color: `#707070` }}
+            isSmall={isSmall}
           >
             <Day>{i + 1}</Day>
           </DayBox>

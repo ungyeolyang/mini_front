@@ -12,6 +12,7 @@ import Accept from "./Accept";
 import { FaBellSlash } from "react-icons/fa";
 import { MdPeople } from "react-icons/md";
 import { FaBell } from "react-icons/fa";
+import UserDetail from "../component/UserDetail";
 
 const Container = styled.div`
   display: flex;
@@ -276,6 +277,8 @@ const Aside = () => {
   const [isOpen1, setIsOpen1] = useState(false); // 메뉴 열림/닫힘 상태
   const [isOpen2, setIsOpen2] = useState(false);
   const [hasNotifications, setHasNotifications] = useState(false); // 알림 여부
+  const [userOpen, setUserOpen] = useState(false);
+  const [detail, setDetail] = useState("");
 
   const onClickDetail = (props) => {
     console.log(props);
@@ -339,6 +342,12 @@ const Aside = () => {
   const onClickLogOut = () => {
     navigate("/");
     localStorage.clear();
+  };
+
+  const onClickUser = (props) => {
+    // console.log(props);
+    setDetail(props);
+    setUserOpen(true);
   };
 
   //모임 수락버튼 클릭
@@ -413,9 +422,10 @@ const Aside = () => {
     acceptList1();
     myMeetingList1();
   }, [id, nick, imgUrl, refresh, isOpen]);
+
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 721) {
+      if (window.innerWidth > 720) {
         setIsOpen1(false);
         setIsOpen2(false);
       }
@@ -528,7 +538,13 @@ const Aside = () => {
         onDisplay={onDisplay}
         setOnDisplay={setOnDisplay}
         id={id}
+        onClickDetail={onClickUser}
       ></SideBar>
+      <UserDetail
+        open={userOpen}
+        close={() => setUserOpen(false)}
+        userId={detail}
+      ></UserDetail>
     </Container>
   );
 };

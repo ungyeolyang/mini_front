@@ -16,7 +16,7 @@ import UserDetail from "../component/UserDetail";
 const Container = styled.div`
   display: flex;
   align-items: center;
-  min-height: 80vh;
+  min-height: 100vh;
 `;
 const FullBox = styled.div`
   position: relative;
@@ -26,6 +26,12 @@ const FullBox = styled.div`
   justify-content: center;
   width: 40vw;
   height: 85vh;
+  @media (max-width: 762px) {
+    width: 80vw;
+    height: 80vh;
+    position: absolute;
+    left: 1rem;
+  }
 `;
 
 const MemberBox = styled.div`
@@ -57,7 +63,7 @@ const Head = styled.div`
   span {
     padding: 1rem;
     font-size: 1rem;
-    border: 2px solid #e5f3ff;
+    border: 2px solid;
     border-bottom: none;
     cursor: pointer;
   }
@@ -68,7 +74,6 @@ const Button = styled.button`
   right: 1rem;
   bottom: 0.5rem;
   outline: none;
-
   align-items: center;
   cursor: pointer;
   margin-right: 10px;
@@ -85,7 +90,7 @@ const Button = styled.button`
 const Span = styled.span`
   color: ${({ isDetail }) => (isDetail === 3 ? `#94b9f3` : `#e5f3ff`)};
   border-color: ${({ isDetail }) => (isDetail === 3 ? `#ccd5ae` : `#e9edc9`)};
-  display: ${({ isSmall }) => (isSmall ? `block` : `none`)};
+  display: ${({ isSmall }) => !isSmall && `none`};
 `;
 
 const Meeting = () => {
@@ -174,9 +179,6 @@ const Meeting = () => {
     setIsDelete(false);
   };
 
-  const onClickSchedule = () => {
-    setIsDetail(true);
-  };
   const onClickDetail = (props) => {
     setUserOpen(true);
     setUserId(props);
@@ -191,6 +193,7 @@ const Meeting = () => {
             setText={setText}
             setSearchCategory={setSearchCategory}
             isSend={isSend}
+            isSmall={isSmall}
           />
         );
       case 2:
@@ -205,7 +208,7 @@ const Meeting = () => {
           />
         );
       default:
-        return <Chatting no={no} info={info} />;
+        return <Chatting no={no} info={info} isSmall={isSmall} />;
     }
   };
 
@@ -214,6 +217,23 @@ const Meeting = () => {
     scheduleList();
     meetingInfo();
   }, [isSend, isDetail, isDelete]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 720) {
+        setIsSmall(true);
+      } else setIsSmall(false);
+      setIsDetail(1);
+    };
+
+    window.addEventListener("resize", handleResize);
+    // 초기 실행을 위해 호출
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isSmall]);
 
   return (
     <>
@@ -262,28 +282,9 @@ const Meeting = () => {
               </Span>
               <Button onClick={() => setSendOpen(true)}>글쓰기</Button>
             </Head>
-
-            {/* {!isDetail ? (
-              <Calendar
-                meetingNo={no}
-                setIsDetail={setIsDetail}
-                setText={setText}
-                setSearchCategory={setSearchCategory}
-                isSend={isSend}
-              />
-            ) : (
-              <ScheduleBox
-                schedule={schedule}
-                onClickDetail={onclickDetail}
-                searchCategory={searchCategory}
-                setSearchCategory={setSearchCategory}
-                text={text}
-                setText={setText}
-              />
-            )} */}
             {detail()}
           </FullBox>
-          <Chatting no={no} info={info} isSmall={isSmall} />
+          {!isSmall && <Chatting no={no} info={info} isSmall={isSmall} />}
         </Container>
       </Right>
       <Modal open={modalOpen} close={closeModal} header="오류">

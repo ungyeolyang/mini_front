@@ -2,7 +2,7 @@ import styled from "styled-components";
 import ScheduleList from "./ScheduleList";
 
 const Container = styled.div`
-  width: 100%;
+  width: ${({ isSmall }) => (isSmall ? `80%` : `100%`)};
 `;
 const Head = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ const Box = styled.div`
 `;
 const Body = styled.div`
   background-color: #e5f3ff;
-  height: 15.5rem;
+  height: ${({ isSmall }) => (isSmall ? `8rem` : `15.5rem`)};
   overflow: hidden;
 `;
 
@@ -42,16 +42,17 @@ const Schedule = ({
   onClickSchedule,
   searchCategory,
   text,
+  isSmall,
 }) => {
   return (
-    <Container>
+    <Container isSmall={isSmall}>
       <Head onClick={onClickSchedule}>
         <Box type="title">제목</Box>
         <Box type="author">작성자</Box>
         <Box type="date">일정</Box>
         <Box type="date">등록일</Box>
       </Head>
-      <Body>
+      <Body isSmall={isSmall}>
         <ScheduleList
           scheduleList={schedule}
           onClickDetail={onClickDetail}

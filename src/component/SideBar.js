@@ -23,17 +23,6 @@ const closeSide = keyframes`
   right: -20vw;
 }`;
 
-const slideDown = () => keyframes`
-  0% {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
 const sideBar = (onDisplay) => {
   return onDisplay ? openSide : closeSide;
 };
@@ -52,7 +41,7 @@ const StyledSideBar = styled.div`
   right: 0;
   height: 100vh;
   background-color: #fefae0;
-  width: 20vw;
+  width: ${({ isSmall }) => (isSmall ? `40vw` : `20vw`)};
   animation: ${({ onDisplay }) => sideBar(onDisplay)} 0.4s forwards;
   header {
     position: absolute;
@@ -81,12 +70,18 @@ const Line = styled.div`
   }
 `;
 
-const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {
+const SideBar = ({
+  isOpen,
+  setIsOpen,
+  onDisplay,
+  setOnDisplay,
+  id,
+  onClickDetail,
+}) => {
   const [sender, setSender] = useState([]);
   const [friend, setFriend] = useState([]);
   const [refresh, setRefresh] = useState(false);
-  const [userOpen, setUserOpen] = useState(false);
-  const [detail, setDetail] = useState("");
+  const [isSmall, setIsSmall] = useState(false);
 
   const onClickOut = () => {
     setOnDisplay(false);
@@ -151,16 +146,27 @@ const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {
       }
     } catch (e) {}
   };
-  const onClickDetail = (props) => {
-    // console.log(props);
-    setDetail(props);
-    setUserOpen(true);
-  };
 
   useEffect(() => {
     sendList();
     friendList();
   }, [isOpen, refresh]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 720) {
+        setIsSmall(true);
+      } else setIsSmall(false);
+    };
+
+    window.addEventListener("resize", handleResize);
+    // 초기 실행을 위해 호출
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isSmall]);
 
   return (
     <Container isOpen={isOpen} onClick={onClickOut}>
@@ -168,6 +174,7 @@ const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {
         isOpen={isOpen}
         onDisplay={onDisplay}
         onClick={onClickSide}
+        isSmall={isSmall}
       >
         <header>
           <Line>
@@ -194,11 +201,6 @@ const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {
             ))}
         </footer>
       </StyledSideBar>
-      <UserDetail
-        open={userOpen}
-        close={() => setUserOpen(false)}
-        userId={detail}
-      ></UserDetail>
     </Container>
   );
 };
