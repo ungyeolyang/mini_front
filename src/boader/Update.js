@@ -52,6 +52,9 @@ const TextInfo = styled.textarea`
   background-color: #fff;
   padding: 10px;
   resize: none;
+  @media (max-width: 720px) {
+    height: 430px;
+  }
 `;
 
 const FileUploadContainer = styled.div`

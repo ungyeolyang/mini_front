@@ -16,6 +16,10 @@ const StyledLetterDetail = styled.div`
   flex-direction: column;
   background-color: #e5f3ff;
   /* padding: 1.5rem; */
+  @media (max-width: 720px) {
+    width: 100%;
+    min-width: 0;
+  }
 `;
 const Div = styled.div`
   display: flex;

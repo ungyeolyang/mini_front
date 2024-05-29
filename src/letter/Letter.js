@@ -12,6 +12,11 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   width: 95%;
+  @media (max-width: 720px) {
+    position: absolute;
+    top: 105px;
+    flex-direction: column;
+  }
 `;
 
 const BtnBox = styled.div`
@@ -19,6 +24,11 @@ const BtnBox = styled.div`
   flex-direction: column;
   width: 15%;
   gap: 1rem;
+  @media (max-width: 720px) {
+    flex-direction: row;
+    width: 100%;
+    gap: 0;
+  }
 `;
 
 const Letter = () => {
@@ -120,15 +130,17 @@ const Letter = () => {
     <Right title={`${category === "send" ? `보낸 ` : `받은 `} 편지함`}>
       <Container>
         <BtnBox>
-          <Btn onClick={onClickReceive}>
+          <Btn onClick={onClickReceive} mediaQuery>
             <TbMailOpened />
             받은 편지함
           </Btn>
-          <Btn onClick={onClickSend}>
+          <Btn onClick={onClickSend} mediaQuery>
             <TbSend />
             보낸 편지함
           </Btn>
-          <Btn onClick={onClickLetter}>편지 쓰기</Btn>
+          <Btn onClick={onClickLetter} mediaQuery>
+            편지 쓰기
+          </Btn>
         </BtnBox>
         {!isDetail ? (
           <LetterBox

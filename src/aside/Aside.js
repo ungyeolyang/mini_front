@@ -9,7 +9,7 @@ import SideBar from "../component/SideBar";
 import MeetingAxiosApi from "../api/MeetingAxiosApi";
 import MyMeeting from "./MyMeeting";
 import Accept from "./Accept";
-import { FaBell, FaBellSlash } from "react-icons/fa";
+import { FaBellSlash, FaBell } from "react-icons/fa";
 import { MdPeople } from "react-icons/md";
 import UserDetail from "../component/UserDetail";
 
@@ -419,24 +419,7 @@ const Aside = () => {
     acceptList();
     acceptList1();
     myMeetingList1();
-  }, [id, nick, imgUrl, isOpen, refresh, hasNotifications]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 721) {
-        setIsOpen1(false);
-        setIsOpen2(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    // 초기 실행을 위해 호출
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  }, [id, nick, imgUrl, refresh, isOpen]);
 
   return (
     <Container>

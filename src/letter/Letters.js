@@ -1,10 +1,17 @@
 import styled from "styled-components";
 import LetterList from "./LetterList";
 
-const Container = styled.div``;
+const Container = styled.div`
+  @media (max-width: 720px) {
+  }
+`;
 const Head = styled.div`
   display: flex;
   background-color: #b8d0fa;
+
+  @media (max-width: 720px) {
+    display: none;
+  }
 `;
 const Box = styled.div`
   display: flex;
@@ -45,6 +52,11 @@ const Box = styled.div`
 const Body = styled.div`
   background-color: #e5f3ff;
   min-height: 17rem;
+  @media (max-width: 720px) {
+    width: 100%;
+    position: absolute;
+    right: 1px;
+  }
 `;
 
 const Letters = ({

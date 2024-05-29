@@ -15,6 +15,16 @@ const StyledLetterBox = styled.div`
     position: relative;
     width: 100%;
   }
+  @media (max-width: 720px) {
+    footer {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      position: absolute;
+      top: 320px;
+      width: 100%;
+    }
+  }
 `;
 
 const Div = styled.div`

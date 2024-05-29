@@ -15,11 +15,28 @@ const StyledBtn = styled.button`
     background-color: #ccd5ae;
     color: #fff;
   }
+  ${({ mediaQuery }) =>
+    mediaQuery &&
+    `
+    @media (max-width: 720px) {
+      border-radius: 0;
+      width: 237px;
+      height: 37px;
+      padding: 0;
+      margin:0;
+      padding:0; 
+      margin-left: 2px;     
+      margin-right: 0;
+      &:not(:last-child) {
+      margin-right: -1px;
+    }
+    }
+  `}
 `;
 
-const Btn = ({ onClick, disabled, children }) => {
+const Btn = ({ onClick, disabled, children, mediaQuery }) => {
   return (
-    <StyledBtn disabled={disabled} onClick={onClick}>
+    <StyledBtn disabled={disabled} onClick={onClick} mediaQuery={mediaQuery}>
       {children}
     </StyledBtn>
   );
