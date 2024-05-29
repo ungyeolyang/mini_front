@@ -18,12 +18,26 @@ const StyledMoim = styled.div`
   &:hover {
     background-color: #b8d0fa;
   }
+  @media (max-width: 720px) {
+    border-radius: 0;
+    height: 7rem;
+    width: 100%;
+    border: 1px solid #b8d0fa;
+    flex-direction: row;
+    position: relative;
+  }
 `;
 const Category = styled.span`
   color: gray;
+  @media (max-width: 720px) {
+    font-size: 10px;
+  }
 `;
 const Title = styled.span`
   font-size: 1.5rem;
+  @media (max-width: 720px) {
+    font-size: 20px;
+  }
 `;
 const Nick = styled.div`
   display: flex;
@@ -31,6 +45,11 @@ const Nick = styled.div`
   gap: 0.1rem;
   span {
     font-weight: bold;
+  }
+  @media (max-width: 720px) {
+    position: absolute;
+    right: 1px;
+    bottom: 1px;
   }
 `;
 const Div = styled.div`
@@ -41,6 +60,14 @@ const Div = styled.div`
     display: flex;
     align-items: center;
     gap: 0.5rem;
+  }
+  @media (max-width: 720px) {
+    position: absolute;
+    right: 130px;
+    bottom: 1px;
+    div {
+      text-align: center;
+    }
   }
 `;
 

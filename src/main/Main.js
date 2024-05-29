@@ -21,6 +21,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: 720px) {
+    width: 100%;
+  }
 `;
 const Conta = styled.div`
   position: relative;
@@ -37,6 +40,12 @@ const MoimBox = styled.div`
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
+  @media (max-width: 720px) {
+    flex-wrap: none;
+    gap: 0;
+    flex-direction: column;
+    width: 100%;
+  }
 `;
 const SerBox = styled.div`
   display: flex;
