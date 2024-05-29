@@ -16,7 +16,7 @@ const People = styled.div`
   }
 `;
 
-const Member = ({ size, id }) => {
+const Member = ({ size, id, onClickDetail }) => {
   const [user, setUser] = useState();
 
   const getMember = async () => {
@@ -35,7 +35,11 @@ const Member = ({ size, id }) => {
 
   return (
     <People>
-      <Profile size={size} src={user?.profile}></Profile>
+      <Profile
+        size={size}
+        src={user?.profile}
+        onClick={() => onClickDetail(id)}
+      ></Profile>
       <span>{user?.nick}</span>
       <span>{`(${id})`}</span>
     </People>

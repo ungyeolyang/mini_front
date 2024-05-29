@@ -6,18 +6,23 @@ import { useState } from "react";
 
 const StyledScheduleBox = styled.div`
   display: flex;
+  position: absolute;
+  top: 10rem;
   width: 100%;
+  gap: 1rem;
   flex-direction: column;
   footer {
     display: flex;
     align-items: center;
-    gap: 30%;
+    justify-content: center;
+    gap: 20%;
     position: relative;
     width: 100%;
   }
 `;
 const Div = styled.div`
   display: flex;
+  justify-content: center;
 
   input,
   button {
@@ -64,6 +69,23 @@ const ScheduleBox = ({
 
   return (
     <StyledScheduleBox>
+      <Div>
+        <select
+          defaultValue="title"
+          onChange={(e) => setSearchCategory(e.target.value)}
+        >
+          <option value="title">제목</option>
+          <option value="id">작성자</option>
+          <option value="sdate">일정</option>
+        </select>
+        <InputBox>
+          <input
+            type="text"
+            placeholder="검색어를 입력해 주세요"
+            onChange={(e) => setText(e.target.value)}
+          />
+        </InputBox>
+      </Div>
       <Schedule
         schedule={paginatedData}
         category={category}
@@ -78,23 +100,6 @@ const ScheduleBox = ({
           totalItemsCount={schedule?.length}
           onPageChange={handlePageChange}
         />
-        <Div>
-          <select
-            defaultValue="title"
-            onChange={(e) => setSearchCategory(e.target.value)}
-          >
-            <option value="title">제목</option>
-            <option value="id">작성자</option>
-            <option value="sdate">일정</option>
-          </select>
-          <InputBox>
-            <input
-              type="text"
-              placeholder="검색어를 입력해 주세요"
-              onChange={(e) => setText(e.target.value)}
-            />
-          </InputBox>
-        </Div>
       </footer>
     </StyledScheduleBox>
   );

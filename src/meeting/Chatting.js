@@ -9,7 +9,7 @@ import ChatLine from "./ChatLine";
 const ChatOutBox = styled.div`
   width: 30vw;
   height: 80vh;
-  display: flex;
+  display: ${({ isSmall }) => (isSmall ? "none" : "flex")};
   justify-content: center;
   align-items: center;
   position: relative;
@@ -62,7 +62,7 @@ const Input = styled.input`
   font-weight: bold;
 `;
 
-const Chatting = ({ info }) => {
+const Chatting = ({ info, isSmall }) => {
   const input = useRef(null);
   const id = localStorage.getItem("id");
 
@@ -120,7 +120,7 @@ const Chatting = ({ info }) => {
   }, []);
 
   return (
-    <ChatOutBox>
+    <ChatOutBox isSmall={isSmall}>
       <ChatInBox>
         <Title>{info?.name}</Title>
         <Chat>

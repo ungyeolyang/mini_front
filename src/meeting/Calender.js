@@ -49,6 +49,8 @@ const Head = styled.div`
 `;
 
 const Container = styled.div`
+  position: absolute;
+  top: 8rem;
   width: 100%;
   display: flex;
   flex-direction: column;

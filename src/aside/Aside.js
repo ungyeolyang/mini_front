@@ -267,6 +267,7 @@ const MeetingBox = styled.div`
   flex-direction: column;
   gap: 1rem;
   overflow: auto;
+  scrollbar-width: none;
   height: 13rem;
 `;
 
@@ -425,7 +426,7 @@ const Aside = () => {
     acceptList();
     acceptList1();
     myMeetingList1();
-  }, [id, nick, imgUrl, refresh, isOpen]);
+  }, [id, nick, imgUrl, refresh]);
 
   return (
     <Container>
@@ -473,6 +474,7 @@ const Aside = () => {
                 position: "fixed",
                 top: "60px",
                 right: "225px",
+                zIndex: `1`,
               }}
             >
               <Head>내모임</Head>

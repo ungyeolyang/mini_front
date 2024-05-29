@@ -11,8 +11,6 @@ import Board from "./boader/Board";
 import BoardDetail from "./boader/BoardDetail";
 import BoInser from "./boader/BoInser";
 import Letter from "./letter/Letter";
-import ImageUploader from "./mypage/ImageUploader";
-import Test from "./Test";
 import Update from "./boader/Update";
 
 function App() {
@@ -23,7 +21,6 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Aside />}>
-              {/* <Route index element={<ImageUploader />} /> */}
               <Route index element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/main" element={<Main />} />

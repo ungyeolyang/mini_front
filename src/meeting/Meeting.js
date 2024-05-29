@@ -29,11 +29,13 @@ const FullBox = styled.div`
 `;
 
 const MemberBox = styled.div`
-  width: 100%;
+  width: 95%;
   display: flex;
   position: absolute;
   align-items: center;
-  top: 0;
+  padding-right: 4rem;
+  overflow-x: auto;
+  top: -4rem;
   border-radius: 1rem;
   background-color: #e5f3ff;
 `;
@@ -46,10 +48,10 @@ const Personnel = styled.span`
   }
 `;
 const Head = styled.div`
-  position: relative;
+  position: absolute;
+  top: 5rem;
   width: 90%;
   height: 2.4rem;
-  margin-top: 4rem;
   border-bottom: 2px solid #ccd5ae;
   padding-left: 1rem;
   span {
@@ -80,6 +82,12 @@ const Button = styled.button`
   }
 `;
 
+const Span = styled.span`
+  color: ${({ isDetail }) => (isDetail === 3 ? `#94b9f3` : `#e5f3ff`)};
+  border-color: ${({ isDetail }) => (isDetail === 3 ? `#ccd5ae` : `#e9edc9`)};
+  display: ${({ isSmall }) => (isSmall ? `block` : `none`)};
+`;
+
 const Meeting = () => {
   const { no } = useParams();
   const context = useContext(UserContext);
@@ -98,6 +106,7 @@ const Meeting = () => {
   const [sendOpen, setSendOpen] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
+  const [isSmall, setIsSmall] = useState(false);
 
   const [searchCategory, setSearchCategory] = useState("title");
   const [text, setText] = useState("");
@@ -172,6 +181,33 @@ const Meeting = () => {
     setUserOpen(true);
     setUserId(props);
   };
+  const detail = () => {
+    switch (isDetail) {
+      case 1:
+        return (
+          <Calendar
+            meetingNo={no}
+            setIsDetail={setIsDetail}
+            setText={setText}
+            setSearchCategory={setSearchCategory}
+            isSend={isSend}
+          />
+        );
+      case 2:
+        return (
+          <ScheduleBox
+            schedule={schedule}
+            onClickDetail={onclickDetail}
+            searchCategory={searchCategory}
+            setSearchCategory={setSearchCategory}
+            text={text}
+            setText={setText}
+          />
+        );
+      default:
+        return <Chatting no={no} info={info} />;
+    }
+  };
 
   useEffect(() => {
     memberList();
@@ -191,7 +227,7 @@ const Meeting = () => {
                     key={user.id}
                     size={`3rem`}
                     id={user.id}
-                    onclickDetail={onClickDetail}
+                    onClickDetail={onClickDetail}
                   ></Member>
                 ))}
               <Personnel>
@@ -200,26 +236,34 @@ const Meeting = () => {
             </MemberBox>
             <Head>
               <span
-                onClick={() => setIsDetail(true)}
+                onClick={() => setIsDetail(1)}
                 style={{
-                  color: isDetail ? `#94b9f3` : `#e5f3ff`,
-                  borderColor: isDetail ? `#ccd5ae` : `#e9edc9`,
+                  color: isDetail === 1 ? `#94b9f3` : `#e5f3ff`,
+                  borderColor: isDetail === 1 ? `#ccd5ae` : `#e9edc9`,
                 }}
               >
                 공지
               </span>
               <span
-                onClick={() => setIsDetail(false)}
+                onClick={() => setIsDetail(2)}
                 style={{
-                  color: !isDetail ? `#94b9f3` : `#e5f3ff`,
-                  borderColor: !isDetail ? `#ccd5ae` : `#e9edc9`,
+                  color: isDetail === 2 ? `#94b9f3` : `#e5f3ff`,
+                  borderColor: isDetail === 2 ? `#ccd5ae` : `#e9edc9`,
                 }}
               >
                 캘린더
               </span>
+              <Span
+                onClick={() => setIsDetail(3)}
+                isSmall={isSmall}
+                isDetail={isDetail}
+              >
+                채팅
+              </Span>
               <Button onClick={() => setSendOpen(true)}>글쓰기</Button>
             </Head>
-            {!isDetail ? (
+
+            {/* {!isDetail ? (
               <Calendar
                 meetingNo={no}
                 setIsDetail={setIsDetail}
@@ -236,9 +280,10 @@ const Meeting = () => {
                 text={text}
                 setText={setText}
               />
-            )}
+            )} */}
+            {detail()}
           </FullBox>
-          <Chatting no={no} info={info} />
+          <Chatting no={no} info={info} isSmall={isSmall} />
         </Container>
       </Right>
       <Modal open={modalOpen} close={closeModal} header="오류">
