@@ -142,6 +142,11 @@ const Body = styled.div`
       font-weight: bold;
       font-size: 20px;
     }
+    @media (max-width: 720px) {
+      header {
+        display: none;
+      }
+    }
   }
 `;
 
@@ -221,7 +226,7 @@ const Mdicon = styled.button`
   padding: 0;
   border: 0;
   position: absolute;
-  right: 200px;
+  right: 230px;
   :hover {
     cursor: pointer;
   }
@@ -414,6 +419,18 @@ const Aside = () => {
               ) : (
                 <div>알림이 없습니다</div>
               )}
+            </div>
+          )}
+          <Mdicon onClick={toggleMenu1}>
+            <MdPeople />
+          </Mdicon>
+          {isOpen2 && (
+            <div style={{ position: "fixed", top: "0", right: "1px" }}>
+              <Head>내모임</Head>
+              {myMeeting &&
+                myMeeting.map((meeting) => (
+                  <MyMeeting meeting={meeting} onclickDetail={onClickDetail} />
+                ))}
             </div>
           )}
           <Profil onClick={onClickProfil} isLogin={isLogin}>
