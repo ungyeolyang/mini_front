@@ -22,6 +22,11 @@ const Container = styled.div`
     margin-bottom: 10%;
     align-self: flex-start;
   }
+  @media (max-width: 720px) {
+    body {
+      height: 115vw;
+    }
+  }
 `;
 
 const DateInput = styled.input`
@@ -66,6 +71,9 @@ const Placeholder1 = styled.span`
 
 const H = styled.h1`
   font-size: 4rem;
+  @media (max-width: 720px) {
+    display: none;
+  }
 `;
 
 const Error = styled.span`
@@ -80,6 +88,10 @@ const Div = styled.div`
   align-items: center;
   padding: 0 0.8rem;
   gap: 5rem;
+  @media (max-width: 720px) {
+    width: 310px;
+    height: 230px;
+  }
 `;
 
 const SignUp = () => {

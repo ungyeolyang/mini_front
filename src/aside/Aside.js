@@ -36,11 +36,13 @@ const Logo = styled.div`
     padding: 0;
     margin-left: 5%;
     ${({ isLogin }) =>
-      isLogin &&
-      `img {
+      isLogin
+        ? `img {
         width: 4rem;
-        object-fit: cover;
-  }`}
+        object-fit: cover; 
+        
+  }`
+        : `{width: 5rem; height: 5rem; margin:0; padding:0;} img{width: 7rem; height: 7rem; object-fit: cover; margin-bottom: 10px; padding-bottom: 10px}`}
   }
 `;
 
@@ -193,6 +195,10 @@ const Div = styled.div`
   flex-direction: column;
   overflow: hidden;
   background-color: ${(props) => props.color || `transparent`};
+
+  @media (max-width: 720px) {
+    ${({ isLogin }) => (isLogin ? `{}` : `align-items:center; height: 100vw;`)}
+  }
 `;
 
 const Head = styled.div`
@@ -262,7 +268,6 @@ const Aside = () => {
     try {
       const rsp = await MeetingAxiosApi.acceptList(id);
       if (rsp.data) {
-        console.log("이게뭐야", rsp.data.length);
         setAccept(rsp.data);
         setHasNotifications(rsp.data.length > 0); // 알림 여부 설정
       } else {
