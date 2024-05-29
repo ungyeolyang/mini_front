@@ -279,7 +279,7 @@ const MeetingDetail = (props) => {
                     <Cdiv>
                       <Bold size={"1.5rem"}>세부위치</Bold>
                       <span>{moim?.location}</span>
-                      {/* {moim?.location !== "온라인" && <KakaoMap moim={moim} />} */}
+                      {moim?.location !== "온라인" && <KakaoMap moim={moim} />}
                     </Cdiv>
                   </Div>
                 </Body>

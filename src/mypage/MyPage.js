@@ -22,6 +22,12 @@ const InContainer = styled.div`
   width: 65%;
   border-top-left-radius: 85px;
   border-top-right-radius: 85px;
+  @media (max-width: 720px) {
+    bottom: -29px;
+    width: 85%;
+    overflow: auto;
+    scrollbar-width: none;
+  }
 `;
 
 const Head = styled.div`
@@ -68,8 +74,13 @@ const Error = styled.span`
 
 const Button = styled.div`
   position: absolute;
-  right: 2rem;
-  bottom: 3rem;
+  bottom: 1px;
+  right: 1px;
+  @media (max-width: 720px) {
+    position: static;
+    bottom: auto;
+    right: auto;
+  }
 `;
 
 const Pw = styled.span`

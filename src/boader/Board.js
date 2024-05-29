@@ -7,7 +7,6 @@ import Paging from "../component/Paging";
 import Right from "../component/Right";
 import { FaMagnifyingGlass, FaBars } from "react-icons/fa6";
 
-// Styled components
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -200,9 +199,9 @@ const Board = () => {
 
     updatePageSize(); // 초기 페이지 크기 설정
 
-    window.addEventListener("resize", updatePageSize); // 리사이즈 이벤트 리스너 추가
+    window.addEventListener("resize", updatePageSize);
     return () => {
-      window.removeEventListener("resize", updatePageSize); // 리사이즈 이벤트 리스너 제거
+      window.removeEventListener("resize", updatePageSize);
     };
   }, []);
 

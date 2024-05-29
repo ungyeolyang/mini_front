@@ -9,9 +9,9 @@ import SideBar from "../component/SideBar";
 import MeetingAxiosApi from "../api/MeetingAxiosApi";
 import MyMeeting from "./MyMeeting";
 import Accept from "./Accept";
-import { FaBellSlash, FaBell } from "react-icons/fa";
+import { FaBellSlash } from "react-icons/fa";
 import { MdPeople } from "react-icons/md";
-import UserDetail from "../component/UserDetail";
+import { FaBell } from "react-icons/fa";
 
 const Container = styled.div`
   display: flex;
@@ -50,8 +50,7 @@ const Profil = styled.div`
   width: 7rem;
   height: 7rem;
   border-radius: 50%;
-  background-color: white;
-  box-shadow: 2px 2px 1px gray;
+  background-color: silver;
   display: flex;
   position: relative;
   overflow: hidden;
@@ -89,7 +88,6 @@ const Side = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
   height: 100vh;
   background-color: #fefae0;
   width: ${({ isLogin }) => (isLogin ? `20vw` : `40vw`)};
@@ -109,6 +107,7 @@ const Body = styled.div`
   display: ${({ isLogin }) => (isLogin ? "flex" : "none")};
   flex-direction: column;
   align-items: center;
+
   footer {
     color: #707070;
     position: absolute;
@@ -226,11 +225,6 @@ const Icon = styled.button`
     display: none; /* 전체 화면이 721px 이상일 때 숨김 */
   }
 `;
-const Span = styled.span`
-  @media (max-width: 721px) {
-    display: none; /* 전체 화면이 721px 이상일 때 숨김 */
-  }
-`;
 const Mdicon = styled.button`
   width: 1rem;
   height: 1rem;
@@ -248,28 +242,6 @@ const Mdicon = styled.button`
   }
 `;
 
-const Line = styled.div`
-  display: flex;
-  padding: 1rem 1rem 0;
-  width: 15rem;
-  border-bottom: 3px solid #b8d0fa;
-  margin-bottom: 1rem;
-`;
-
-const AcceptBox = styled.div`
-  position: absolute;
-  bottom: 5rem;
-  height: 12rem;
-  overflow: hidden;
-`;
-const MeetingBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  overflow: auto;
-  height: 13rem;
-`;
-
 const Aside = () => {
   const id = localStorage.getItem("id");
   const navigate = useNavigate();
@@ -277,13 +249,10 @@ const Aside = () => {
   const [member, setMember] = useState();
   const [myMeeting, setMyMeeting] = useState();
   const [accept, setAccept] = useState();
-  const [num, setNum] = useState();
-  const [userId, setUserId] = useState();
   const [refresh, setRefresh] = useState(false);
   const [isOpen1, setIsOpen1] = useState(false); // 메뉴 열림/닫힘 상태
   const [isOpen2, setIsOpen2] = useState(false);
   const [hasNotifications, setHasNotifications] = useState(false); // 알림 여부
-  const [userOpen, setUserOpen] = useState(false);
 
   const onClickDetail = (props) => {
     console.log(props);
@@ -311,7 +280,7 @@ const Aside = () => {
   };
   const myMeetingList1 = async () => {
     try {
-      const rsp = await MeetingAxiosApi.myMeetingList(id);
+      const rsp = await MeetingAxiosApi.myMeetingList1(id);
       if (rsp.data) {
         console.log(rsp.data);
         setMyMeeting(rsp.data);
@@ -347,10 +316,6 @@ const Aside = () => {
   const onClickLogOut = () => {
     navigate("/");
     localStorage.clear();
-  };
-  const onClickUser = (props) => {
-    setUserOpen(true);
-    setUserId(props);
   };
 
   //모임 수락버튼 클릭
@@ -399,7 +364,6 @@ const Aside = () => {
       if (rsp.data) {
         console.log(rsp.data);
         setAccept(rsp.data);
-        setNum(rsp.data.length);
       } else {
         console.log(`리스트가 없음`);
       }
@@ -425,7 +389,24 @@ const Aside = () => {
     acceptList();
     acceptList1();
     myMeetingList1();
-  }, [id, nick, imgUrl, refresh, isOpen]);
+  }, [id, nick, imgUrl, refresh, isOpen, hasNotifications]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 721) {
+        setIsOpen1(false);
+        setIsOpen2(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    // 초기 실행을 위해 호출
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <Container>
@@ -488,35 +469,27 @@ const Aside = () => {
           <Nick>{member ? member?.nick : nick}</Nick>
           <Id>{"(" + id + ")"}</Id>
           <Button onClick={onClickLogOut}>
-            <Span>로그아웃</Span>
-            <span>[→</span>
+            로그아웃<span>[→</span>
           </Button>
           <header>
-            <Line>
-              <Head>내모임</Head>
-            </Line>
-            <MeetingBox>
-              {myMeeting &&
-                myMeeting.map((meeting) => (
-                  <MyMeeting
-                    meeting={meeting}
-                    onclickDetail={onClickDetail}
-                  ></MyMeeting>
-                ))}
-            </MeetingBox>
-          </header>
-          <AcceptBox>
+            <Head>내모임</Head>
+            {myMeeting &&
+              myMeeting.map((meeting) => (
+                <MyMeeting
+                  meeting={meeting}
+                  onclickDetail={onClickDetail}
+                ></MyMeeting>
+              ))}
+
             {accept &&
               accept.map((user) => (
                 <Accept
                   user={user}
                   onClickOk={onClickOk}
                   onClickNo={onClickNo}
-                  num={num}
-                  onClickUser={onClickUser}
                 ></Accept>
               ))}
-          </AcceptBox>
+          </header>
           <footer>
             <Link to="/board">게시판</Link>
             <span className="separator">ㅣ</span>
@@ -534,13 +507,6 @@ const Aside = () => {
         setOnDisplay={setOnDisplay}
         id={id}
       ></SideBar>
-      <UserDetail
-        open={userOpen}
-        close={() => {
-          setUserOpen(false);
-        }}
-        userId={userId}
-      ></UserDetail>
     </Container>
   );
 };
