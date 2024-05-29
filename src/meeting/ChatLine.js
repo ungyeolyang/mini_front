@@ -27,7 +27,7 @@ const Box = styled.div`
 const Contents = styled.span`
   padding: 0.5rem 1rem 0.5rem 1rem;
   border-radius: 1rem;
-  background-color: gray;
+  background-color: ${(props) => (props.display ? `#e9edc9` : `#ccd5ae`)};
 `;
 
 const Nick = styled.div`
@@ -78,7 +78,7 @@ const ChatLine = ({ user, id }) => {
       <Profile size={"4rem"} display={id === member.id} src={member.profile} />
       <Box>
         <Nick display={id === member.id}>{member.nick}</Nick>
-        <Contents>{user.contents}</Contents>
+        <Contents display={id === member.id}>{user.contents}</Contents>
       </Box>
       <Time>{formatDate(user.date)}</Time>
     </Line>

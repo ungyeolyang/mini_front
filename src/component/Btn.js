@@ -9,7 +9,7 @@ const StyledBtn = styled.button`
   margin-right: 10px;
   background-color: #e9edc9;
   border: 0;
-  padding: 0.5rem 2rem;
+  padding: 0.5rem 1.5rem;
   border-radius: 0.5rem;
   &:hover {
     background-color: #ccd5ae;

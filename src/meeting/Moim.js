@@ -8,7 +8,7 @@ import { GoPersonFill } from "react-icons/go";
 
 const StyledMoim = styled.div`
   display: flex;
-  width: 25rem;
+  width: 27rem;
   height: 12rem;
   flex-direction: column;
   border-radius: 1rem;
@@ -49,9 +49,10 @@ const Cdiv = styled.div`
   flex-direction: column;
 `;
 
-const Moim = ({ meeting, onClickMoim }) => {
+const Moim = ({ meeting, onClickMoim, currentPage }) => {
   const [nick, setNick] = useState("");
   const [size, setSize] = useState(0);
+  const [refresh, setRefresh] = useState("");
   const context = useContext(UserContext);
   const { rpad } = context;
 
@@ -81,7 +82,11 @@ const Moim = ({ meeting, onClickMoim }) => {
   useEffect(() => {
     memberList();
     getMember();
-  }, [nick]);
+  }, [nick, currentPage]);
+
+  useEffect(() => {
+    setRefresh(!refresh);
+  }, []);
 
   return (
     <StyledMoim onClick={() => onClickMoim(meeting)}>

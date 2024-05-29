@@ -165,7 +165,7 @@ const Main = () => {
   useEffect(() => {
     meetingList();
     conAccept();
-  }, [recruitOpen]);
+  }, [recruitOpen, isDetail]);
 
   const handleSerinputChange = (e) => {
     setserinput(e.target.value);
@@ -209,7 +209,11 @@ const Main = () => {
         <MoimBox>
           {meeting &&
             paginatedData.map((e) => (
-              <Moim meeting={e} onClickMoim={onClickMoim} />
+              <Moim
+                meeting={e}
+                onClickMoim={onClickMoim}
+                currentPage={currentPage}
+              />
             ))}
         </MoimBox>
         <Conta>

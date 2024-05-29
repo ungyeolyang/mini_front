@@ -32,7 +32,7 @@ const ModalStyle = styled.div`
     flex-direction: column;
     align-items: center;
     min-width: 1000px;
-    min-height: 900px;
+
     margin: 0 auto;
     border-radius: 0.6rem;
     background-color: #e5f3ff;
@@ -92,11 +92,33 @@ const ModalStyle = styled.div`
   }
 `;
 
-const Div = styled.div``;
+const Div = styled.div`
+  display: flex;
+  width: 90%;
+  justify-content: flex-start;
+  align-items: ${({ type }) => (type === "head" ? `flex-end` : `center`)};
+  padding: 0.5rem 5rem;
+  gap: ${({ type }) => (type === "head" ? `30%` : `60%`)};
+`;
 
-const Bold = styled.span`
+const Cdiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ type }) => (type === "head" ? `0.5rem` : `0.5rem`)};
+  > span {
+    font-size: 1.1rem;
+    padding-left: 0.5rem;
+  }
+`;
+const UserBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const Bold = styled.div`
   font-weight: bold;
-  font-size: inherit;
+  font-size: ${({ size }) => size || "1rem"};
 `;
 const Title = styled.div`
   font-size: 3rem;
@@ -105,6 +127,12 @@ const Title = styled.div`
   text-align: center;
   border-bottom: 1px solid gray;
 `;
+
+const Gray = styled.span`
+  color: gray;
+  font-size: 1.1rem;
+`;
+
 const User = styled.span`
   padding: 0.2rem 0.8rem;
   border-radius: 1rem;
@@ -148,7 +176,7 @@ const MeetingDetail = (props) => {
     setModalOpen(false);
   };
 
-  const onClickUser = (e) => {
+  const onClickUser = () => {
     setUserOpen(true);
   };
 
@@ -203,34 +231,56 @@ const MeetingDetail = (props) => {
               <main>
                 <Body>
                   <Title>{moim?.name}</Title>
-                  <span>
-                    기간 :
-                    {moim?.duration1 ? formatDate(moim?.duration1) : "매일"}
-                    {moim?.duration2 && ` ~ ${formatDate(moim?.duration2)}`}
-                  </span>
-                  {id === moim?.id && <Btn>삭제</Btn>}
-                  <Div>{moim?.category}</Div>
-                  <Div>{moim?.title}</Div>
-                  <Div>
-                    {size} / {moim?.personnel}
+                  <Div type="head">
+                    <Cdiv>
+                      <Gray>{moim?.category}</Gray>
+                      <Bold size={"2rem"}>{moim?.title}</Bold>
+                      <UserBox>
+                        <Bold>모임장</Bold>
+                        <User onClick={onClickUser}>
+                          {userNick}({moim?.id})
+                        </User>
+                      </UserBox>
+                    </Cdiv>
+                    {moim?.id !== id && !accept?.includes(moim.no) && (
+                      <Btn
+                        onClick={() => {
+                          setApplyOpen(true);
+                        }}
+                      >
+                        신청하기
+                      </Btn>
+                    )}
                   </Div>
-                  <Div>{moim?.detail}</Div>
-                  <Div>{moim?.location || "온라인"}</Div>
-                  {moim?.id !== id && !accept?.includes(moim.no) && (
-                    <Btn
-                      onClick={() => {
-                        setApplyOpen(true);
-                      }}
-                    >
-                      신청하기
-                    </Btn>
-                  )}
-                  {/* <KakaoMap moim={moim} /> */}
-                  <Div type="receive">
-                    <Bold>작성자</Bold>
-                    <User onClick={onClickUser} user={moim?.id}>
-                      {userNick}({moim?.id})
-                    </User>
+                  <Div>
+                    <Cdiv>
+                      <Bold size={"1.5rem"}>인원</Bold>
+                      <span>
+                        {size} / {moim?.personnel}
+                      </span>
+                    </Cdiv>
+                    <Cdiv>
+                      <Bold size={"1.5rem"}>기간</Bold>
+                      <span>
+                        {moim?.duration1 ? formatDate(moim?.duration1) : "매일"}
+                      </span>
+                      <span>
+                        {moim?.duration2 && ` ~ ${formatDate(moim?.duration2)}`}
+                      </span>
+                    </Cdiv>
+                  </Div>
+                  <Div>
+                    <Cdiv>
+                      <Bold size={"1.5rem"}>세부사항</Bold>
+                      <span>{moim?.detail}</span>
+                    </Cdiv>
+                  </Div>
+                  <Div>
+                    <Cdiv>
+                      <Bold size={"1.5rem"}>세부위치</Bold>
+                      <span>{moim?.location}</span>
+                      {/* {moim?.location !== "온라인" && <KakaoMap moim={moim} />} */}
+                    </Cdiv>
                   </Div>
                 </Body>
               </main>

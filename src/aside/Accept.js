@@ -1,8 +1,10 @@
 import styled, { keyframes } from "styled-components";
 import Profile from "../component/Profile";
 import Btn from "../component/Btn";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import LoginAxiosApi from "../api/LoginAxiosApi";
+import { UserContext } from "../context/UserStore";
+import UserDetail from "../component/UserDetail";
 
 const slideUp = keyframes`
   0% {
@@ -24,8 +26,18 @@ const StyledAccept = styled.div`
 `;
 const Head = styled.div`
   background-color: #b8d0fa;
+  display: flex;
+  align-items: center;
+  position: relative;
   padding: 0.7rem;
   border-radius: 1rem 1rem 0 0;
+  span {
+    position: absolute;
+    padding: 0.2rem 0.6rem;
+    right: 1rem;
+    background-color: #e9edc9;
+    border-radius: 50%;
+  }
 `;
 const Body = styled.div`
   background-color: #e5f3ff;
@@ -44,20 +56,24 @@ const Div = styled.div`
   display: flex;
   gap: 0.5rem;
 `;
-
+const Span = styled.span`
+  visibility: ${({ on }) => (on ? "hidden" : "visible")};
+`;
 const Detail = styled.div`
   display: ${({ on }) => (on ? `flex` : `none`)};
   background-color: #e5f3ff;
   border: 2px solid #b8d0fa;
   padding: 1rem;
   position: absolute;
-  top: 6.5rem;
-  right: 5rem;
+  top: 5rem;
+  right: 3rem;
 `;
 
-const Accept = ({ user, onClickOk, onClickNo }) => {
+const Accept = ({ user, onClickOk, onClickNo, num, onClickUser }) => {
   const [member, setMember] = useState();
   const [on, setOn] = useState(false);
+  const context = useContext(UserContext);
+  const { rpad } = context;
 
   useEffect(() => {
     const getMember = async () => {
@@ -73,21 +89,28 @@ const Accept = ({ user, onClickOk, onClickNo }) => {
 
   return (
     <StyledAccept>
-      <Head>모임신청</Head>
+      <Head>모임신청{num > 1 && <span>{num}</span>}</Head>
       <Body>
-        <Profile size={`5rem`} src={member?.profile}></Profile>
+        <Profile
+          size={`5rem`}
+          src={member?.profile}
+          onClick={() => {
+            onClickUser(user.id);
+          }}
+        ></Profile>
         <Cdiv>
           <div>
             <span style={{ fontWeight: `bold` }}>{member?.nick}</span>
             <span> ({user.id})</span>
           </div>
-          <span
-            onMouseEnter={() => setOn(true)}
-            onMouseLeave={() => setOn(false)}
-          >
+          <Span onMouseEnter={() => setOn(true)} on={on}>
+            {user.detail.length > 12
+              ? rpad(user.detail.substr(0, 9), 12, ".")
+              : user.detail}
+          </Span>
+          <Detail on={on} onMouseLeave={() => setOn(false)}>
             {user.detail}
-          </span>
-          <Detail on={on}>{user.detail}</Detail>
+          </Detail>
           <Div>
             <Btn onClick={() => onClickOk(user)}>수락</Btn>
             <Btn onClick={() => onClickNo(user)}>거절</Btn>

@@ -60,6 +60,8 @@ const StyledSideBar = styled.div`
   }
   footer {
     position: absolute;
+    height: 12rem;
+    overflow: hidden;
     bottom: 0;
   }
 `;
@@ -72,8 +74,11 @@ const Head = styled.span`
 const Line = styled.div`
   display: flex;
   border-bottom: 3px solid #b8d0fa;
-  width: 95%;
+  width: 100%;
   padding-left: 1rem;
+  @media (max-width: 1000px) {
+    width: 80%;
+  }
 `;
 
 const SideBar = ({ isOpen, setIsOpen, onDisplay, setOnDisplay, id }) => {

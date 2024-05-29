@@ -4,7 +4,8 @@ const StyledProfile = styled.div`
   width: ${(props) => props.size};
   height: ${(props) => props.size};
   border-radius: 50%;
-  background-color: silver;
+  background-color: white;
+  box-shadow: 2px 2px 1px gray;
   display: ${({ display }) => (display ? `none` : `flex`)};
   position: relative;
   overflow: hidden;

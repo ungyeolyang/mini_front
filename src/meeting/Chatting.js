@@ -9,7 +9,6 @@ import ChatLine from "./ChatLine";
 const ChatOutBox = styled.div`
   width: 30vw;
   height: 80vh;
-  background-color: silver;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,6 +19,7 @@ const ChatInBox = styled.div`
   width: 95%;
   height: 96%;
   background-color: #e5f3ff;
+  border-radius: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,6 +39,7 @@ const Title = styled.div`
   font-size: 2.5rem;
   font-weight: bold;
   background-color: #b8d0fa;
+  border-radius: 1rem 1rem 0 0;
 `;
 
 const InputBox = styled.div`
@@ -99,24 +100,24 @@ const Chatting = ({ info }) => {
     }
   };
 
-  // useEffect(() => {
-  //   const getChat = async () => {
-  //     try {
-  //       const rsp = await MeetingAxiosApi.chatList(info?.no);
-  //       if (rsp.data) {
-  //         setChat(rsp.data);
-  //       } else {
-  //         console.log("값을 못가지고옴");
-  //       }
-  //     } catch (e) {
-  //       console.log("에러");
-  //     }
-  //   };
+  useEffect(() => {
+    const getChat = async () => {
+      try {
+        const rsp = await MeetingAxiosApi.chatList(info?.no);
+        if (rsp.data) {
+          setChat(rsp.data);
+        } else {
+          console.log("값을 못가지고옴");
+        }
+      } catch (e) {
+        console.log("에러");
+      }
+    };
 
-  //   const interval = setInterval(getChat, 1000);
+    const interval = setInterval(getChat, 100000);
 
-  //   return () => clearInterval(interval);
-  // }, []);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <ChatOutBox>

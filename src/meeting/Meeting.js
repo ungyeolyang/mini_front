@@ -11,6 +11,7 @@ import { UserContext } from "../context/UserStore";
 import ScheduleBox from "./ScheduleBox";
 import { useParams } from "react-router-dom";
 import ScheduleSend from "./ScheduleSend";
+import UserDetail from "../component/UserDetail";
 
 const Container = styled.div`
   display: flex;
@@ -25,22 +26,31 @@ const FullBox = styled.div`
   justify-content: center;
   width: 40vw;
   height: 85vh;
-  background-color: gray;
 `;
 
 const MemberBox = styled.div`
   width: 100%;
-  height: 100px;
   display: flex;
   position: absolute;
+  align-items: center;
   top: 0;
+  border-radius: 1rem;
+  background-color: #e5f3ff;
+`;
+const Personnel = styled.span`
+  position: absolute;
+  font-weight: bold;
+  right: 2rem;
+  span {
+    color: gray;
+  }
 `;
 const Head = styled.div`
   position: relative;
   width: 90%;
   height: 2.4rem;
   margin-top: 4rem;
-  border-bottom: 2px solid #94b9f3;
+  border-bottom: 2px solid #ccd5ae;
   padding-left: 1rem;
   span {
     padding: 1rem;
@@ -48,9 +58,6 @@ const Head = styled.div`
     border: 2px solid #e5f3ff;
     border-bottom: none;
     cursor: pointer;
-    &:hover {
-      border-color: #94b9f3;
-    }
   }
 `;
 
@@ -81,13 +88,16 @@ const Meeting = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [member, setMember] = useState();
   const [user, setUser] = useState();
+  const [info, setInfo] = useState();
+  const [size, setSize] = useState(0);
+  const [userId, setUserId] = useState();
   const [schedule, setSchedule] = useState([]);
   const [isDetail, setIsDetail] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
   const [isSend, setIsSend] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-  const [info, setInfo] = useState();
+  const [userOpen, setUserOpen] = useState(false);
 
   const [searchCategory, setSearchCategory] = useState("title");
   const [text, setText] = useState("");
@@ -120,6 +130,7 @@ const Meeting = () => {
       const rsp = await MeetingAxiosApi.memberList(no);
       if (rsp.data) {
         setMember(rsp.data);
+        setSize(rsp.data.length);
       } else {
         console.log("멤버를 못불러옴");
         setMember([]);
@@ -157,6 +168,10 @@ const Meeting = () => {
   const onClickSchedule = () => {
     setIsDetail(true);
   };
+  const onClickDetail = (props) => {
+    setUserOpen(true);
+    setUserId(props);
+  };
 
   useEffect(() => {
     memberList();
@@ -172,15 +187,23 @@ const Meeting = () => {
             <MemberBox>
               {member &&
                 member.map((user) => (
-                  <Member key={user.id} size={`3rem`} id={user.id}></Member>
+                  <Member
+                    key={user.id}
+                    size={`3rem`}
+                    id={user.id}
+                    onclickDetail={onClickDetail}
+                  ></Member>
                 ))}
+              <Personnel>
+                <span>{size}</span> / {info?.personnel}
+              </Personnel>
             </MemberBox>
             <Head>
               <span
                 onClick={() => setIsDetail(true)}
                 style={{
                   color: isDetail ? `#94b9f3` : `#e5f3ff`,
-                  borderColor: isDetail ? `#94b9f3` : `#e5f3ff`,
+                  borderColor: isDetail ? `#ccd5ae` : `#e9edc9`,
                 }}
               >
                 공지
@@ -189,7 +212,7 @@ const Meeting = () => {
                 onClick={() => setIsDetail(false)}
                 style={{
                   color: !isDetail ? `#94b9f3` : `#e5f3ff`,
-                  borderColor: !isDetail ? `#94b9f3` : `#e5f3ff`,
+                  borderColor: !isDetail ? `#ccd5ae` : `#e9edc9`,
                 }}
               >
                 캘린더
@@ -237,6 +260,13 @@ const Meeting = () => {
         setIsSend={setIsSend}
         no={no}
       ></ScheduleSend>
+      <UserDetail
+        open={userOpen}
+        close={() => {
+          setUserOpen(false);
+        }}
+        userId={userId}
+      ></UserDetail>
     </>
   );
 };
