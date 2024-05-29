@@ -32,7 +32,7 @@ const Title = styled.h3`
 
 const CategoryButton = styled.button`
   padding: 10px;
-  width: 237px;
+  width: 239px;
   height: 40px;
   margin-right: 10px;
   background-color: #e9edc9;
@@ -49,7 +49,7 @@ const CategoryButton = styled.button`
     margin-right: 0;
     flex: 1;
     &:not(:last-child) {
-      margin-right: -1px; /* Remove margin between buttons */
+      margin-right: -1px;
     }
     ${(props) =>
       props.active
@@ -186,14 +186,13 @@ const Board = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [serchCategory, setserchCategory] = useState("제목");
   const [serinput, setserinput] = useState("");
-  const [menuOpen, setMenuOpen] = useState(false);
   const [pageSize, setPageSize] = useState(6);
 
   const navigate = useNavigate();
   useEffect(() => {
     const updatePageSize = () => {
       if (window.innerWidth <= 720) {
-        setPageSize(10);
+        setPageSize(8);
       } else {
         setPageSize(6);
       }
@@ -277,13 +276,14 @@ const Board = () => {
       console.log(e);
     }
   };
-
   const handleClick = () => {
     navigate("/boinser");
   };
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+  const onKeyDownEnter = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
   };
 
   return (
@@ -353,6 +353,7 @@ const Board = () => {
             type="text"
             placeholder="검색어를 입력해 주세요"
             onChange={handleSerinputChange}
+            onKeyDown={onKeyDownEnter}
           />
           <InputButton onClick={handleSubmit}>
             <Inputicon>

@@ -63,6 +63,9 @@ const ModalStyle = styled.div`
       padding: 12px 16px;
       text-align: right;
     }
+    @media (max-width: 720px) {
+      width: 80%;
+    }
   }
 
   @keyframes modal-show {

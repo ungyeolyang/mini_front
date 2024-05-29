@@ -3,8 +3,8 @@ import styled from "styled-components";
 import useAddress from "./hooks/useLocation";
 
 const MapContainer = styled.div`
-  width: 50vh;
-  height: 50vh;
+  width: 30vh;
+  height: 30vh;
 `;
 
 const AppContainer = styled.div`
@@ -138,21 +138,6 @@ const KakaoMap = ({ moim }) => {
   return (
     <AppContainer>
       <MapContainer ref={mapRef}></MapContainer>
-      {/* <SearchContainer>
-        <InputWrapper>
-          <Input
-            type="text"
-            value={searchQuery}
-            onChange={handleSearchInputChange}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                handleSearchButtonClick();
-              }
-            }}
-          />
-        </InputWrapper>
-        <Button onClick={handleSearchButtonClick}>확인</Button>
-      </SearchContainer> */}
       {selectedPlace && (
         <InfoWindowContainer>
           <InfoWindowContent>

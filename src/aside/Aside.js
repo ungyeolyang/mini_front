@@ -9,8 +9,9 @@ import SideBar from "../component/SideBar";
 import MeetingAxiosApi from "../api/MeetingAxiosApi";
 import MyMeeting from "./MyMeeting";
 import Accept from "./Accept";
-import { FaBell, FaBellSlash } from "react-icons/fa";
+import { FaBellSlash } from "react-icons/fa";
 import { MdPeople } from "react-icons/md";
+import { FaBell } from "react-icons/fa";
 
 const Container = styled.div`
   display: flex;
@@ -259,13 +260,14 @@ const Aside = () => {
   };
   const acceptList1 = async () => {
     try {
-      const rsp = await MeetingAxiosApi.acceptList1(id);
+      const rsp = await MeetingAxiosApi.acceptList(id);
       if (rsp.data) {
-        console.log(rsp.data);
+        console.log("이게뭐야", rsp.data.length);
         setAccept(rsp.data);
         setHasNotifications(rsp.data.length > 0); // 알림 여부 설정
       } else {
         console.log(`리스트가 없음`);
+        setHasNotifications(false);
       }
     } catch (e) {
       console.log(e);
@@ -382,7 +384,24 @@ const Aside = () => {
     acceptList();
     acceptList1();
     myMeetingList1();
-  }, [id, nick, imgUrl, refresh, isOpen]);
+  }, [id, nick, imgUrl, refresh, isOpen, hasNotifications]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 721) {
+        setIsOpen1(false);
+        setIsOpen2(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    // 초기 실행을 위해 호출
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <Container>
@@ -398,7 +417,7 @@ const Aside = () => {
             <div
               style={{
                 position: "absolute",
-                top: "2.5rem",
+                top: "3.7rem",
                 right: "1rem",
                 background: "#fff",
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
@@ -425,7 +444,13 @@ const Aside = () => {
             <MdPeople />
           </Mdicon>
           {isOpen2 && (
-            <div style={{ position: "fixed", top: "0", right: "1px" }}>
+            <div
+              style={{
+                position: "fixed",
+                top: "60px",
+                right: "225px",
+              }}
+            >
               <Head>내모임</Head>
               {myMeeting &&
                 myMeeting.map((meeting) => (
@@ -450,15 +475,16 @@ const Aside = () => {
                   onclickDetail={onClickDetail}
                 ></MyMeeting>
               ))}
+
+            {accept &&
+              accept.map((user) => (
+                <Accept
+                  user={user}
+                  onClickOk={onClickOk}
+                  onClickNo={onClickNo}
+                ></Accept>
+              ))}
           </header>
-          {accept &&
-            accept.map((user) => (
-              <Accept
-                user={user}
-                onClickOk={onClickOk}
-                onClickNo={onClickNo}
-              ></Accept>
-            ))}
           <footer>
             <Link to="/board">게시판</Link>
             <span className="separator">ㅣ</span>

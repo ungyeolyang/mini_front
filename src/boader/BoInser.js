@@ -84,12 +84,15 @@ const InsertBu = styled.button`
 
 const TextInfo = styled.textarea`
   width: 100%;
-  height: 85%; /* 높이를 두 배로 */
+  height: 85%;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #fff;
   padding: 10px;
   resize: none;
+  @media (max-width: 720px) {
+    height: 75%;
+  }
 `;
 
 const FileUploadContainer = styled.div`

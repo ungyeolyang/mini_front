@@ -225,7 +225,7 @@ const MeetingDetail = (props) => {
                       신청하기
                     </Btn>
                   )}
-                  {/* <KakaoMap moim={moim} /> */}
+                  <KakaoMap moim={moim} />
                   <Div type="receive">
                     <Bold>작성자</Bold>
                     <User onClick={onClickUser} user={moim?.id}>
