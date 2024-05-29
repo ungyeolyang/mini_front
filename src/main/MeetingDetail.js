@@ -18,12 +18,18 @@ const ModalStyle = styled.div`
     bottom: 0;
     left: 0;
     z-index: 99;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(
+      0,
+      0,
+      0,
+      0.5
+    ); /* Increased opacity for better visibility */
   }
 
   .openModal {
     display: flex;
     align-items: center;
+    justify-content: center; /* Centering the modal */
     animation: modal-bg-show 0.8s;
   }
 
@@ -32,7 +38,6 @@ const ModalStyle = styled.div`
     flex-direction: column;
     align-items: center;
     min-width: 1000px;
-
     margin: 0 auto;
     border-radius: 0.6rem;
     background-color: #e5f3ff;
@@ -90,6 +95,25 @@ const ModalStyle = styled.div`
       }
     }
   }
+  @media (max-width: 720px) {
+    .openModal {
+      align-items: flex-start;
+    }
+    section {
+      height: 100%;
+      width: 100%;
+      min-width: 100%;
+      border-radius: 0;
+      overflow: auto;
+    }
+    header {
+      width: 100%;
+      padding: 16px 16px;
+    }
+    main {
+      padding: 1rem 0;
+    }
+  }
 `;
 
 const Div = styled.div`
@@ -99,6 +123,14 @@ const Div = styled.div`
   align-items: ${({ type }) => (type === "head" ? `flex-end` : `center`)};
   padding: 0.5rem 5rem;
   gap: ${({ type }) => (type === "head" ? `30%` : `60%`)};
+
+  @media (max-width: 720px) {
+    padding: 0.5rem 1rem;
+    flex-direction: column;
+    gap: ${({ type }) => (type === "head" ? `0.5rem` : `1rem`)};
+    text-align: center;
+    align-items: center;
+  }
 `;
 
 const Cdiv = styled.div`
@@ -110,6 +142,7 @@ const Cdiv = styled.div`
     padding-left: 0.5rem;
   }
 `;
+
 const UserBox = styled.div`
   display: flex;
   align-items: center;
@@ -120,12 +153,18 @@ const Bold = styled.div`
   font-weight: bold;
   font-size: ${({ size }) => size || "1rem"};
 `;
+
 const Title = styled.div`
   font-size: 3rem;
   padding: 1rem;
   width: 90%;
   text-align: center;
   border-bottom: 1px solid gray;
+  @media (max-width: 720px) {
+    font-size: 20px;
+    width: 100%;
+    padding: 0.5rem;
+  }
 `;
 
 const Gray = styled.span`
@@ -153,6 +192,12 @@ const Body = styled.div`
   border-top-left-radius: 85px;
   border-top-right-radius: 85px;
   padding: 2rem;
+  @media (max-width: 720px) {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0;
+    text-align: center;
+  }
 `;
 
 const MeetingDetail = (props) => {

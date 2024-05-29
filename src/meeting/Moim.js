@@ -77,9 +77,8 @@ const Cdiv = styled.div`
 `;
 
 const Moim = ({ meeting, onClickMoim, currentPage }) => {
-  const [nick, setNick] = useState("");
+  const [nick, setNick] = useState(""); // 초기 상태 설정
   const [size, setSize] = useState(0);
-  const [refresh, setRefresh] = useState("");
   const context = useContext(UserContext);
   const { rpad } = context;
 
@@ -100,7 +99,9 @@ const Moim = ({ meeting, onClickMoim, currentPage }) => {
   const getMember = async () => {
     try {
       const rsp = await LoginAxiosApi.memberGetOne(meeting.id);
-      setNick(rsp.data[0]?.nick);
+      if (rsp.data) {
+        setNick(rsp.data[0]?.nick); // 상태 업데이트
+      }
     } catch (e) {
       console.log(e);
     }
@@ -108,12 +109,7 @@ const Moim = ({ meeting, onClickMoim, currentPage }) => {
 
   useEffect(() => {
     memberList();
-    getMember();
-  }, [nick, currentPage]);
-
-  useEffect(() => {
-    setRefresh(!refresh);
-  }, []);
+  }, [currentPage, meeting.id, meeting.no]); // 의존성 배열 수정
 
   return (
     <StyledMoim onClick={() => onClickMoim(meeting)}>
@@ -138,10 +134,7 @@ const Moim = ({ meeting, onClickMoim, currentPage }) => {
           {size}/ {meeting.personnel}
         </div>
       </Div>
-      <Nick>
-        <span>{nick}</span>(
-        {rpad(meeting.id.substr(0, 3), meeting.id.length, "*")})
-      </Nick>
+      <Nick>{rpad(meeting.id.substr(0, 3), meeting.id.length, "*")}</Nick>
     </StyledMoim>
   );
 };
