@@ -180,6 +180,7 @@ const Main = () => {
   const handleSerinputChange = (e) => {
     setserinput(e.target.value);
   };
+
   const handleSubmit = async () => {
     try {
       const rsp = await MainAxiosApi.mainsersel(serchCategory, serinput);
@@ -244,6 +245,7 @@ const Main = () => {
                   meeting={e}
                   onClickMoim={onClickMoim}
                   currentPage={currentPage}
+                  size={size}
                 />
               ))}
         </MoimBox>

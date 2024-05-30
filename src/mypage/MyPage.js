@@ -236,9 +236,9 @@ const MyPage = () => {
   // 수정버튼 클릭
   const onClickEdit = async () => {
     if (member) {
-      const changePw = inputPw || member[0]?.pw;
-      const changeNick = inputNick || member[0]?.nick;
-      const changeIntro = inputIntro || member[0]?.introduction;
+      const changePw = inputPw || member?.pw;
+      const changeNick = inputNick || member?.nick;
+      const changeIntro = inputIntro || member?.introdution;
 
       if (isConPw && !isPw) {
         setModalOpen(true);
@@ -251,9 +251,9 @@ const MyPage = () => {
         const rsp = await MyAxiosApi.memberEdit(
           id,
           changePw,
-          member[0]?.birth,
+          member?.birth,
           changeNick,
-          member[0]?.email,
+          member?.email,
           inputGender,
           changeIntro
         );

@@ -1,6 +1,6 @@
 import axios from "axios";
-const DOMAIN = "http://localhost:8111";
-// const DOMAIN = "http://192.168.10.13:8111";
+// const DOMAIN = "http://localhost:8111";
+const DOMAIN = "http://192.168.10.13:8111";
 const LOGO = "/dooin";
 
 // 메인에 띄우기

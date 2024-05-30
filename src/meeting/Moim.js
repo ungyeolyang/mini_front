@@ -78,7 +78,6 @@ const Cdiv = styled.div`
 
 const Moim = ({ meeting, onClickMoim, currentPage }) => {
   const [nick, setNick] = useState("");
-  const [size, setSize] = useState(0);
   const context = useContext(UserContext);
   const { rpad } = context;
 
@@ -113,7 +112,7 @@ const Moim = ({ meeting, onClickMoim, currentPage }) => {
         </div>
         <div>
           <GoPersonFill style={{ color: `gray` }} />
-          {size}/ {meeting.personnel}
+          {meeting.personnel}
         </div>
       </Div>
       <Nick>{rpad(meeting.id.substr(0, 3), meeting.id.length, "*")}</Nick>
