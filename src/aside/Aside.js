@@ -110,6 +110,16 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
 
+  header {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 16rem;
+    overflow: auto;
+    scrollbar-width: none;
+  }
+
   footer {
     color: #707070;
     position: absolute;

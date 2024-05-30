@@ -74,6 +74,26 @@ const LetterList = ({
   //     setMailNoList((prev) => prev.filter((no) => no !== mail.no));
   //   }
   // };
+  // const category = () => {
+  //   switch(category){
+  //     case "send":
+  //       return if(id === mail.receiver)
+  //       `내게 쓴 편지`
+  //       else mail.receiverNick;
+  //       case "receive":
+  //         return if(id === mail.sender)
+  //           `내게 쓴 편지`
+  //           else mail.senderNick;
+  //   }
+
+  //   return                {category === "send"
+  //   ? id === mail.receiver
+  //     ? `내게 쓴 편지`
+  //     : mail.receiverNick
+  //   : id === mail.receiver
+  //   ? `내게 쓴 편지`
+  //   : mail.senderNick}
+  // }
 
   return (
     <>
@@ -97,7 +117,7 @@ const LetterList = ({
                   ? id === mail.receiver
                     ? `내게 쓴 편지`
                     : mail.receiverNick
-                  : id === mail.receiver
+                  : id === mail.sender
                   ? `내게 쓴 편지`
                   : mail.senderNick}
               </Box>

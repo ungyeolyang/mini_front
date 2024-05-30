@@ -1,10 +1,9 @@
+import React, { useContext, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import Profile from "../component/Profile";
 import Btn from "../component/Btn";
-import { useContext, useEffect, useState } from "react";
 import LoginAxiosApi from "../api/LoginAxiosApi";
 import { UserContext } from "../context/UserStore";
-import UserDetail from "../component/UserDetail";
 
 const slideUp = keyframes`
   0% {
@@ -16,6 +15,7 @@ const slideUp = keyframes`
     transform: translateY(0);
   }
 `;
+
 const StyledAccept = styled.div`
   display: flex;
   width: 20rem;
@@ -24,6 +24,7 @@ const StyledAccept = styled.div`
   margin-bottom: 1rem;
   animation: ${slideUp} 0.5s 0.4s forwards;
 `;
+
 const Head = styled.div`
   background-color: #b8d0fa;
   display: flex;
@@ -39,6 +40,7 @@ const Head = styled.div`
     border-radius: 50%;
   }
 `;
+
 const Body = styled.div`
   background-color: #e5f3ff;
   display: flex;
@@ -47,18 +49,22 @@ const Body = styled.div`
   gap: 1rem;
   border-radius: 0 0 1rem 1rem;
 `;
+
 const Cdiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
 `;
+
 const Div = styled.div`
   display: flex;
   gap: 0.5rem;
 `;
+
 const Span = styled.span`
   visibility: ${({ on }) => (on ? "hidden" : "visible")};
 `;
+
 const Detail = styled.div`
   display: ${({ on }) => (on ? `flex` : `none`)};
   background-color: #e5f3ff;
@@ -84,39 +90,51 @@ const Accept = ({ user, onClickOk, onClickNo, num, onClickUser }) => {
         console.log(e);
       }
     };
-    getMember();
+    if (user) {
+      getMember();
+    }
   }, [user]);
+
+  if (!user) {
+    return null; // user가 없으면 아무것도 렌더링하지 않음
+  }
+
+  const handleMouseEnter = () => {
+    if (user.detail && user.detail.length > 12) {
+      setOn(true);
+    }
+  };
 
   return (
     <StyledAccept>
       <Head>모임신청{num > 1 && <span>{num}</span>}</Head>
       <Body>
         <Profile
-          size={`5rem`}
+          size="5rem"
           src={member?.profile}
           onClick={() => {
             onClickUser(user.id);
           }}
-        ></Profile>
+        />
         <Cdiv>
           <div>
-            <span style={{ fontWeight: `bold` }}>{member?.nick}</span>
+            <span style={{ fontWeight: "bold" }}>{member?.nick}</span>
             <span> ({user.id})</span>
           </div>
-          <Span
-            onMouseEnter={() => user.detail.length > 12 && setOn(true)}
-            on={on}
-          >
-            {user.detail.length > 12
-              ? rpad(user.detail.substr(0, 9), 12, ".")
-              : user.detail}
-          </Span>
-          {user.detail.length > 12 && (
-            <Detail on={on} onMouseLeave={() => setOn(false)}>
-              {user.detail}
-            </Detail>
+          {user.detail && (
+            <>
+              <Span onMouseEnter={handleMouseEnter} on={on}>
+                {user.detail.length > 12
+                  ? rpad(user.detail.substr(0, 9), 12, ".")
+                  : user.detail}
+              </Span>
+              {user.detail.length > 12 && (
+                <Detail on={on} onMouseLeave={() => setOn(false)}>
+                  {user.detail}
+                </Detail>
+              )}
+            </>
           )}
-
           <Div>
             <Btn onClick={() => onClickOk(user)}>수락</Btn>
             <Btn onClick={() => onClickNo(user)}>거절</Btn>
@@ -126,4 +144,5 @@ const Accept = ({ user, onClickOk, onClickNo, num, onClickUser }) => {
     </StyledAccept>
   );
 };
+
 export default Accept;

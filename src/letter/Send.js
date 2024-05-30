@@ -268,6 +268,12 @@ const Send = (props) => {
     conId();
   }, [receive, isId]);
 
+  const resendApply = () => {
+    setReceive(user.id);
+    setReceiveNick(user.nick);
+    return `${user?.nick}(${user?.id})`;
+  };
+
   // useEffect(() => {
   //   const refresh = () => {
   //     setReceive(user?.id);
@@ -322,9 +328,7 @@ const Send = (props) => {
                       <Div type="nick">
                         {user ? (
                           user.id !== id ? (
-                            <Id>
-                              {user?.nick}({user?.id})
-                            </Id>
+                            <Id>{resendApply()}</Id>
                           ) : (
                             <Id>나에게 쓰기</Id>
                           )

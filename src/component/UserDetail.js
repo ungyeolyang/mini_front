@@ -152,7 +152,8 @@ const UserDetail = (props) => {
   const [isAready, setIsAready] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
   const [letterOpen, setLetterOpen] = useState(false);
-
+  const [receive, setReceive] = useState();
+  const [receiveNick, setReceiveNick] = useState();
   const [modalContent, setModalContent] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -340,6 +341,10 @@ const UserDetail = (props) => {
           setIsSend={setIsSend}
           isSend={isSend}
           user={user}
+          setReceive={setReceive}
+          receive={receive}
+          setReceiveNick={setReceiveNick}
+          receiveNick={receiveNick}
         ></Send>
       </ModalStyle>
       <Modal open={modalOpen} close={closeModal} header="친구추가" btn="확인">
