@@ -287,15 +287,17 @@ const MeetingDetail = (props) => {
                         </User>
                       </UserBox>
                     </Cdiv>
-                    {moim?.id !== id && !accept?.includes(moim.no) && (
-                      <Btn
-                        onClick={() => {
-                          setApplyOpen(true);
-                        }}
-                      >
-                        신청하기
-                      </Btn>
-                    )}
+                    {moim?.id !== id &&
+                      !accept?.includes(moim.no) &&
+                      size !== moim?.personnel && (
+                        <Btn
+                          onClick={() => {
+                            setApplyOpen(true);
+                          }}
+                        >
+                          신청하기
+                        </Btn>
+                      )}
                   </Div>
                   <Div>
                     <Cdiv>

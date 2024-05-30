@@ -450,6 +450,7 @@ const Aside = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
   return (
     <Container>
       <Side isLogin={isLogin}>

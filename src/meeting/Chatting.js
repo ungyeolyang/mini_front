@@ -28,7 +28,7 @@ const ChatInBox = styled.div`
 const Chat = styled.div`
   padding-top: 1rem;
   width: 100%;
-  height: ${({ isSmall }) => (isSmall ? "66%" : "83%")};
+  height: ${({ isSmall }) => (isSmall ? "66%" : "78%")};
   overflow: auto;
   scrollbar-width: none;
 `;
@@ -91,8 +91,14 @@ const Chatting = ({ info, isSmall }) => {
   const getChat = async () => {
     try {
       const rsp = await MeetingAxiosApi.chatList(info?.no);
-      setChat(rsp.data);
-    } catch (e) {}
+      if (rsp.data) {
+        setChat(rsp.data);
+      } else {
+        console.log("값을 못가지고옴");
+      }
+    } catch (e) {
+      console.log("에러");
+    }
   };
 
   const onKeyDownEnter = (e) => {
@@ -102,21 +108,7 @@ const Chatting = ({ info, isSmall }) => {
   };
 
   // useEffect(() => {
-  //   const getChat = async () => {
-  //     try {
-  //       const rsp = await MeetingAxiosApi.chatList(info?.no);
-  //       if (rsp.data) {
-  //         setChat(rsp.data);
-  //       } else {
-  //         console.log("값을 못가지고옴");
-  //       }
-  //     } catch (e) {
-  //       console.log("에러");
-  //     }
-  //   };
-
-  //   const interval = setInterval(getChat, 100000);
-
+  //   const interval = setInterval(getChat, 500);
   //   return () => clearInterval(interval);
   // }, []);
 

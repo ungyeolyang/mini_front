@@ -238,16 +238,14 @@ const Main = () => {
 
         <MoimBox>
           {meeting &&
-            paginatedData
-              .filter((e) => e.personnel !== size)
-              .map((e) => (
-                <Moim
-                  meeting={e}
-                  onClickMoim={onClickMoim}
-                  currentPage={currentPage}
-                  size={size}
-                />
-              ))}
+            paginatedData.map((e) => (
+              <Moim
+                meeting={e}
+                onClickMoim={onClickMoim}
+                currentPage={currentPage}
+                size={size}
+              />
+            ))}
         </MoimBox>
         <Conta>
           <Paging
